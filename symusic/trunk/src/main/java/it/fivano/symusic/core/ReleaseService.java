@@ -34,13 +34,14 @@ public class ReleaseService {
 		
 		try {
 			
+			// pagina di inizio
 			String urlConn = conf.URL+conf.URL_ACTION+"?"+conf.PARAMS.replace("{0}", genere);
 			ZeroDayMusicInfo info = new ZeroDayMusicInfo();
 			info.setProcessNextPage(true);
 			
 			listRelease = this.parse0DayMusic(urlConn, da, a, info);
 			
-			
+			// se c'è da recuperare altre release, cambia pagina
 			while(info.isProcessNextPage()) {
 				
 				System.out.println("is processing");
@@ -118,6 +119,8 @@ public class ReleaseService {
 					
 					// release date
 					release.setReleaseDate(dateIn);
+					
+					SymusicUtility.processReleaseName(release);
 					
 					listRelease.add(release);
 				}
