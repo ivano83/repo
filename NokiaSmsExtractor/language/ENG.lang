@@ -1,0 +1,64 @@
+#English
+#
+# English language for Nokia Backup Manager
+#
+# Version: 0.5
+# Autor: Ivano Fiorini
+#
+
+# Menù e sub-menù
+#
+0=Menù
+1=Sms
+2=Rubric
+
+6=Open
+7=Exit
+8=About
+9=Language
+
+12=Select File
+13=Select Output
+14=Options
+15=Backup Sms
+16=Backup Rubric
+17=Information!
+18=Output
+
+
+# Interface
+#
+20=Sms Manager
+21=Rubrica Manager
+22=Open File
+23=File Selected
+24=File Output Sms
+25=File Output Rubric
+26=Selected Format
+27=File to select
+28=Format
+29=It associates Rubric
+30=It associates the names in rubric with the telephone numbers in the sms
+
+# Title for File
+#
+50=NUMBER
+51=DATE
+52=MESSAGE TYPE
+53=MESSAGE
+54=SENDER
+55=SENT
+56=RECEIVED
+
+# Notices
+#
+79=Attention!
+80=The file selected doesn't exist.
+81=Origin field's file is empty.
+82=Destination field's file is empty.
+83=Created file rubric
+84=Created files sms
+85=Output file exist. \nOverwrite the file?
+86=You choose the format preferred output
+87=Association rubric in progress...
+88=The choOsen language will be mailed to the next start.

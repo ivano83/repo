@@ -1,0 +1,64 @@
+#Italiano
+#
+# Linguaggio Italiano per Nokia Backup Manager
+#
+# Versione: 0.5
+# Autore: Ivano Fiorini
+#
+
+# Menù e sotto-menù
+#
+0=Menù
+1=Sms
+2=Rubrica
+
+6=Apri
+7=Esci
+8=About
+9=Linguaggio
+
+12=Seleziona File
+13=Seleziona Output
+14=Opzioni
+15=Backup Sms
+16=Backup Rubrica
+17=Informazioni!
+18=Output
+
+
+# Interfaccia
+#
+20=Gestione Sms
+21=Gestione Rubrica
+22=Apri File
+23=File Selezionato
+24=File Output Sms
+25=File Output Rubrica
+26=Formato scelto
+27=File da selezionare
+28=Formato
+29=Associa Rubrica
+30=Associa i nomi in rubrica con i numeri di telefono negli sms
+
+# Titoli per File
+#
+50=NUMERO
+51=DATA
+52=TIPO MESSAGGIO
+53=MESSAGGIO
+54=MITTENTE
+55=INVIATO
+56=RICEVUTO
+
+# Avvisi
+#
+79=Attenzione!
+80=Il file scelto non esiste.
+81=Il campo del file di origine è vuoto.
+82=Il campo del file di destinazione è vuoto.
+83=Creato file rubrica
+84=Creato file sms
+85=Il file di output esiste. \nSovrascrivere il file?
+86=Scegli il formato output preferito
+87=Associazione rubrica in corso...
+88=Il linguaggio scelto verrà impostato al prossimo avvio.
