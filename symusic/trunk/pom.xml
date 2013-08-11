@@ -20,6 +20,11 @@
 		<artifactId>jsoup</artifactId>
 		<version>1.7.2</version>
 	</dependency>
+	<dependency>
+		<groupId>com.wcohen.ss</groupId>
+		<artifactId>secondstring</artifactId>
+		<version>1.0</version>
+	</dependency>
   </dependencies>
   <build>
     <finalName>symusic</finalName>

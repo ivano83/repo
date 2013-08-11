@@ -11,19 +11,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class ReleaseService {
+public class Release0DayMusicService {
 	
 	private ZeroDayMusicConf conf;
-	private boolean processNextPage;
 	
-	public ReleaseService() throws IOException {
+	public Release0DayMusicService() throws IOException {
 		conf = new ZeroDayMusicConf();
 	}
 	
@@ -83,10 +81,7 @@ public class ReleaseService {
 			info.setNextPage(this.extractNextPage(doc));
 
 			Elements releaseGroup = doc.getElementsByAttributeValue("id",conf.ID_RELEASE_GROUP);
-			int totReleaseDayInPage = releaseGroup.size();
-			int countReleaseDayInPage = 0;
 			for(Element e : releaseGroup) {
-				countReleaseDayInPage++;
 				
 				// date release
 				String dateIn = this.getStandardDateFormat(e.parent().getElementById(conf.ID_DAY).text());
@@ -181,7 +176,7 @@ public class ReleaseService {
 		Date da = sdf.parse("20130725");
 		Date a = sdf.parse("20130802");
 		
-		ReleaseService s = new ReleaseService();
+		Release0DayMusicService s = new Release0DayMusicService();
 		List<ReleaseModel> res = s.parse0DayMusicRelease("trance",da,a);
 		for(ReleaseModel r : res)
 			System.out.println(r);
