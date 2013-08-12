@@ -14,8 +14,9 @@ public class BeatportConf {
 	public String CLASS_RELEASE_ITEM;
 	public String CLASS_RELEASE_TITLE;
 	public String RELEASE_DETAIL;
-	public String DAY_FORMAT;
 	public String TABLE_RELEASE_TRACK;
+	public String RELEASE_TRACK_NAME;
+	public String RELEASE_TRACK_GENRE;
 	
 	public BeatportConf() throws IOException {
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("beatport.properties");
@@ -29,10 +30,10 @@ public class BeatportConf {
 		ATTR_RELEASE_VALUE = props.getProperty("attr_release_value");
 		CLASS_RELEASE_ITEM = props.getProperty("class_release_item");
 		CLASS_RELEASE_TITLE = props.getProperty("class_release_title");
-		DAY_FORMAT = props.getProperty("day_format");
 		RELEASE_DETAIL = props.getProperty("release_detail");
 		TABLE_RELEASE_TRACK = props.getProperty("table_release_track");
-		
+		RELEASE_TRACK_NAME = props.getProperty("release_track_name");
+		RELEASE_TRACK_GENRE = props.getProperty("release_track_genre");
 	}
 
 }

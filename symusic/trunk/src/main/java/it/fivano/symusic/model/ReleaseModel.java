@@ -15,6 +15,9 @@ public class ReleaseModel {
 	private String recordLabel;
 	
 	private List<LinkModel> links;
+	private List<TrackModel> tracks;
+	private List<VideoModel> videos;
+	
 	
 	public String getName() {
 		return name;
@@ -80,5 +83,26 @@ public class ReleaseModel {
 	public String toString() {
 		return name + " ["+releaseDate+"]";
 	}
-
+	public List<TrackModel> getTracks() {
+		return tracks;
+	}
+	public void setTracks(List<TrackModel> tracks) {
+		this.tracks = tracks;
+	}
+	public void addTrack(TrackModel tr) {
+		if(this.tracks==null)
+			tracks = new ArrayList<TrackModel>();
+		tracks.add(tr);
+	}
+	public List<VideoModel> getVideos() {
+		return videos;
+	}
+	public void setVideos(List<VideoModel> videos) {
+		this.videos = videos;
+	}
+	public void addVideo(VideoModel tr) {
+		if(this.videos==null)
+			videos = new ArrayList<VideoModel>();
+		videos.add(tr);
+	}
 }

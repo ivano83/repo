@@ -2,6 +2,7 @@ package it.fivano.symusic.core;
 
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.conf.ZeroDayMusicConf;
+import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.LinkModel;
 import it.fivano.symusic.model.ReleaseModel;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,6 +22,8 @@ import org.jsoup.select.Elements;
 public class Release0DayMusicService {
 	
 	private ZeroDayMusicConf conf;
+	
+	Logger log = Logger.getLogger(getClass());
 	
 	public Release0DayMusicService() throws IOException {
 		conf = new ZeroDayMusicConf();
@@ -42,7 +46,7 @@ public class Release0DayMusicService {
 			// se c'è da recuperare altre release, cambia pagina
 			while(info.isProcessNextPage()) {
 				
-				System.out.println("is processing");
+				log.info("Andiamo alla pagina successiva...");
 				
 				listRelease.addAll(this.parse0DayMusic(info.getNextPage(), da, a, info));
 				
@@ -76,6 +80,7 @@ public class Release0DayMusicService {
 			ReleaseModel release = null;
 			LinkModel link = null;
 			
+			log.info("Connessione in corso --> "+urlConn);
 			Document doc = Jsoup.connect(urlConn).get();
 			
 			info.setNextPage(this.extractNextPage(doc));
@@ -116,6 +121,26 @@ public class Release0DayMusicService {
 					release.setReleaseDate(dateIn);
 					
 					SymusicUtility.processReleaseName(release);
+					log.info("#####################");
+					log.info("|"+release+"|");
+					
+					try {
+						// recupera dati da beatport per il dettaglio della release
+						BeatportService beatport = new BeatportService();
+						beatport.parseBeatport(release);
+						
+					} catch (ParseReleaseException e1) {
+						log.warn("BeatportService fallito!");
+					}
+					
+					try {
+						// recupera dati da beatport per il dettaglio della release
+						YoutubeService youtube = new YoutubeService();
+						youtube.extractYoutubeVideo(release);
+						
+					} catch (ParseReleaseException e1) {
+						log.warn("YoutubeService fallito!");
+					}
 					
 					listRelease.add(release);
 				}
@@ -173,8 +198,8 @@ public class Release0DayMusicService {
 
 	public static void main(String[] args) throws IOException, ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-		Date da = sdf.parse("20130725");
-		Date a = sdf.parse("20130802");
+		Date da = sdf.parse("20130802");
+		Date a = sdf.parse("20130803");
 		
 		Release0DayMusicService s = new Release0DayMusicService();
 		List<ReleaseModel> res = s.parse0DayMusicRelease("trance",da,a);
