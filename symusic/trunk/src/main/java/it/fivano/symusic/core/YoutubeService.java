@@ -113,7 +113,11 @@ public class YoutubeService {
 		
 		String[] split = name.split("-");
 		
-		if(split.length==5) {
+		if(split.length==1) {
+			
+			result = name;
+		}
+		else if(split.length==5) {
 			
 			result = split[0]+"-"+split[1];
 		}
