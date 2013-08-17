@@ -1,0 +1,7 @@
+Il pattern è di questo tipo:
+
+P[num.tel][in/out][gg-mm-aaaa]-[hh-mm-ss]
+
+verrà trasformato in questo modo:
+
+[aaaa-mm-gg] [hh-mm-ss] [num.tel] [in/out]
