@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/IvanoUtility"/>
 	<classpathentry exported="true" kind="con" path="org.dyno.visual.swing.VS_LIBRARY/layoutext"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/BestUtility"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -3,8 +3,8 @@ package it.ivano.backupsync.view;
 import it.ivano.backupsync.business.FileSyncService;
 import it.ivano.backupsync.model.CompareItem;
 import it.ivano.backupsync.model.FileSyncModel;
-import it.ivano.utility.ByteUtility;
-import it.ivano.utility.FileUtility;
+import it.ivano.utility.bytes.ByteUtility;
+import it.ivano.utility.file.FileUtility;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
