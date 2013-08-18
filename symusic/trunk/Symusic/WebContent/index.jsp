@@ -50,6 +50,15 @@
 				<input type="text" name="endDate" class="tcal">
 			</td>
 		</tr>
+		<tr>
+			<td>
+				<div>Estrai dati da Beatport</div>
+
+			</td>
+			<td>
+				<input type="checkbox" name="enableBeatport" value="true"/>
+			</td>
+		</tr>
 	</table>
 	<input type="submit" value="Ricerca">
 	

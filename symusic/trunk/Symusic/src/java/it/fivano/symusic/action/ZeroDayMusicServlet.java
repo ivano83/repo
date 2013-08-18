@@ -45,13 +45,19 @@ public class ZeroDayMusicServlet extends HttpServlet {
 			String iDate = request.getParameter("initDate");
 			String eDate = request.getParameter("endDate");
 			
+			String enableBeatport = request.getParameter("enableBeatport");
+			
 			// se non presente le date sono inizializzate alla data corrente
-			initDate = (iDate==null || iDate.isEmpty())? new Date() : sdf.parse(iDate);
-			endDate = (eDate==null || eDate.isEmpty())? new Date() : sdf.parse(eDate);
+			initDate = (iDate==null || iDate.isEmpty())? sdf.parse(sdf.format(new Date())) : sdf.parse(iDate);
+			endDate = (eDate==null || eDate.isEmpty())? sdf.parse(sdf.format(new Date())) : sdf.parse(eDate);
 
 			List<ReleaseModel> listRelease = new ArrayList<ReleaseModel>();
 			if(site.equals("1")) {
 				Release0DayMusicService zeroDay = new Release0DayMusicService();
+				if(enableBeatport!=null && enableBeatport.equalsIgnoreCase("true"))
+					zeroDay.setEnableBeatportService(true);
+				else
+					zeroDay.setEnableBeatportService(false);
 				listRelease = zeroDay.parse0DayMusicRelease(genre, initDate, endDate);
 			}
 			

@@ -6,6 +6,7 @@ import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.TrackModel;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -79,10 +80,13 @@ public class BeatportService {
 					String artistName = releaseDetail.child(1).text();
 					release.setArtist(artistName);
 				}
-				
-//				log.info("\n");
+
 				TrackModel currTrack = null;
 				Elements releaseTracks = doc.getElementsByClass(conf.TABLE_RELEASE_TRACK);
+				
+				if(!releaseTracks.isEmpty()) { // reset tracks se presenti su beatport (sono più dettagliate)
+					release.setTracks(new ArrayList<TrackModel>());
+				}
 				for(Element track : releaseTracks) {
 					currTrack = new TrackModel();
 					// artista

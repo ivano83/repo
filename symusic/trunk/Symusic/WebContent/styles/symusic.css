@@ -19,6 +19,17 @@
 	font-size: 11px;
 }
 
+.rel_video {
+	font-family: cursive;
+	font-size: 12px;
+	padding: 2px 0;
+}
+
+.rel_link {
+	font-family: cursive;
+	font-size: 12px;
+	padding: 2px 0;
+} 
 
 /** CALENDARIO */
 

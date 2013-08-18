@@ -22,11 +22,13 @@ import org.jsoup.select.Elements;
 public class Release0DayMusicService {
 	
 	private ZeroDayMusicConf conf;
+	private boolean enableBeatportService;
 	
 	Logger log = Logger.getLogger(getClass());
 	
 	public Release0DayMusicService() throws IOException {
 		conf = new ZeroDayMusicConf();
+		enableBeatportService = true;
 	}
 	
 	
@@ -126,8 +128,19 @@ public class Release0DayMusicService {
 					
 					try {
 						// recupera dati da beatport per il dettaglio della release
-						BeatportService beatport = new BeatportService();
-						beatport.parseBeatport(release);
+						ScenelogService scenelog = new ScenelogService();
+						scenelog.parseScenelog(release);
+						
+					} catch (ParseReleaseException e1) {
+						log.warn("ScenelogService fallito!");
+					}
+					
+					try {
+						if(enableBeatportService) {
+							// recupera dati da beatport per il dettaglio della release
+							BeatportService beatport = new BeatportService();
+							beatport.parseBeatport(release);
+						}
 						
 					} catch (ParseReleaseException e1) {
 						log.warn("BeatportService fallito!");
@@ -205,6 +218,16 @@ public class Release0DayMusicService {
 		List<ReleaseModel> res = s.parse0DayMusicRelease("trance",da,a);
 		for(ReleaseModel r : res)
 			System.out.println(r);
+	}
+
+
+	public boolean isEnableBeatportService() {
+		return enableBeatportService;
+	}
+
+
+	public void setEnableBeatportService(boolean enableBeatportService) {
+		this.enableBeatportService = enableBeatportService;
 	}
 }
 

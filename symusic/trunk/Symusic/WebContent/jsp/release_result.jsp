@@ -13,7 +13,7 @@
 <table class="rel_table">	
 	<c:forEach items="${listRelease}" var="item">
 		<tr>
-			<td>
+			<td width="">
 				<div class="rel_name">${item.nameWithUnderscore}</div>
 				<div>Artista: ${item.artist}</div>
 				<div>Titolo release: ${item.song}</div>
@@ -34,11 +34,11 @@
 			<td>
 				<div>VIDEO</div>
 				<c:forEach items="${item.videos}" var="video">
-					<div><a href="${video.link}" target="_blank">${video.name}</a></div>
+					<div class="rel_video"><a href="${video.link}" target="_blank">${video.name}</a></div>
 				</c:forEach>
 				<div>DOWNLOAD</div>
 				<c:forEach items="${item.links}" var="link">
-					<div><a href="${link.link}" target="_blank">${link.link}</a></div>
+					<div class="rel_link"><a href="${link.link}" target="_blank">${link.link}</a></div>
 				</c:forEach>
 			</td>
 		</tr>
