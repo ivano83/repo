@@ -67,6 +67,22 @@ public class SymusicUtility {
 		return false;
 
 	}
+	
+	public static Date sottraiData(Date data, int numGiorniDaSottrarre) {
+		
+		Long millisDaSottrarre = (60*60*24*numGiorniDaSottrarre)*1000L;
+		
+		return new Date(data.getTime()-millisDaSottrarre);
+		
+	}
+	
+	public static Date aggiungiData(Date data, int numGiorniDaSottrarre) {
+		
+		Long millisDaSottrarre = (60*60*24*numGiorniDaSottrarre)*1000L;
+		
+		return new Date(data.getTime()+millisDaSottrarre);
+		
+	}
 
 	public static void main(String[] args) {
 		System.out.println(compareStringSimilarity("Houseshaker Feat. Amanda Blush","Houseshaker Feat Amanda Blush"));
@@ -74,6 +90,7 @@ public class SymusicUtility {
 		System.out.println(compareStringSimilarity("Houseshaker Feat. Amanda Blush","Houseshaker Amanda Blush"));
 		System.out.println(compareStringSimilarity("Houseshaker Feat. Amanda Blush","Amanda Blush Feat Houseshaker"));
 
+		sottraiData(new Date(), 2);
 	}
 }
 

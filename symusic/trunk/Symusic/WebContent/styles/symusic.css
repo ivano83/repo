@@ -31,6 +31,16 @@
 	padding: 2px 0;
 } 
 
+.rel_successive {
+	left: 5%;
+    position: relative;
+}
+
+.rel_precedenti {
+	left: 65%;
+    position: relative;
+}
+
 /** CALENDARIO */
 
 /* input box in default state */ 

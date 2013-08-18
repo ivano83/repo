@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<jsp:include page="head_common.jsp" />
+	<c:import url="head_common.jsp"/>
 	<title>SYMUSIC - Risultati ricerca</title>
 </head>
 <body>
@@ -46,6 +46,13 @@
 	
 </table>
 
+<p>
+<span class="rel_successive"><a href="${urlSuccessivo}">SUCCESSIVE RELEASE</a></span>
+<span class="rel_precedenti"><a href="${urlPrecedente}">PRECEDENTI RELEASE</a></span>
+</p>
 
 </body>
+<head>
+	<meta http-equiv="Pragma" content="no-cache">
+</head>
 </html>
