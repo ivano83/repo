@@ -13,13 +13,11 @@
 <table class="rel_table">	
 	<c:forEach items="${listRelease}" var="item">
 		<tr>
-			<td width="">
+			<td width="30%">
+				<div>Data: ${item.releaseDate}</div>
 				<div class="rel_name">${item.nameWithUnderscore}</div>
 				<div>Artista: ${item.artist}</div>
 				<div>Titolo release: ${item.song}</div>
-			</td>
-			<td>
-				<div>${item.releaseDate}</div>
 			</td>
 			<td>
 				<ol>

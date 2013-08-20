@@ -34,6 +34,7 @@ public class YoutubeService {
 			
 			Elements videoGroup = null;
 			Document doc = null;
+			String urlConn = null;
 			do  {
 				try {
 					String rel = release.getName();
@@ -42,7 +43,7 @@ public class YoutubeService {
 					String query = this.formatQueryString(rel,tentativi);
 
 					// pagina di inizio
-					String urlConn = conf.URL+conf.URL_ACTION+"?"+conf.PARAMS.replace("{0}", query);
+					urlConn = conf.URL+conf.URL_ACTION+"?"+conf.PARAMS.replace("{0}", query);
 					log.info("Connessione in corso --> "+urlConn);
 					doc = Jsoup.connect(urlConn).get();
 					
@@ -89,7 +90,11 @@ public class YoutubeService {
 				if(count>=conf.MAX_VIDEO_EXTRACT)
 					break;
 			}
-
+			
+			yt = new VideoModel();
+			yt.setLink(urlConn);
+			yt.setName("[......CERCA SU YOUTUBE......]");
+			release.addVideo(yt);
 			
 		} catch (ParseReleaseException e) {
 			// TODO Auto-generated catch block

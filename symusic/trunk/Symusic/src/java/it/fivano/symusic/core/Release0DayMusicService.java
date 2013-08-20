@@ -23,12 +23,14 @@ public class Release0DayMusicService {
 	
 	private ZeroDayMusicConf conf;
 	private boolean enableBeatportService;
+	private boolean enableYoutubeService;
 	
 	Logger log = Logger.getLogger(getClass());
 	
 	public Release0DayMusicService() throws IOException {
 		conf = new ZeroDayMusicConf();
 		enableBeatportService = true;
+		enableYoutubeService = true;
 	}
 	
 	
@@ -126,6 +128,9 @@ public class Release0DayMusicService {
 					log.info("#####################");
 					log.info("|"+release+"|");
 					
+					
+					enableYoutubeService = this.verificaAbilitazioneYoutube(release);
+					
 					try {
 						// recupera dati da beatport per il dettaglio della release
 						ScenelogService scenelog = new ScenelogService();
@@ -147,10 +152,11 @@ public class Release0DayMusicService {
 					}
 					
 					try {
-						// recupera dati da beatport per il dettaglio della release
-						YoutubeService youtube = new YoutubeService();
-						youtube.extractYoutubeVideo(release);
-						
+						if(enableYoutubeService) {
+							// recupera dati da beatport per il dettaglio della release
+							YoutubeService youtube = new YoutubeService();
+							youtube.extractYoutubeVideo(release);
+						}
 					} catch (ParseReleaseException e1) {
 						log.warn("YoutubeService fallito!");
 					}
@@ -175,6 +181,16 @@ public class Release0DayMusicService {
 		
 	}
 	
+	private boolean verificaAbilitazioneYoutube(ReleaseModel release) {
+		
+		String name = release.getName().toUpperCase();
+		if(name.startsWith("VA-") || name.startsWith("VA -"))
+			return false;
+		
+		return true;
+	}
+
+
 	private String extractNextPage(Document doc) {
 		
 		Element docSub = doc.getElementsByAttributeValue("id",conf.ID_NEXT_PAGES).get(0);

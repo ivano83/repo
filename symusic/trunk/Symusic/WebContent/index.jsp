@@ -7,7 +7,7 @@
 	<title>SYMUSIC - Facilita la ricerca delle release musicali</title>
 </head>
 <body>
-<h2>Hello World!</h2>
+<h2>S Y M U S I C</h2>
 
 <form action="ZeroDayMusicServlet"> 
 
