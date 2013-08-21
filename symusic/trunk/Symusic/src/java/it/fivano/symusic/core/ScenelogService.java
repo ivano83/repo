@@ -1,14 +1,14 @@
 package it.fivano.symusic.core;
 
-import java.io.IOException;
-import java.util.List;
-
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.conf.ScenelogConf;
 import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.LinkModel;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.TrackModel;
+
+import java.io.IOException;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -17,7 +17,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
-public class ScenelogService {
+public class ScenelogService extends BaseService {
 	
 	private ScenelogConf conf;
 	
@@ -27,7 +27,7 @@ public class ScenelogService {
 		conf = new ScenelogConf();
 	}
 	
-	public boolean parseScenelog(ReleaseModel release) throws IOException, ParseReleaseException {
+	public boolean parseScenelog(ReleaseModel release) throws ParseReleaseException {
 		
 		try {
 			int tentativi = 0;
@@ -38,10 +38,9 @@ public class ScenelogService {
 			Document doc = null;
 			do  {
 				try {
-					String query = this.formatQueryString(release.getName(),tentativi);
-					
+				
 					// pagina di inizio
-					String urlConn = conf.URL+conf.URL_ACTION+"?"+conf.PARAMS.replace("{0}", query);
+					String urlConn = this.getUrlConnection(release, tentativi);
 					log.info("Connessione in corso --> "+urlConn);
 					doc = Jsoup.connect(urlConn).userAgent(userAgent).get();
 					
@@ -100,6 +99,7 @@ public class ScenelogService {
 				for(Element dl : downloads) {
 					currLink = new LinkModel();
 					currLink.setLink(dl.attr("href"));
+					currLink.setName((dl.attr("href").length()>50)? dl.attr("href").substring(0,70)+"..." : dl.attr("href"));
 					release.addLink(currLink);
 				}
 				
@@ -112,47 +112,23 @@ public class ScenelogService {
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
-//		} catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
+			log.error("[SCENELOG] Errore nel parsing",e);
+			throw new ParseReleaseException("[SCENELOG] Errore nel parsing",e);
 		}
 
 		return true;
 		
 	}
 	
-	private String formatQueryString(String name, int wordToDelete) {
+	private String getUrlConnection(ReleaseModel release, int tentativi) {
+		String query = this.formatQueryString(release.getName(),tentativi);
 		
-		int index = name.indexOf("(");
-		String result = "";
-		if(index!=-1)
-			return name.substring(0,index).replace(" ", "+");
-		
-		String[] split = name.split("-");
-		
-		if(split.length==1) {
-			
-			result = name;
-		}
-		else if(split.length==5) {
-			
-			result = split[0]+"-"+split[1];
-		}
-		else if(split.length>5) {
-			result = split[0]+"-"+split[1]+"-"+split[2];
-		}
-		else {
-			result = split[0]+"-"+split[1];
-		}
-		
-		if(wordToDelete>0) {
-			for(int i=0;i<wordToDelete;i++)
-				result = result.substring(0,result.lastIndexOf(" "));
-		}
-		
-		return result.replace(" ", "+");
+		// pagina di inizio
+		return conf.URL+conf.URL_ACTION+"?"+conf.PARAMS.replace("{0}", query);
+	}
+	
+	protected String applyFilterSearch(String t) {
+		return t.replace(" ", "+");
 	}
 	
 	public static void main(String[] args) throws IOException, ParseReleaseException {

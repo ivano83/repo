@@ -36,7 +36,7 @@
 				</c:forEach>
 				<div>DOWNLOAD</div>
 				<c:forEach items="${item.links}" var="link">
-					<div class="rel_link"><a href="${link.link}" target="_blank">${link.link}</a></div>
+					<div class="rel_link"><a href="${link.link}" target="_blank">${link.name}</a></div>
 				</c:forEach>
 			</td>
 		</tr>

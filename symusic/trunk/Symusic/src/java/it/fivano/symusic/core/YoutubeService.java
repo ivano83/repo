@@ -15,7 +15,7 @@ import it.fivano.symusic.model.TrackModel;
 import it.fivano.symusic.model.VideoModel;
 
 
-public class YoutubeService {
+public class YoutubeService extends BaseService {
 	
 	YoutubeConf conf;
 	
@@ -37,13 +37,9 @@ public class YoutubeService {
 			String urlConn = null;
 			do  {
 				try {
-					String rel = release.getName();
-					if(release.getArtist()!=null && release.getSong()!=null)
-						rel = release.getArtist()+" "+release.getSong();
-					String query = this.formatQueryString(rel,tentativi);
 
 					// pagina di inizio
-					urlConn = conf.URL+conf.URL_ACTION+"?"+conf.PARAMS.replace("{0}", query);
+					urlConn = this.getUrlConnection(release, tentativi);
 					log.info("Connessione in corso --> "+urlConn);
 					doc = Jsoup.connect(urlConn).get();
 					
@@ -90,11 +86,7 @@ public class YoutubeService {
 				if(count>=conf.MAX_VIDEO_EXTRACT)
 					break;
 			}
-			
-			yt = new VideoModel();
-			yt.setLink(urlConn);
-			yt.setName("[......CERCA SU YOUTUBE......]");
-			release.addVideo(yt);
+
 			
 		} catch (ParseReleaseException e) {
 			// TODO Auto-generated catch block
@@ -110,39 +102,27 @@ public class YoutubeService {
 		
 	}
 	
-	private String formatQueryString(String name, int wordToDelete) {
+	private String getUrlConnection(ReleaseModel release, int tentativi) {
+		String rel = release.getName();
+		if(release.getArtist()!=null && release.getSong()!=null)
+			rel = release.getArtist()+" "+release.getSong();
+		String query = this.formatQueryString(rel,tentativi);
+
+		// pagina di inizio
+		return conf.URL+conf.URL_ACTION+"?"+conf.PARAMS.replace("{0}", query);
+	}
+
+
+	public void addManualSearchLink(ReleaseModel release) {
 		
-		int index = name.indexOf("(");
-		String result = "";
-		if(index!=-1)
-			return applyFilterSearch(name.substring(0,index));
+		VideoModel yt = new VideoModel();
+		yt.setLink(this.getUrlConnection(release, 0));
+		yt.setName("[......CERCA SU YOUTUBE......]");
+		release.addVideo(yt);
 		
-		String[] split = name.split("-");
-		
-		if(split.length==1) {
-			
-			result = name;
-		}
-		else if(split.length==5) {
-			
-			result = split[0]+"-"+split[1];
-		}
-		else if(split.length>5) {
-			result = split[0]+"-"+split[1]+"-"+split[2];
-		}
-		else {
-			result = split[0]+"-"+split[1];
-		}
-		
-		if(wordToDelete>0) {
-			for(int i=0;i<wordToDelete;i++)
-				result = result.substring(0,result.lastIndexOf(" "));
-		}
-		
-		return applyFilterSearch(result);
 	}
 	
-	private String applyFilterSearch(String t) {
+	protected String applyFilterSearch(String t) {
 		t = t.replace("-", " ").replace(",", " ").replace("feat", " ").replace("ft", " ")
 				.replace(".", " ").replace("  ", " ").replace(" and ", " ").replace(" ", "+");
 		return t;

@@ -36,6 +36,8 @@ public class SymusicUtility {
 		String name = rel.getNameWithUnderscore();
 		String[] nameSplit = name.replace("-","_").split("_");
 		int size = nameSplit.length;
+		if(size<2) return;
+		
 		String crew = nameSplit[size-1];
 		String year = nameSplit[size-2];
 		

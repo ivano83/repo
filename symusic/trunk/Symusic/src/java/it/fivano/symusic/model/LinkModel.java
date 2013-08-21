@@ -2,6 +2,7 @@ package it.fivano.symusic.model;
 
 public class LinkModel {
 	
+	private String name;
 	private String link;
 	private String serverLink;
 	public String getLink() {
@@ -15,6 +16,12 @@ public class LinkModel {
 	}
 	public void setServerLink(String serverLink) {
 		this.serverLink = serverLink;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	

@@ -14,7 +14,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class BeatportService {
+public class BeatportService extends BaseService {
 
 	private BeatportConf conf;
 	
@@ -136,33 +136,9 @@ public class BeatportService {
 		return true;
 		
 	}
-
-	private String formatQueryString(String name, int wordToDelete) {
-		
-		int index = name.indexOf("(");
-		String result = "";
-		if(index!=-1)
-			return name.substring(0,index).replace(" ", "+");
-		
-		String[] split = name.split("-");
-		
-		if(split.length==5) {
-			
-			result = split[0]+"-"+split[1];
-		}
-		else if(split.length>5) {
-			result = split[0]+"-"+split[1]+"-"+split[2];
-		}
-		else {
-			result = split[0]+"-"+split[1];
-		}
-		
-		if(wordToDelete>0) {
-			for(int i=0;i<wordToDelete;i++)
-				result = result.substring(0,result.lastIndexOf(" "));
-		}
-		
-		return result.replace(" ", "+");
+	
+	protected String applyFilterSearch(String t) {
+		return t.replace(" ", "+");
 	}
 	
 	public static void main(String[] args) throws IOException, ParseReleaseException {

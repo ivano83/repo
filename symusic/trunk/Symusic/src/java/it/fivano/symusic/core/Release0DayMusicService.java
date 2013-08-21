@@ -23,6 +23,7 @@ public class Release0DayMusicService {
 	
 	private ZeroDayMusicConf conf;
 	private boolean enableBeatportService;
+	private boolean enableScenelogService;
 	private boolean enableYoutubeService;
 	
 	Logger log = Logger.getLogger(getClass());
@@ -30,6 +31,7 @@ public class Release0DayMusicService {
 	public Release0DayMusicService() throws IOException {
 		conf = new ZeroDayMusicConf();
 		enableBeatportService = true;
+		enableScenelogService = true;
 		enableYoutubeService = true;
 	}
 	
@@ -132,10 +134,13 @@ public class Release0DayMusicService {
 					enableYoutubeService = this.verificaAbilitazioneYoutube(release);
 					
 					try {
-						// recupera dati da beatport per il dettaglio della release
 						ScenelogService scenelog = new ScenelogService();
-						scenelog.parseScenelog(release);
-						
+						if(enableScenelogService) {
+							// recupera dati da Scenelog per la tracklist e link download
+							scenelog.parseScenelog(release);
+						}
+						GoogleService google = new GoogleService();
+						google.addManualSearchLink(release);
 					} catch (ParseReleaseException e1) {
 						log.warn("ScenelogService fallito!");
 					}
@@ -152,11 +157,13 @@ public class Release0DayMusicService {
 					}
 					
 					try {
+						YoutubeService youtube = new YoutubeService();
 						if(enableYoutubeService) {
-							// recupera dati da beatport per il dettaglio della release
-							YoutubeService youtube = new YoutubeService();
+							// recupera dati da youtube per i video
 							youtube.extractYoutubeVideo(release);
 						}
+						youtube.addManualSearchLink(release); // link a youtube per la ricerca manuale
+						
 					} catch (ParseReleaseException e1) {
 						log.warn("YoutubeService fallito!");
 					}
