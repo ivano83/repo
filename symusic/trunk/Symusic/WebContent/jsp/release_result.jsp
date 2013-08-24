@@ -4,6 +4,15 @@
 <html>
 <head>
 	<c:import url="head_common.jsp"/>
+	<script type="text/javascript">
+	  $(document).ready(function(){
+	    $(".rating").jRating({
+		  step:true,
+		  length:5,
+		  decimalLength:0 // number of decimal in the rate
+		});
+	  });
+	</script>
 	<title>SYMUSIC - Risultati ricerca</title>
 </head>
 <body>
@@ -18,6 +27,8 @@
 				<div class="rel_name">${item.nameWithUnderscore}</div>
 				<div>Artista: ${item.artist}</div>
 				<div>Titolo release: ${item.song}</div>
+				<div class="rating" data-average="0" data-id="8"></div>
+				<div class="ok"></div>
 			</td>
 			<td>
 				<ol>

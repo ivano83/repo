@@ -7,10 +7,19 @@
 		<servlet-name>ZeroDayMusicServlet</servlet-name>
 		<servlet-class>it.fivano.symusic.action.ZeroDayMusicServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<display-name>RatingServlet</display-name>
+		<servlet-name>RatingServlet</servlet-name>
+		<servlet-class>it.fivano.symusic.action.RatingServlet</servlet-class>
+	</servlet>
 	
 	<servlet-mapping>
 		<servlet-name>ZeroDayMusicServlet</servlet-name>
 		<url-pattern>/ZeroDayMusicServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RatingServlet</servlet-name>
+		<url-pattern>/RatingServlet</url-pattern>
 	</servlet-mapping>
 
 	<welcome-file-list>
