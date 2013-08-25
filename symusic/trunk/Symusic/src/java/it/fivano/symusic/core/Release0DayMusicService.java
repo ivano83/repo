@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -130,6 +131,10 @@ public class Release0DayMusicService {
 					log.info("#####################");
 					log.info("|"+release+"|");
 					
+					
+					// recupero e inserimento dati sul DB
+					// TODO recupero e inserimento dati sul DB
+					release.setId(new Long(new Random().nextInt(9000000)));
 					
 					enableYoutubeService = this.verificaAbilitazioneYoutube(release);
 					

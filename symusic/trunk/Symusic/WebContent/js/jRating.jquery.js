@@ -159,7 +159,7 @@
 					/** END ONLY FOR THE DEMO **/
 						
 		                $.get('RatingServlet',{id:idBox},function(responseText) { 
-		                        $('#ok').text("VOTATO");
+		                        $('.voted_'+idBox).html('<img class="voted_img" src="./img/rating/rated_ok_green.png" alt="THANKS" />');
 		                });
 					if(opts.onClick) opts.onClick( element, rate );
 

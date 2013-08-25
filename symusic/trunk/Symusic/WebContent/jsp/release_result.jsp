@@ -27,8 +27,9 @@
 				<div class="rel_name">${item.nameWithUnderscore}</div>
 				<div>Artista: ${item.artist}</div>
 				<div>Titolo release: ${item.song}</div>
-				<div class="rating" data-average="0" data-id="8"></div>
-				<div class="ok"></div>
+				<div class="rating" data-average="0" data-id="${item.id}"></div>
+				<span class="voted voted_${item.id}"><img class="voted_img" src="./img/rating/rated_ok_green.png" alt="THANKS" /></span>
+				
 			</td>
 			<td>
 				<ol>

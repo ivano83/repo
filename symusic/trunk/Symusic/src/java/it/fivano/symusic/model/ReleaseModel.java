@@ -5,6 +5,7 @@ import java.util.List;
 
 public class ReleaseModel {
 	
+	private Long id;
 	private String name;
 	private String nameWithUnderscore;
 	private String year;
@@ -104,5 +105,11 @@ public class ReleaseModel {
 		if(this.videos==null)
 			videos = new ArrayList<VideoModel>();
 		videos.add(tr);
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 }
