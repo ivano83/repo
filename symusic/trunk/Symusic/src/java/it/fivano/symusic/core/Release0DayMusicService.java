@@ -138,18 +138,21 @@ public class Release0DayMusicService {
 					
 					enableYoutubeService = this.verificaAbilitazioneYoutube(release);
 					
+					
+					// ########## SCENELOG ############
 					try {
 						ScenelogService scenelog = new ScenelogService();
 						if(enableScenelogService) {
 							// recupera dati da Scenelog per la tracklist e link download
 							scenelog.parseScenelog(release);
 						}
-						GoogleService google = new GoogleService();
-						google.addManualSearchLink(release);
 					} catch (ParseReleaseException e1) {
 						log.warn("ScenelogService fallito!");
 					}
+					GoogleService google = new GoogleService();
+					google.addManualSearchLink(release);
 					
+					// ########## BEATPORT ############
 					try {
 						if(enableBeatportService) {
 							// recupera dati da beatport per il dettaglio della release
@@ -161,17 +164,19 @@ public class Release0DayMusicService {
 						log.warn("BeatportService fallito!");
 					}
 					
+					// ########## YOUTUBE ############
+					YoutubeService youtube = new YoutubeService();
 					try {
-						YoutubeService youtube = new YoutubeService();
 						if(enableYoutubeService) {
 							// recupera dati da youtube per i video
 							youtube.extractYoutubeVideo(release);
 						}
-						youtube.addManualSearchLink(release); // link a youtube per la ricerca manuale
+						
 						
 					} catch (ParseReleaseException e1) {
 						log.warn("YoutubeService fallito!");
 					}
+					youtube.addManualSearchLink(release); // link a youtube per la ricerca manuale
 					
 					listRelease.add(release);
 				}
