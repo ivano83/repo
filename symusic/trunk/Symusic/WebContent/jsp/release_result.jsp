@@ -27,9 +27,14 @@
 				<div class="rel_name">${item.nameWithUnderscore}</div>
 				<div>Artista: ${item.artist}</div>
 				<div>Titolo release: ${item.song}</div>
-				<div class="rating" data-average="0" data-id="${item.id}"></div>
-				<span class="voted voted_${item.id}"><img class="voted_img" src="./img/rating/rated_ok_green.png" alt="THANKS" /></span>
-				
+				<div class="rating" data-average="${item.voteAverage}" data-id="${item.id}" data-value="${item.voteValue}" disable="${item.voted}"></div>
+				<span class="voted voted_${item.id}">${item.voteAverage}/5
+				<c:choose>
+					<c:when test="${item.voted}">
+						<img class="voted_img" src="./img/rating/rated_ok_green.png" alt="THANKS" title="Il tuo voto: ${item.voteValue}/5" />
+					</c:when>
+				</c:choose>
+				</span>
 			</td>
 			<td>
 				<ol>

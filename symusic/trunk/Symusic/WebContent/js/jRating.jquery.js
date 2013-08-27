@@ -19,7 +19,7 @@
 
 			/** Boolean vars **/
 			step:false, // if true,  mouseover binded star by star,
-			isDisabled:false, // if true, user could not rate
+			isDisabled: false, // if true, user could not rate
 			showRateInfo: true, // show rates informations when cursor moves onto the plugin
 			canRateAgain : false, // if true, the user could rates {nbRates} times with jRating.. Default, 1 time
 			sendRequest: true, // send values to server
@@ -49,6 +49,11 @@
 			hasRated = false,
 			globalWidth = 0,
 			nbOfRates = opts.nbRates;
+			
+			if($(this).attr('disable')=='true')
+				opts.isDisabled = true;
+			else
+				opts.isDisabled = false;	
 
 			if($(this).hasClass('jDisabled') || opts.isDisabled)
 				var jDisabled = true;
@@ -60,9 +65,10 @@
 
 			var average = parseFloat($(this).attr('data-average')), // get the average of all rates
 			idBox = parseInt($(this).attr('data-id')), // get the id of the box
+			voteValue = parseInt($(this).attr('data-value')), // get the id of the box
 			widthRatingContainer = starWidth*opts.length, // Width of the Container
 			widthColor = average/opts.rateMax*widthRatingContainer, // Width of the color Container
-
+			widthPersonalVote = voteValue/opts.rateMax*widthRatingContainer, // Width of the color Voted
 			quotient =
 			$('<div>',
 			{
@@ -77,7 +83,7 @@
 			{
 				'class' : 'jRatingAverage',
 				css:{
-					width:0,
+					width:widthPersonalVote,
 					top:- starHeight
 				}
 			}).appendTo($(this)),
@@ -96,7 +102,7 @@
 
 
 			$(this).css({width: widthRatingContainer,overflow:'hidden',zIndex:1,position:'relative'});
-
+			
 			if(!jDisabled)
 			$(this).unbind().bind({
 				mouseenter : function(e){
@@ -152,14 +158,15 @@
 					var rate = getNote(newWidth);
 					average.width(newWidth);
 
+					averageVote = parseFloat($(this).attr('data-average'));
 
-					/** ONLY FOR THE DEMO, YOU CAN REMOVE THIS CODE **/
+					/** ONLY FOR THE DEMO, YOU CAN REMOVE THIS CODE 
 						$('.datasSent p').html('<strong>idBox : </strong>'+idBox+'<br /><strong>rate : </strong>'+rate+'<br /><strong>action :</strong> rating');
 						$('.serverResponse p').html('<strong>Loading...</strong>');
-					/** END ONLY FOR THE DEMO **/
+					 END ONLY FOR THE DEMO **/
 						
-		                $.get('RatingServlet',{id:idBox},function(responseText) { 
-		                        $('.voted_'+idBox).html('<img class="voted_img" src="./img/rating/rated_ok_green.png" alt="THANKS" />');
+		                $.get('RatingServlet',{id:idBox,vote:rate},function(responseText) { 
+		                        $('.voted_'+idBox).html(averageVote+'/5<img class="voted_img" src="./img/rating/rated_ok_green.png" alt="THANKS" title="Il tuo voto: '+rate+'/5"/>');
 		                });
 					if(opts.onClick) opts.onClick( element, rate );
 
@@ -172,9 +179,9 @@
 							function(data) {
 								if(!data.error)
 								{
-									/** ONLY FOR THE DEMO, YOU CAN REMOVE THIS CODE **/
+									/** ONLY FOR THE DEMO, YOU CAN REMOVE THIS CODE 
 										$('.serverResponse p').html(data.server);
-									/** END ONLY FOR THE DEMO **/
+									 END ONLY FOR THE DEMO **/
 
 
 									/** Here you can display an alert box,
@@ -185,9 +192,9 @@
 								else
 								{
 
-									/** ONLY FOR THE DEMO, YOU CAN REMOVE THIS CODE **/
+									/** ONLY FOR THE DEMO, YOU CAN REMOVE THIS CODE 
 										$('.serverResponse p').html(data.server);
-									/** END ONLY FOR THE DEMO **/
+									 END ONLY FOR THE DEMO **/
 
 									/** Here you can display an alert box,
 										or use the jNotify Plugin :) http://www.myqjqueryplugins.com/jNotify

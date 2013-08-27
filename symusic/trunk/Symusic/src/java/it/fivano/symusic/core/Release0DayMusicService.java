@@ -109,7 +109,7 @@ public class Release0DayMusicService {
 				}
 				
 				
-				
+				int i = 0;
 				Elements links = e.getElementsByTag("a");
 				for(Element linkDoc : links) {
 					release = new ReleaseModel();
@@ -135,6 +135,14 @@ public class Release0DayMusicService {
 					// recupero e inserimento dati sul DB
 					// TODO recupero e inserimento dati sul DB
 					release.setId(new Long(new Random().nextInt(9000000)));
+					double rounded = (double) Math.round(new Double(new Random().nextInt(5)*0.8) * 100) / 100;
+					release.setVoteAverage(rounded);
+					
+					if(i==0 || i==3) {
+						release.setVoted(true);
+						release.setVoteValue(new Random().nextInt(4));
+					}
+					i++;
 					
 					enableYoutubeService = this.verificaAbilitazioneYoutube(release);
 					

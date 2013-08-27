@@ -15,9 +15,18 @@ public class ReleaseModel {
 	private String releaseDate;
 	private String recordLabel;
 	
+	private Integer voteValue;
+	private Double voteAverage;
+	private boolean voted;
+	
 	private List<LinkModel> links;
 	private List<TrackModel> tracks;
 	private List<VideoModel> videos;
+	
+	public ReleaseModel() {
+		voteAverage = 0.;
+		voteValue = 0;
+	}
 	
 	
 	public String getName() {
@@ -111,5 +120,23 @@ public class ReleaseModel {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public Integer getVoteValue() {
+		return voteValue;
+	}
+	public void setVoteValue(Integer voteValue) {
+		this.voteValue = voteValue;
+	}
+	public boolean isVoted() {
+		return voted;
+	}
+	public void setVoted(boolean voted) {
+		this.voted = voted;
+	}
+	public Double getVoteAverage() {
+		return voteAverage;
+	}
+	public void setVoteAverage(Double voteAverage) {
+		this.voteAverage = voteAverage;
 	}
 }
