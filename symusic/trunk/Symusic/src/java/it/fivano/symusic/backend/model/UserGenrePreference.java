@@ -21,12 +21,12 @@ public class UserGenrePreference implements Serializable {
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
-	@JoinColumn(name="id_user")
+	@JoinColumn(name="id_user", insertable=false, updatable=false)
 	private User user;
 
 	//bi-directional many-to-one association to Genre
 	@ManyToOne
-	@JoinColumn(name="id_genre")
+	@JoinColumn(name="id_genre", insertable=false, updatable=false)
 	private Genre genre;
 
 	public UserGenrePreference() {

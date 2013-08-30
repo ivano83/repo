@@ -24,12 +24,12 @@ public class ReleaseRating implements Serializable {
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
-	@JoinColumn(name="id_user")
+	@JoinColumn(name="id_user", insertable=false, updatable=false)
 	private User user;
 
 	//bi-directional many-to-one association to Release
 	@ManyToOne
-	@JoinColumn(name="id_release")
+	@JoinColumn(name="id_release", insertable=false, updatable=false)
 	private Release release;
 
 	public ReleaseRating() {
