@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" 
+	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+	<persistence-unit name="Symusic" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<non-jta-data-source>java:/SymusicDS</non-jta-data-source>
+		<class>it.fivano.symusic.backend.model.Genre</class>
+		<class>it.fivano.symusic.backend.model.Release</class>
+		<class>it.fivano.symusic.backend.model.ReleaseLink</class>
+		<class>it.fivano.symusic.backend.model.ReleaseRating</class>
+		<class>it.fivano.symusic.backend.model.ReleaseRatingPK</class>
+		<class>it.fivano.symusic.backend.model.ReleaseTrack</class>
+		<class>it.fivano.symusic.backend.model.ReleaseVideo</class>
+		<class>it.fivano.symusic.backend.model.User</class>
+		<class>it.fivano.symusic.backend.model.UserGenrePreference</class>
+		<class>it.fivano.symusic.backend.model.UserGenrePreferencePK</class>
+		<class>it.fivano.symusic.backend.model.UserPreference</class>
+		<properties>
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/symusic"/>
+			<property name="javax.persistence.jdbc.user" value="root"/>
+			<property name="javax.persistence.jdbc.password" value="passw0rd.1"/>
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
+		</properties>
+	</persistence-unit>
+	
+</persistence>
