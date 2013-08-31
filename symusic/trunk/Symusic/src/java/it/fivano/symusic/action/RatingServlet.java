@@ -1,6 +1,5 @@
 package it.fivano.symusic.action;
 
-import it.fivano.symusic.backend.dao.ReleaseDao;
 import it.fivano.symusic.model.ReleaseModel;
 
 import java.io.IOException;

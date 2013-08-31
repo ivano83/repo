@@ -99,7 +99,7 @@ public class ScenelogService extends BaseService {
 				for(Element dl : downloads) {
 					currLink = new LinkModel();
 					currLink.setLink(dl.attr("href"));
-					currLink.setName((dl.attr("href").length()>50)? dl.attr("href").substring(0,70)+"..." : dl.attr("href"));
+					currLink.setName((dl.attr("href").length()>70)? dl.attr("href").substring(0,70)+"..." : dl.attr("href"));
 					release.addLink(currLink);
 				}
 				

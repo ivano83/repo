@@ -1,8 +1,6 @@
 package it.fivano.symusic.core;
 
 import it.fivano.symusic.SymusicUtility;
-import it.fivano.symusic.backend.TransformerUtility;
-import it.fivano.symusic.backend.dao.ReleaseDao;
 import it.fivano.symusic.conf.ZeroDayMusicConf;
 import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.LinkModel;
@@ -135,14 +133,14 @@ public class Release0DayMusicService {
 					
 					enableYoutubeService = this.verificaAbilitazioneYoutube(release);
 					
-					boolean isRecuperato = false;
-					ReleaseDao dao = new ReleaseDao();
-					ReleaseModel relDb = TransformerUtility.transformReleaseToModel(dao.getRelease(release.getNameWithUnderscore()));
-					if(relDb!=null) {
-						enableScenelogService = false;
-						enableYoutubeService = false;
-						isRecuperato = true;
-					}
+//					boolean isRecuperato = false;
+//					ReleaseDao dao = new ReleaseDao();
+//					ReleaseModel relDb = TransformerUtility.transformReleaseToModel(dao.getRelease(release.getNameWithUnderscore()));
+//					if(relDb!=null) {
+//						enableScenelogService = false;
+//						enableYoutubeService = false;
+//						isRecuperato = true;
+//					}
 					
 					// recupero e inserimento dati sul DB
 					// TODO recupero e inserimento dati sul DB
@@ -194,9 +192,9 @@ public class Release0DayMusicService {
 					}
 					
 					// salva sul db
-					if(!isRecuperato) {
-						dao.saveRelease(TransformerUtility.transformRelease(release));
-					}
+//					if(!isRecuperato) {
+//						dao.saveRelease(TransformerUtility.transformRelease(release));
+//					}
 					
 					
 					GoogleService google = new GoogleService();
