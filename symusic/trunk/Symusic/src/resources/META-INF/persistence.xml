@@ -3,7 +3,7 @@
 	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
 	<persistence-unit name="Symusic" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<non-jta-data-source>java:SymusicDS</non-jta-data-source>
+		<non-jta-data-source>java:/SymusicDS</non-jta-data-source>
 		<class>it.fivano.symusic.backend.model.Genre</class>
 		<class>it.fivano.symusic.backend.model.Release</class>
 		<class>it.fivano.symusic.backend.model.ReleaseLink</class>
@@ -20,6 +20,7 @@
 			<property name="javax.persistence.jdbc.user" value="root"/>
 			<property name="javax.persistence.jdbc.password" value="passw0rd.1"/>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
 		</properties>
 	</persistence-unit>
 	

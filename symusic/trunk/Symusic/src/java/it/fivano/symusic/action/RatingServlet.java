@@ -1,5 +1,6 @@
 package it.fivano.symusic.action;
 
+import it.fivano.symusic.backend.dao.ReleaseDao;
 import it.fivano.symusic.model.ReleaseModel;
 
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class RatingServlet  extends HttpServlet {
 				r.setVoteAverage((r.getVoteAverage()+Integer.parseInt(request.getParameter("vote"))/2));
 			}
 		}
-		
+	
 		
 		response.setContentType("text/plain");  
 		response.setCharacterEncoding("UTF-8"); 

@@ -2,18 +2,27 @@ package it.fivano.symusic;
 
 import it.fivano.symusic.model.ReleaseModel;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Properties;
 
-import com.wcohen.ss.Level2JaroWinkler;
 import com.wcohen.ss.Level2MongeElkan;
 import com.wcohen.ss.MongeElkan;
 
 public class SymusicUtility {
 	
 	public static final String STANDARD_DATE_FORMAT = "dd/MM/yyyy";
+	
+	public static Properties getProps(String propsName) throws IOException {
+		InputStream in = SymusicUtility.class.getClassLoader().getResourceAsStream(propsName);
+		Properties props = new Properties();
+		props.load(in);
+		return props;
+	}
 	
 	
 	public static String getStandardDateFormat(String dateIn, String format) throws ParseException {

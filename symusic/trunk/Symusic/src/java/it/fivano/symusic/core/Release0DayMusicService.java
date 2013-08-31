@@ -1,6 +1,8 @@
 package it.fivano.symusic.core;
 
 import it.fivano.symusic.SymusicUtility;
+import it.fivano.symusic.backend.TransformerUtility;
+import it.fivano.symusic.backend.dao.ReleaseDao;
 import it.fivano.symusic.conf.ZeroDayMusicConf;
 import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.LinkModel;
@@ -131,6 +133,16 @@ public class Release0DayMusicService {
 					log.info("#####################");
 					log.info("|"+release+"|");
 					
+					enableYoutubeService = this.verificaAbilitazioneYoutube(release);
+					
+					boolean isRecuperato = false;
+					ReleaseDao dao = new ReleaseDao();
+					ReleaseModel relDb = TransformerUtility.transformReleaseToModel(dao.getRelease(release.getNameWithUnderscore()));
+					if(relDb!=null) {
+						enableScenelogService = false;
+						enableYoutubeService = false;
+						isRecuperato = true;
+					}
 					
 					// recupero e inserimento dati sul DB
 					// TODO recupero e inserimento dati sul DB
@@ -144,9 +156,7 @@ public class Release0DayMusicService {
 					}
 					i++;
 					
-					enableYoutubeService = this.verificaAbilitazioneYoutube(release);
-					
-					
+	
 					// ########## SCENELOG ############
 					try {
 						ScenelogService scenelog = new ScenelogService();
@@ -157,8 +167,7 @@ public class Release0DayMusicService {
 					} catch (ParseReleaseException e1) {
 						log.warn("ScenelogService fallito!");
 					}
-					GoogleService google = new GoogleService();
-					google.addManualSearchLink(release);
+					
 					
 					// ########## BEATPORT ############
 					try {
@@ -180,10 +189,18 @@ public class Release0DayMusicService {
 							youtube.extractYoutubeVideo(release);
 						}
 						
-						
 					} catch (ParseReleaseException e1) {
 						log.warn("YoutubeService fallito!");
 					}
+					
+					// salva sul db
+					if(!isRecuperato) {
+						dao.saveRelease(TransformerUtility.transformRelease(release));
+					}
+					
+					
+					GoogleService google = new GoogleService();
+					google.addManualSearchLink(release);
 					youtube.addManualSearchLink(release); // link a youtube per la ricerca manuale
 					
 					listRelease.add(release);

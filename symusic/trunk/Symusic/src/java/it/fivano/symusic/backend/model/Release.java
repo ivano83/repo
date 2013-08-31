@@ -1,7 +1,12 @@
 package it.fivano.symusic.backend.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import java.util.List;
 
 
@@ -33,18 +38,21 @@ public class Release implements Serializable {
 
 	//bi-directional many-to-one association to ReleaseLink
 	@OneToMany(mappedBy="release")
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<ReleaseLink> releaseLinks;
 
 	//bi-directional many-to-one association to ReleaseRating
 	@OneToMany(mappedBy="release")
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<ReleaseRating> releaseRatings;
 
 	//bi-directional many-to-one association to ReleaseTrack
 	@OneToMany(mappedBy="release")
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<ReleaseTrack> releaseTracks;
 
 	//bi-directional many-to-one association to ReleaseVideo
-	@OneToMany(mappedBy="release")
+	@OneToMany(mappedBy="release", fetch=FetchType.EAGER)
 	private List<ReleaseVideo> releaseVideos;
 
 	public Release() {
