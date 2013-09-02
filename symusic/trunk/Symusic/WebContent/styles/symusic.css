@@ -36,6 +36,11 @@
     position: relative;
 }
 
+.rel_home {
+	left: 35%;
+    position: relative;
+}
+
 .rel_precedenti {
 	left: 65%;
     position: relative;

@@ -8,6 +8,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.conf.YoutubeConf;
 import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.ReleaseModel;
@@ -46,8 +47,48 @@ public class YoutubeService extends BaseService {
 					videoGroup = doc.getElementsByClass(conf.CLASS_VIDEO);
 					if(videoGroup.isEmpty())
 						throw new ParseReleaseException();
-				
-					trovato = true;
+					
+					
+					VideoModel yt = null;
+					String title = "";
+					int count = 0;
+					for(Element video : videoGroup) {
+						yt = new VideoModel();
+						Element videoTitle = video.getElementsByClass(conf.CLASS_VIDEO_TITLE).get(0);
+						title = videoTitle.text();
+						
+						String relName = this.formatQueryString(release.getName(),tentativi);
+						boolean similarity = SymusicUtility.compareStringSimilarity(relName, title);
+						if(!similarity) {
+							continue;
+						}
+						
+						yt.setName(title);
+						
+						String href = videoTitle.child(0).attr("href");
+						yt.setLink(conf.URL+href.substring(1));
+						
+						try {
+							String eta = video.getElementsByClass(conf.CLASS_VIDEO_META).get(0).getElementsByTag("li").get(1).text();
+							yt.setEta(eta);
+						} catch (Exception e) {
+							log.warn("Impossibile recuperare il dato eta' del video = "+title);
+						}
+						
+						
+						log.info("    VIDEO:  "+yt);
+						release.addVideo(yt);
+						
+						// salva solo MAX_VIDEO_EXTRACT video
+						count++;
+						if(count>=conf.MAX_VIDEO_EXTRACT)
+							break;
+					}
+
+					if(release.getVideos().isEmpty())
+						trovato = false;
+					else
+						trovato = true;
 				} catch (Exception e1) {
 					tentativi++;
 				}
@@ -56,37 +97,8 @@ public class YoutubeService extends BaseService {
 			
 			if(videoGroup==null || videoGroup.isEmpty())
 				throw new ParseReleaseException("Nessun risultato ottenuto per la release = "+release);
-		
-//			log.info("\n");
-			VideoModel yt = null;
-			String title = "";
-			int count = 0;
-			for(Element video : videoGroup) {
-				yt = new VideoModel();
-				Element videoTitle = video.getElementsByClass(conf.CLASS_VIDEO_TITLE).get(0);
-				title = videoTitle.text();
-				yt.setName(title);
-				
-				String href = videoTitle.child(0).attr("href");
-				yt.setLink(conf.URL+href.substring(1));
-				
-				try {
-					String eta = video.getElementsByClass(conf.CLASS_VIDEO_META).get(0).getElementsByTag("li").get(1).text();
-					yt.setEta(eta);
-				} catch (Exception e) {
-					log.warn("Impossibile recuperare il dato eta' del video = "+title);
-				}
-				
-				
-				log.info("    VIDEO:  "+yt);
-				release.addVideo(yt);
-				
-				// salva solo MAX_VIDEO_EXTRACT video
-				count++;
-				if(count>=conf.MAX_VIDEO_EXTRACT)
-					break;
-			}
-
+			
+			
 			
 		} catch (ParseReleaseException e) {
 			// TODO Auto-generated catch block

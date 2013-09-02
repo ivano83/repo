@@ -95,12 +95,8 @@ public class ScenelogService extends BaseService {
 				Element releaseDownloads = doc.getElementsByClass(conf.RELEASE_DOWNLOAD).get(0);
 				
 				Elements downloads = releaseDownloads.getElementsByTag("a");
-				LinkModel currLink = null;
 				for(Element dl : downloads) {
-					currLink = new LinkModel();
-					currLink.setLink(dl.attr("href"));
-					currLink.setName((dl.attr("href").length()>70)? dl.attr("href").substring(0,70)+"..." : dl.attr("href"));
-					release.addLink(currLink);
+					release.addLink(this.popolateLink(dl));
 				}
 				
 			}
@@ -121,7 +117,7 @@ public class ScenelogService extends BaseService {
 	}
 	
 	private String getUrlConnection(ReleaseModel release, int tentativi) {
-		String query = this.formatQueryString(release.getName(),tentativi);
+		String query = release.getNameWithUnderscore();
 		
 		// pagina di inizio
 		return conf.URL+conf.URL_ACTION+"?"+conf.PARAMS.replace("{0}", query);

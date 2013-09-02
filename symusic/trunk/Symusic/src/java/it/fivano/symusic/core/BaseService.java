@@ -1,8 +1,18 @@
 package it.fivano.symusic.core;
 
+import org.jsoup.nodes.Element;
+
+import it.fivano.symusic.model.LinkModel;
+
 public abstract class BaseService {
 	
-	
+	protected LinkModel popolateLink(Element dl) {
+		LinkModel currLink = new LinkModel();
+		currLink.setLink(dl.attr("href"));
+		currLink.setName((dl.attr("href").length()>70)? dl.attr("href").substring(0,70)+"..." : dl.attr("href"));
+		
+		return currLink;
+	}
 	
 	protected String formatQueryString(String name, int wordToDelete) {
 		
@@ -30,10 +40,10 @@ public abstract class BaseService {
 		
 		if(wordToDelete>0) {
 			for(int i=0;i<wordToDelete;i++)
-				result = result.substring(0,result.lastIndexOf(" "));
+				result = result.substring(0,result.lastIndexOf("-"));
 		}
 		
-		return applyFilterSearch(result);
+		return this.applyFilterSearch(result);
 	}
 	
 	protected abstract String applyFilterSearch(String result);

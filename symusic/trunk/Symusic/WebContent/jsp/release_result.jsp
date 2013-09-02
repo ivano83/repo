@@ -63,6 +63,7 @@
 
 <p>
 <span class="rel_successive"><a href="${urlSuccessivo}">SUCCESSIVE RELEASE</a></span>
+<span class="rel_home"><a href="./">HOME</a></span>
 <span class="rel_precedenti"><a href="${urlPrecedente}">PRECEDENTI RELEASE</a></span>
 </p>
 

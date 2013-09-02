@@ -20,7 +20,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class Release0DayMusicService {
+public class Release0DayMusicService extends BaseService {
 	
 	private ZeroDayMusicConf conf;
 	private boolean enableBeatportService;
@@ -113,7 +113,6 @@ public class Release0DayMusicService {
 				Elements links = e.getElementsByTag("a");
 				for(Element linkDoc : links) {
 					release = new ReleaseModel();
-					link = new LinkModel();
 					
 					// name
 					String title = linkDoc.attr("title");
@@ -121,8 +120,7 @@ public class Release0DayMusicService {
 					release.setNameWithUnderscore(title.replace(" ", "_"));
 					
 					// link
-					link.setLink(linkDoc.attr("href"));
-					release.addLink(link);
+					release.addLink(this.popolateLink(linkDoc));
 					
 					// release date
 					release.setReleaseDate(dateIn);
@@ -284,6 +282,12 @@ public class Release0DayMusicService {
 
 	public void setEnableBeatportService(boolean enableBeatportService) {
 		this.enableBeatportService = enableBeatportService;
+	}
+
+
+	@Override
+	protected String applyFilterSearch(String result) {
+		return result;
 	}
 }
 
