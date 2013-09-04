@@ -263,7 +263,6 @@ class LinkItem implements Comparable<LinkItem> {
 		
 		return this.getLink().equals(obj.getLink());
 	}
-	@Override
 	public int compareTo(LinkItem o) {
 		return this.getLink().compareTo(o.getLink());
 	}
