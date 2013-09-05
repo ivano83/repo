@@ -1,7 +1,10 @@
 package it.fivano.symusic.core;
 
 import it.fivano.symusic.SymusicUtility;
+import it.fivano.symusic.backend.TransformerUtility;
+import it.fivano.symusic.backend.service.ReleaseService;
 import it.fivano.symusic.conf.ZeroDayMusicConf;
+import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.LinkModel;
 import it.fivano.symusic.model.ReleaseModel;
@@ -37,7 +40,7 @@ public class Release0DayMusicService extends BaseService {
 	}
 	
 	
-	public List<ReleaseModel> parse0DayMusicRelease(String genere, Date da, Date a) {
+	public List<ReleaseModel> parse0DayMusicRelease(String genere, Date da, Date a) throws BackEndException {
 		
 		List<ReleaseModel> listRelease = null;
 		
@@ -75,7 +78,7 @@ public class Release0DayMusicService extends BaseService {
 	
 	
 	
-	private List<ReleaseModel> parse0DayMusic(String urlConn, Date da, Date a, ZeroDayMusicInfo info) throws IOException, ParseException {
+	private List<ReleaseModel> parse0DayMusic(String urlConn, Date da, Date a, ZeroDayMusicInfo info) throws IOException, ParseException, BackEndException {
 		
 		List<ReleaseModel> listRelease = new ArrayList<ReleaseModel>();
 		
@@ -131,14 +134,14 @@ public class Release0DayMusicService extends BaseService {
 					
 					enableYoutubeService = this.verificaAbilitazioneYoutube(release);
 					
-//					boolean isRecuperato = false;
-//					ReleaseDao dao = new ReleaseDao();
-//					ReleaseModel relDb = TransformerUtility.transformReleaseToModel(dao.getRelease(release.getNameWithUnderscore()));
-//					if(relDb!=null) {
-//						enableScenelogService = false;
-//						enableYoutubeService = false;
-//						isRecuperato = true;
-//					}
+					boolean isRecuperato = false;
+					ReleaseService relServ = new ReleaseService();
+					ReleaseModel relDb = TransformerUtility.transformReleaseToModel(relServ.getRelease(release.getNameWithUnderscore()));
+					if(relDb!=null) {
+						enableScenelogService = false;
+						enableYoutubeService = false;
+						isRecuperato = true;
+					}
 					
 					// recupero e inserimento dati sul DB
 					// TODO recupero e inserimento dati sul DB
@@ -190,9 +193,9 @@ public class Release0DayMusicService extends BaseService {
 					}
 					
 					// salva sul db
-//					if(!isRecuperato) {
-//						dao.saveRelease(TransformerUtility.transformRelease(release));
-//					}
+					if(!isRecuperato) {
+						relServ.saveRelease(TransformerUtility.transformRelease(release));
+					}
 					
 					
 					GoogleService google = new GoogleService();
@@ -263,7 +266,7 @@ public class Release0DayMusicService extends BaseService {
 	
 	}
 
-	public static void main(String[] args) throws IOException, ParseException {
+	public static void main(String[] args) throws IOException, ParseException, BackEndException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		Date da = sdf.parse("20130802");
 		Date a = sdf.parse("20130803");

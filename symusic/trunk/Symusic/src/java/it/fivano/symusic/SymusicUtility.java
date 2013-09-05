@@ -17,6 +17,18 @@ public class SymusicUtility {
 	
 	public static final String STANDARD_DATE_FORMAT = "dd/MM/yyyy";
 	
+	public enum EnvironmentType {
+		TESTING("testing");
+		
+		private String env;
+		private EnvironmentType(String env) {
+			this.env = env;
+		}
+		public String getEnv() {
+			return env;
+		}
+	}
+	
 	public static Properties getProps(String propsName) throws IOException {
 		InputStream in = SymusicUtility.class.getClassLoader().getResourceAsStream(propsName);
 		Properties props = new Properties();

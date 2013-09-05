@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties>
+		<property name="driver" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/symusic" />
+		<property name="username" value="root" />
+		<property name="password" value="passw0rd.1" />
+	</properties>
+	<environments default="deployment">
+	<environment id="testing">
+		<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver" />
+				<property name="url" value="jdbc:mysql://localhost:3306/symusic" />
+				<property name="username" value="root" />
+				<property name="password" value="passw0rd.1" />
+			</dataSource>
+		</environment>
+		<environment id="deployment">
+			<transactionManager type="MANAGED">
+				<property name="closeConnection" value="true" />
+			</transactionManager>
+			<dataSource type="JNDI">
+				<property name="data_source" value="java:/SymusicDS" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="it/fivano/symusic/backend/map/GenreMapper.xml" />
+		<mapper resource="it/fivano/symusic/backend/map/ReleaseLinkMapper.xml" />
+		<mapper resource="it/fivano/symusic/backend/map/ReleaseMapper.xml" />
+		<mapper resource="it/fivano/symusic/backend/map/ReleaseRatingMapper.xml" />
+		<mapper resource="it/fivano/symusic/backend/map/ReleaseTrackMapper.xml" />
+		<mapper resource="it/fivano/symusic/backend/map/ReleaseVideoMapper.xml" />
+		<mapper resource="it/fivano/symusic/backend/map/UserGenrePreferenceMapper.xml" />
+		<mapper resource="it/fivano/symusic/backend/map/UserMapper.xml" />
+		<mapper resource="it/fivano/symusic/backend/map/UserPreferenceMapper.xml" />
+	</mappers>
+</configuration>
