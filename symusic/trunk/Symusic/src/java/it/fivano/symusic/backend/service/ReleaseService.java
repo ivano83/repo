@@ -4,10 +4,14 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import it.fivano.symusic.backend.TransformerUtility;
 import it.fivano.symusic.backend.dao.ReleaseMapper;
 import it.fivano.symusic.backend.model.Release;
 import it.fivano.symusic.backend.model.ReleaseExample;
 import it.fivano.symusic.exception.BackEndException;
+import it.fivano.symusic.model.LinkModel;
+import it.fivano.symusic.model.ReleaseModel;
+import it.fivano.symusic.model.VideoModel;
 
 public class ReleaseService extends RootService {
 	
@@ -17,7 +21,7 @@ public class ReleaseService extends RootService {
 		return this.apriSessione().getMapper(ReleaseMapper.class);
 	}
 	
-	public Release getRelease(String name) throws BackEndException {
+	public ReleaseModel getRelease(String name) throws BackEndException {
 		
 		try {
 			ReleaseExample input = new ReleaseExample();
@@ -33,18 +37,50 @@ public class ReleaseService extends RootService {
 			if(res.size()==0)
 				return null;
 			else 
-				return res.get(0);
+				return TransformerUtility.transformReleaseToModel(res.get(0));
+		} finally {
+			this.chiudiSessione();
+		}
+	}
+
+	public ReleaseModel getReleaseFull(String name) throws BackEndException {
+		
+		try {
+			ReleaseExample input = new ReleaseExample();
+			input.createCriteria().andReleaseNameEqualTo(name);
+			
+			ReleaseMapper releaseDao = this.getReleaseMapper();
+			
+			List<Release> res = releaseDao.selectByExample(input);
+			
+			if(res.size()>1) {
+				log.warn("La ricerca per nome release = '"+name+"' ha restituito più di un valore");
+			}
+			if(res.size()==0)
+				return null;
+			else {
+				
+				ReleaseModel relRes = TransformerUtility.transformReleaseToModel(res.get(0));
+				Long idRel = relRes.getId();
+				List<VideoModel> videos = new VideoService().getVideos(idRel);
+				relRes.setVideos(videos);
+				
+				List<LinkModel> links = new LinkService().getLinks(idRel);
+				relRes.setLinks(links);
+				
+				return relRes;
+			}
 		} finally {
 			this.chiudiSessione();
 		}
 	}
 
 	
-	public Release saveRelease(Release rel) throws BackEndException {
+	public ReleaseModel saveRelease(Release rel) throws BackEndException {
 		
 		try {
 			if(rel!=null && rel.getReleaseName()!=null) {
-				Release r = getRelease(rel.getReleaseName());
+				ReleaseModel r = getRelease(rel.getReleaseName());
 				if(r!=null) {
 					return r;
 				}
@@ -55,7 +91,7 @@ public class ReleaseService extends RootService {
 			else {
 				throw new BackEndException("Non ci sono dati sufficienti per salvare la release: "+rel);
 			}
-			return rel;
+			return TransformerUtility.transformReleaseToModel(rel);
 		} finally {
 			this.chiudiSessione();
 		}

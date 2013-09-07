@@ -31,5 +31,5 @@ public class VideoModel {
 				link!=null? link+" | " : ""+
 						eta!=null? eta+" | " : "";
 	}
-	
+
 }

@@ -2,7 +2,9 @@ package it.fivano.symusic.core;
 
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.backend.TransformerUtility;
+import it.fivano.symusic.backend.service.LinkService;
 import it.fivano.symusic.backend.service.ReleaseService;
+import it.fivano.symusic.backend.service.VideoService;
 import it.fivano.symusic.conf.ZeroDayMusicConf;
 import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.exception.ParseReleaseException;
@@ -136,11 +138,12 @@ public class Release0DayMusicService extends BaseService {
 					
 					boolean isRecuperato = false;
 					ReleaseService relServ = new ReleaseService();
-					ReleaseModel relDb = TransformerUtility.transformReleaseToModel(relServ.getRelease(release.getNameWithUnderscore()));
+					ReleaseModel relDb = relServ.getReleaseFull(release.getNameWithUnderscore());
 					if(relDb!=null) {
 						enableScenelogService = false;
 						enableYoutubeService = false;
 						isRecuperato = true;
+						release = relDb;
 					}
 					
 					// recupero e inserimento dati sul DB
@@ -154,6 +157,14 @@ public class Release0DayMusicService extends BaseService {
 						release.setVoteValue(new Random().nextInt(4));
 					}
 					i++;
+					
+					
+
+					// salva sul db
+					if(!isRecuperato) {
+						relServ.saveRelease(TransformerUtility.transformRelease(release));
+						// TODO in input deve avere il model ... trasformazione nel service
+					}
 					
 	
 					// ########## SCENELOG ############
@@ -191,12 +202,7 @@ public class Release0DayMusicService extends BaseService {
 					} catch (ParseReleaseException e1) {
 						log.warn("YoutubeService fallito!");
 					}
-					
-					// salva sul db
-					if(!isRecuperato) {
-						relServ.saveRelease(TransformerUtility.transformRelease(release));
-					}
-					
+
 					
 					GoogleService google = new GoogleService();
 					google.addManualSearchLink(release);

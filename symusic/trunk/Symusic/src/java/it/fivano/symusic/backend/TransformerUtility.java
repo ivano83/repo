@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.fivano.symusic.backend.model.Release;
+import it.fivano.symusic.backend.model.ReleaseLink;
 import it.fivano.symusic.backend.model.ReleaseVideo;
+import it.fivano.symusic.model.LinkModel;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.VideoModel;
 
@@ -94,6 +96,29 @@ public class TransformerUtility {
 		
 		for(ReleaseVideo v : video) {
 			res.add(transformVideoToModel(v));
+		}
+		return res;
+	}
+	
+	public static LinkModel transformLinkToModel(ReleaseLink video) {
+		if(video==null)
+			return null;
+		
+		LinkModel res = new LinkModel();
+		
+		res.setLink(video.getReleaseLink());
+		
+		return res;
+	}
+	
+	public static List<LinkModel> transformLinksToModel(List<ReleaseLink> video) {
+		List<LinkModel> res = new ArrayList<LinkModel>();
+		
+		if(video==null)
+			return res;
+		
+		for(ReleaseLink v : video) {
+			res.add(transformLinkToModel(v));
 		}
 		return res;
 	}

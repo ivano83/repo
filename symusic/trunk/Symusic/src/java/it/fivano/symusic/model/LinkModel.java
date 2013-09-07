@@ -24,5 +24,4 @@ public class LinkModel {
 		this.name = name;
 	}
 
-	
 }

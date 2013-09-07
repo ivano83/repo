@@ -49,6 +49,5 @@ public class TrackModel {
 								(genere!=null? genere+" | " : "") + 
 										(bpm!=null? bpm+" | " : "") ;
 	}
-	
 
 }

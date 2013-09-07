@@ -38,6 +38,8 @@ public class YoutubeService extends BaseService {
 			String urlConn = null;
 			do  {
 				try {
+					
+					Long idRel = release.getId();
 
 					// pagina di inizio
 					urlConn = this.getUrlConnection(release, tentativi);
