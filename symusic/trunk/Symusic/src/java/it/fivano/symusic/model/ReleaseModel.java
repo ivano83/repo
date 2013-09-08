@@ -30,6 +30,9 @@ public class ReleaseModel {
 	
 	
 	public String getName() {
+		if(name==null && nameWithUnderscore!=null) {
+			name = nameWithUnderscore.replace("_", " ");
+		}
 		return name;
 	}
 	public void setName(String name) {

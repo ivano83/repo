@@ -1,7 +1,11 @@
 package it.fivano.symusic.core;
 
 import it.fivano.symusic.SymusicUtility;
+import it.fivano.symusic.backend.service.LinkService;
+import it.fivano.symusic.backend.service.TrackService;
+import it.fivano.symusic.backend.service.VideoService;
 import it.fivano.symusic.conf.ScenelogConf;
+import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.LinkModel;
 import it.fivano.symusic.model.ReleaseModel;
@@ -27,7 +31,7 @@ public class ScenelogService extends BaseService {
 		conf = new ScenelogConf();
 	}
 	
-	public boolean parseScenelog(ReleaseModel release) throws ParseReleaseException {
+	public boolean parseScenelog(ReleaseModel release) throws ParseReleaseException, BackEndException {
 		
 		try {
 			int tentativi = 0;
@@ -99,6 +103,13 @@ public class ScenelogService extends BaseService {
 					release.addLink(this.popolateLink(dl));
 				}
 				
+				// salva sul db
+				LinkService lserv = new LinkService();
+				lserv.saveLinks(release.getLinks(), release.getId());
+
+				TrackService tserv = new TrackService();
+				tserv.saveTracks(release.getTracks(), release.getId());
+				
 			}
 			else {
 				log.warn("[SCENELOG] Release non trovata = "+release);
@@ -110,6 +121,9 @@ public class ScenelogService extends BaseService {
 			// TODO Auto-generated catch block
 			log.error("[SCENELOG] Errore nel parsing",e);
 			throw new ParseReleaseException("[SCENELOG] Errore nel parsing",e);
+		} catch (BackEndException e) {
+			log.error("[SCENELOG] Errore di backend durante il salvataggio dei dati estratti");
+			throw e;
 		}
 
 		return true;
@@ -127,7 +141,7 @@ public class ScenelogService extends BaseService {
 		return t.replace(" ", "+");
 	}
 	
-	public static void main(String[] args) throws IOException, ParseReleaseException {
+	public static void main(String[] args) throws IOException, ParseReleaseException, BackEndException {
 		
 		ScenelogService s = new ScenelogService();
 		ReleaseModel r = new ReleaseModel();

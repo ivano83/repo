@@ -11,6 +11,7 @@ import it.fivano.symusic.backend.model.ReleaseExample;
 import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.model.LinkModel;
 import it.fivano.symusic.model.ReleaseModel;
+import it.fivano.symusic.model.TrackModel;
 import it.fivano.symusic.model.VideoModel;
 
 public class ReleaseService extends RootService {
@@ -24,20 +25,42 @@ public class ReleaseService extends RootService {
 	public ReleaseModel getRelease(String name) throws BackEndException {
 		
 		try {
-			ReleaseExample input = new ReleaseExample();
-			input.createCriteria().andReleaseNameEqualTo(name);
+			ReleaseMapper releaseDao = this.getReleaseMapper();
+
+			return this.getRelease(name, releaseDao);
 			
+		} finally {
+			this.chiudiSessione();
+		}
+	}
+	
+	private ReleaseModel getRelease(String name, ReleaseMapper releaseDao) throws BackEndException {
+		
+		ReleaseExample input = new ReleaseExample();
+		input.createCriteria().andReleaseNameEqualTo(name);
+
+		List<Release> res = releaseDao.selectByExample(input);
+
+		if(res.size()>1) {
+			log.warn("La ricerca per nome release = '"+name+"' ha restituito più di un valore");
+		}
+		if(res.size()==0)
+			return null;
+		else 
+			return TransformerUtility.transformReleaseToModel(res.get(0));
+
+	}
+	
+	public ReleaseModel getRelease(Long idRel) throws BackEndException {
+		
+		try {
+
 			ReleaseMapper releaseDao = this.getReleaseMapper();
 			
-			List<Release> res = releaseDao.selectByExample(input);
+			Release res = releaseDao.selectByPrimaryKey(idRel);
+
+			return TransformerUtility.transformReleaseToModel(res);
 			
-			if(res.size()>1) {
-				log.warn("La ricerca per nome release = '"+name+"' ha restituito più di un valore");
-			}
-			if(res.size()==0)
-				return null;
-			else 
-				return TransformerUtility.transformReleaseToModel(res.get(0));
 		} finally {
 			this.chiudiSessione();
 		}
@@ -68,6 +91,10 @@ public class ReleaseService extends RootService {
 				List<LinkModel> links = new LinkService().getLinks(idRel);
 				relRes.setLinks(links);
 				
+				List<TrackModel> tracks = new TrackService().getTracks(idRel);
+				relRes.setTracks(tracks);
+				
+				
 				return relRes;
 			}
 		} finally {
@@ -76,15 +103,17 @@ public class ReleaseService extends RootService {
 	}
 
 	
-	public ReleaseModel saveRelease(Release rel) throws BackEndException {
+	public ReleaseModel saveRelease(ReleaseModel release) throws BackEndException {
 		
 		try {
+			Release rel = TransformerUtility.transformRelease(release);
+			
 			if(rel!=null && rel.getReleaseName()!=null) {
-				ReleaseModel r = getRelease(rel.getReleaseName());
+				ReleaseMapper releaseDao = this.getReleaseMapper();
+				ReleaseModel r = getRelease(rel.getReleaseName(), releaseDao);
 				if(r!=null) {
 					return r;
 				}
-				ReleaseMapper releaseDao = this.getReleaseMapper();
 				releaseDao.insert(rel);
 				
 			}

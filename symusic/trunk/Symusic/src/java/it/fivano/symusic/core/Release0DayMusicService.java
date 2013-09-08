@@ -146,9 +146,14 @@ public class Release0DayMusicService extends BaseService {
 						release = relDb;
 					}
 					
+
+					// salva sul db
+					if(!isRecuperato) {
+						release = relServ.saveRelease(release);
+					}
+					
 					// recupero e inserimento dati sul DB
 					// TODO recupero e inserimento dati sul DB
-					release.setId(new Long(new Random().nextInt(9000000)));
 					double rounded = (double) Math.round(new Double(new Random().nextInt(5)*0.8) * 100) / 100;
 					release.setVoteAverage(rounded);
 					
@@ -158,13 +163,6 @@ public class Release0DayMusicService extends BaseService {
 					}
 					i++;
 					
-					
-
-					// salva sul db
-					if(!isRecuperato) {
-						relServ.saveRelease(TransformerUtility.transformRelease(release));
-						// TODO in input deve avere il model ... trasformazione nel service
-					}
 					
 	
 					// ########## SCENELOG ############

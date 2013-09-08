@@ -9,7 +9,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import it.fivano.symusic.SymusicUtility;
+import it.fivano.symusic.backend.service.VideoService;
 import it.fivano.symusic.conf.YoutubeConf;
+import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.TrackModel;
@@ -27,7 +29,7 @@ public class YoutubeService extends BaseService {
 	}
 
 	
-	public boolean extractYoutubeVideo(ReleaseModel release) throws ParseReleaseException {
+	public boolean extractYoutubeVideo(ReleaseModel release) throws ParseReleaseException, BackEndException {
 		
 		try {
 			int tentativi = 0;
@@ -101,14 +103,17 @@ public class YoutubeService extends BaseService {
 				throw new ParseReleaseException("Nessun risultato ottenuto per la release = "+release);
 			
 			
+			// salva sul db
+			VideoService vserv = new VideoService();
+			vserv.saveVideos(release.getVideos(), release.getId());
+			
 			
 		} catch (ParseReleaseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Errore di parsing durante il salvataggio dei dati estratti");
 			throw e;
-//		} catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
+		} catch (BackEndException e) {
+			log.error("Errore di backend durante il salvataggio dei dati estratti");
+			throw e;
 		}
 
 		return true;

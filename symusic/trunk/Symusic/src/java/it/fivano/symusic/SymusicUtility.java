@@ -57,12 +57,17 @@ public class SymusicUtility {
 		String name = rel.getNameWithUnderscore();
 		String[] nameSplit = name.replace("-","_").split("_");
 		int size = nameSplit.length;
-		if(size<2) return;
+		if(size<=2) return;
 		
 		String crew = nameSplit[size-1];
 		String year = nameSplit[size-2];
-		
-		rel.setCrew(crew);
+		if(!year.matches("\\d\\d\\d\\d")) {
+			year = nameSplit[size-3];
+			crew = nameSplit[size-2] + "_" + nameSplit[size-1];
+			
+		}
+		if(year.matches("\\d\\d\\d\\d"))
+			rel.setCrew(crew);
 		rel.setYear(year);
 		
 	}

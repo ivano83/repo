@@ -1,6 +1,9 @@
 package it.fivano.symusic.core;
 
+import it.fivano.symusic.backend.service.LinkService;
+import it.fivano.symusic.backend.service.TrackService;
 import it.fivano.symusic.conf.BeatportConf;
+import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.TrackModel;
@@ -24,7 +27,7 @@ public class BeatportService extends BaseService {
 		conf = new BeatportConf();
 	}
 	
-	public boolean parseBeatport(ReleaseModel release) throws IOException, ParseReleaseException {
+	public boolean parseBeatport(ReleaseModel release) throws ParseReleaseException, BackEndException {
 		
 		try {
 			int tentativi = 0;
@@ -116,6 +119,10 @@ public class BeatportService extends BaseService {
 					release.addTrack(currTrack);
 					log.info("    DETTAGLIO:  "+currTrack);
 				}
+				
+				// salva sul db
+				TrackService lserv = new TrackService();
+				lserv.saveTracks(release.getTracks(), release.getId());
 
 			}
 			else {
@@ -125,12 +132,11 @@ public class BeatportService extends BaseService {
 
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("[BEATPORT] Errore di parsing");
+			throw new ParseReleaseException("[BEATPORT] Errore nel parsing",e);
+		} catch (BackEndException e) {
+			log.error("[BEATPORT] Errore di backend durante il salvataggio dei dati estratti");
 			throw e;
-//		} catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
 		}
 
 		return true;
@@ -141,7 +147,7 @@ public class BeatportService extends BaseService {
 		return t.replace(" ", "+");
 	}
 	
-	public static void main(String[] args) throws IOException, ParseReleaseException {
+	public static void main(String[] args) throws IOException, ParseReleaseException, BackEndException {
 		BeatportService s = new BeatportService();
 		ReleaseModel r = new ReleaseModel();
 		r.setName("Houseshaker Feat. Amanda Blush-Light the Sky-(7000042629)-WEB-2013-DWM");

@@ -26,25 +26,31 @@ public class VideoService extends RootService {
 	public List<VideoModel> getVideos(Long idRelease) throws BackEndException {
 		
 		try {
-			ReleaseVideoExample input = new ReleaseVideoExample();
-			input.createCriteria().andIdReleaseEqualTo(idRelease);
-			
 			ReleaseVideoMapper videoDao = this.getVideoMapper();
-			
-			List<ReleaseVideo> res = videoDao.selectByExample(input);
-			
-			return TransformerUtility.transformVideosToModel(res);
+						
+			return this.getVideos(idRelease, videoDao);
 			
 		} finally {
 			this.chiudiSessione();
 		}
 	}
 
+	private List<VideoModel> getVideos(Long idRelease, ReleaseVideoMapper videoDao) throws BackEndException {
+		
+		ReleaseVideoExample input = new ReleaseVideoExample();
+		input.createCriteria().andIdReleaseEqualTo(idRelease);
+
+		List<ReleaseVideo> res = videoDao.selectByExample(input);
+
+		return TransformerUtility.transformVideosToModel(res);
+
+	}
+
 	
-	public VideoModel saveVideo(ReleaseVideo videoIn) throws BackEndException {
+	public VideoModel saveVideo(VideoModel video, Long idRelease) throws BackEndException {
 		
 		try {
-			
+			ReleaseVideo videoIn = TransformerUtility.transformVideo(video, idRelease);
 			ReleaseVideoMapper videoDao = this.getVideoMapper();
 			
 			return this.saveVideo(videoIn, videoDao);
@@ -53,9 +59,11 @@ public class VideoService extends RootService {
 		}
 	}
 	
-	public List<VideoModel> saveVideos(List<ReleaseVideo> videoIn) throws BackEndException {
+	public List<VideoModel> saveVideos(List<VideoModel> video, Long idRelease) throws BackEndException {
 		
 		try {
+			List<ReleaseVideo> videoIn = TransformerUtility.transformVideos(video, idRelease);
+			
 			List<VideoModel> result = new ArrayList<VideoModel>();
 			ReleaseVideoMapper videoDao = this.getVideoMapper();
 			
@@ -74,7 +82,7 @@ public class VideoService extends RootService {
 
 		if(videoIn!=null && videoIn.getIdRelease()!=null && videoIn.getVideoLink()!=null) {
 			// controllo di esistenza del video sul DB
-			List<VideoModel> videoList = getVideos(videoIn.getIdRelease());
+			List<VideoModel> videoList = getVideos(videoIn.getIdRelease(), videoDao);
 			boolean isPresente = false;
 			for(VideoModel v : videoList) {
 				if(v.getLink().equalsIgnoreCase(videoIn.getVideoLink())) {

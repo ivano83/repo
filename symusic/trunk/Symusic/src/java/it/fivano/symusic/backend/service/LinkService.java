@@ -23,40 +23,49 @@ public class LinkService extends RootService {
 	public List<LinkModel> getLinks(Long idRelease) throws BackEndException {
 		
 		try {
+
+			ReleaseLinkMapper linkDao = this.getLinkMapper();
+						
+			return this.getLinks(idRelease, linkDao);
+			
+		} finally {
+			this.chiudiSessione();
+		}
+	}
+	
+	private List<LinkModel> getLinks(Long idRelease, ReleaseLinkMapper linkDao) throws BackEndException {
+		
 			ReleaseLinkExample input = new ReleaseLinkExample();
 			input.createCriteria().andIdReleaseEqualTo(idRelease);
-			
-			ReleaseLinkMapper videoDao = this.getLinkMapper();
-			
-			List<ReleaseLink> res = videoDao.selectByExample(input);
+						
+			List<ReleaseLink> res = linkDao.selectByExample(input);
 			
 			return TransformerUtility.transformLinksToModel(res);
 			
-		} finally {
-			this.chiudiSessione();
-		}
 	}
 
 	
-	public LinkModel saveLink(ReleaseLink videoIn) throws BackEndException {
+	public LinkModel saveLink(LinkModel link, Long idRelease) throws BackEndException {
 		
 		try {
-			
+			ReleaseLink linkIn = TransformerUtility.transformLink(link, idRelease);
 			ReleaseLinkMapper videoDao = this.getLinkMapper();
 			
-			return this.saveLink(videoIn, videoDao);
+			return this.saveLink(linkIn, videoDao);
 		} finally {
 			this.chiudiSessione();
 		}
 	}
 	
-	public List<LinkModel> saveLinks(List<ReleaseLink> videoIn) throws BackEndException {
+	public List<LinkModel> saveLinks(List<LinkModel> links, Long idRelease) throws BackEndException {
 		
 		try {
+			List<ReleaseLink> linkIn = TransformerUtility.transformLinks(links, idRelease);
+			
 			List<LinkModel> result = new ArrayList<LinkModel>();
 			ReleaseLinkMapper videoDao = this.getLinkMapper();
 			
-			for(ReleaseLink v : videoIn) {
+			for(ReleaseLink v : linkIn) {
 				result.add(this.saveLink(v, videoDao));
 			}
 			
@@ -66,24 +75,24 @@ public class LinkService extends RootService {
 		}
 	}
 	
-	private LinkModel saveLink(ReleaseLink linkIn, ReleaseLinkMapper videoDao) throws BackEndException {
+	private LinkModel saveLink(ReleaseLink linkIn, ReleaseLinkMapper linkDao) throws BackEndException {
 		
 
 		if(linkIn!=null && linkIn.getIdRelease()!=null && linkIn.getReleaseLink()!=null) {
 			// controllo di esistenza del video sul DB
-			List<LinkModel> videoList = getLinks(linkIn.getIdRelease());
+			List<LinkModel> videoList = getLinks(linkIn.getIdRelease(), linkDao);
 			boolean isPresente = false;
 			for(LinkModel v : videoList) {
 				if(v.getLink().equalsIgnoreCase(linkIn.getReleaseLink())) {
-					log.info("Il link e' gia' presente per la release ID_REL:"+linkIn.getIdRelease()+"  LINK:"+linkIn.getIdReleaseLink());
+					log.info("Il link e' gia' presente per la release ID_REL:"+linkIn.getIdRelease()+"  LINK:"+linkIn.getReleaseLink());
 					isPresente = true;
 					break;
 				}
 			}
 
 			if(!isPresente) {
-				videoDao.insert(linkIn);
-				log.info("Il link e' stato salvato con ID:"+linkIn.getIdReleaseLink()+"  ID_REL:"+linkIn.getIdRelease()+"  LINK:"+linkIn.getIdReleaseLink());
+				linkDao.insert(linkIn);
+				log.info("Il link e' stato salvato con ID:"+linkIn.getIdReleaseLink()+"  ID_REL:"+linkIn.getIdRelease()+"  LINK:"+linkIn.getReleaseLink());
 			}
 
 		}

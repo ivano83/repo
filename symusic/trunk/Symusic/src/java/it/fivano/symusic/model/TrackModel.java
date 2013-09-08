@@ -2,6 +2,7 @@ package it.fivano.symusic.model;
 
 public class TrackModel {
 	
+	private Integer trackNumber;
 	private String trackName;
 	private String artist;
 	private String time;
@@ -48,6 +49,12 @@ public class TrackModel {
 						(time!=null? time+" | " : "") + 
 								(genere!=null? genere+" | " : "") + 
 										(bpm!=null? bpm+" | " : "") ;
+	}
+	public Integer getTrackNumber() {
+		return trackNumber;
+	}
+	public void setTrackNumber(Integer trackNumber) {
+		this.trackNumber = trackNumber;
 	}
 
 }

@@ -13,6 +13,9 @@ public class VideoModel {
 		this.link = link;
 	}
 	public String getName() {
+		if(name==null && link!=null) {
+			name = (link.length()>70)? link.substring(0,70)+"..." : link;
+		}
 		return name;
 	}
 	public void setName(String name) {
