@@ -1,39 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
 <generatorConfiguration >
+<classPathEntry location="C:\Users\ivano\Documents\IVANO\WORK\Symusic\workspace-symusic\SymusicEAR\EarContent\lib\mysql-connector-java-5.1.26-bin.jar" /> 
   <context id="context1" >
   	<plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin" />
 	<plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
     <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/symusic" userId="root" password="passw0rd.1" />
-    <javaModelGenerator targetPackage="it.fivano.symusic.backend.model" targetProject="Symusic/src/java" />
+    <javaModelGenerator targetPackage="it.fivano.symusic.backend.model" targetProject="Symusic/src/java" >
+    	<property name="trimStrings" value="true" />
+    </javaModelGenerator>
     <sqlMapGenerator targetPackage="it.fivano.symusic.backend.map" targetProject="Symusic/src/resources" />
     <javaClientGenerator targetPackage="it.fivano.symusic.backend.dao" targetProject="Symusic/src/java" type="XMLMAPPER" />
     
-    <table tableName="genre" schema="symusic">
-		<generatedKey column="id_genre" sqlStatement="MySql" identity="true" />
-	</table>
-	<table tableName="release" schema="symusic">
+<!--     <table tableName="genre" schema="symusic"> -->
+<!-- 		<generatedKey column="id_genre" sqlStatement="MySql" identity="true" /> -->
+<!-- 	</table> -->
+	<table tableName="release" schema="symusic" catalog="symusic" >
 		<generatedKey column="id_release" sqlStatement="MySql" identity="true" />
 	</table>
-	<table tableName="release_link" schema="symusic">
-		<generatedKey column="id_release_link" sqlStatement="MySql" identity="true" />
-	</table>
-	<table tableName="release_video" schema="symusic">
-		<generatedKey column="id_release_video" sqlStatement="MySql" identity="true" />
-	</table>
-	<table tableName="release_rating" schema="symusic">
-	</table>
-	<table tableName="release_track" schema="symusic">
-		<generatedKey column="id_release_track" sqlStatement="MySql" identity="true" />
-	</table>
-	<table tableName="user" schema="symusic">
-		<generatedKey column="id_user" sqlStatement="MySql" identity="true" />
-	</table>
-	<table tableName="user_genre_preference" schema="symusic">
-	</table>
-	<table tableName="user_preference" schema="symusic">
-		<generatedKey column="id_user_preference" sqlStatement="MySql" identity="true" />
-	</table>
+<!-- 	<table tableName="release_link" schema="symusic" catalog="symusic" > -->
+<!-- 		<generatedKey column="id_release_link" sqlStatement="MySql" identity="true" /> -->
+<!-- 	</table> -->
+<!-- 	<table tableName="release_video" schema="symusic" catalog="symusic" > -->
+<!-- 		<generatedKey column="id_release_video" sqlStatement="MySql" identity="true" /> -->
+<!-- 	</table> -->
+<!-- 	<table tableName="release_rating" schema="symusic"> -->
+<!-- 	</table> -->
+<!-- 	<table tableName="release_track" schema="symusic"> -->
+<!-- 		<generatedKey column="id_release_track" sqlStatement="MySql" identity="true" /> -->
+<!-- 	</table> -->
+<!-- 	<table tableName="user" schema="symusic"> -->
+<!-- 		<generatedKey column="id_user" sqlStatement="MySql" identity="true" /> -->
+<!-- 	</table> -->
+<!-- 	<table tableName="user_genre_preference" schema="symusic"> -->
+<!-- 	</table> -->
+<!-- 	<table tableName="user_preference" schema="symusic"> -->
+<!-- 		<generatedKey column="id_user_preference" sqlStatement="MySql" identity="true" /> -->
+<!-- 	</table> -->
 	
   </context>
 </generatorConfiguration>

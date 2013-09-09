@@ -1,5 +1,6 @@
 package it.fivano.symusic.backend.service;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -29,12 +30,14 @@ public class ReleaseService extends RootService {
 
 			return this.getRelease(name, releaseDao);
 			
+		} catch (ParseException e) {
+			throw new BackEndException(e);
 		} finally {
 			this.chiudiSessione();
 		}
 	}
 	
-	private ReleaseModel getRelease(String name, ReleaseMapper releaseDao) throws BackEndException {
+	private ReleaseModel getRelease(String name, ReleaseMapper releaseDao) throws BackEndException, ParseException {
 		
 		ReleaseExample input = new ReleaseExample();
 		input.createCriteria().andReleaseNameEqualTo(name);
@@ -61,6 +64,8 @@ public class ReleaseService extends RootService {
 
 			return TransformerUtility.transformReleaseToModel(res);
 			
+		} catch (ParseException e) {
+			throw new BackEndException(e);
 		} finally {
 			this.chiudiSessione();
 		}
@@ -97,6 +102,8 @@ public class ReleaseService extends RootService {
 				
 				return relRes;
 			}
+		} catch (ParseException e) {
+			throw new BackEndException(e);
 		} finally {
 			this.chiudiSessione();
 		}
@@ -121,6 +128,8 @@ public class ReleaseService extends RootService {
 				throw new BackEndException("Non ci sono dati sufficienti per salvare la release: "+rel);
 			}
 			return TransformerUtility.transformReleaseToModel(rel);
+		} catch (ParseException e) {
+			throw new BackEndException(e);
 		} finally {
 			this.chiudiSessione();
 		}

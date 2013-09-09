@@ -47,8 +47,18 @@ public class SymusicUtility {
 	}
 	
 	public static Date getStandardDate(String dateIn) throws ParseException {
-			
+		if(dateIn==null)
+			return null;
+		
 		return new SimpleDateFormat(STANDARD_DATE_FORMAT).parse(dateIn);
+		
+	}
+	
+	public static String getStandardDate(Date dateIn) throws ParseException {
+		if(dateIn==null)
+			return null;
+		
+		return new SimpleDateFormat(STANDARD_DATE_FORMAT).format(dateIn);
 		
 	}
 	

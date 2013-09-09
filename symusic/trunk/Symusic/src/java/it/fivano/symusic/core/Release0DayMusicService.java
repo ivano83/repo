@@ -149,7 +149,8 @@ public class Release0DayMusicService extends BaseService {
 
 					// salva sul db
 					if(!isRecuperato) {
-						release = relServ.saveRelease(release);
+						ReleaseModel r = relServ.saveRelease(release);
+						release.setId(r.getId());
 					}
 					
 					// recupero e inserimento dati sul DB

@@ -55,7 +55,9 @@ public class TrackService extends RootService {
 			ReleaseTrack trackIn = TransformerUtility.transformTrack(track,idRelease);
 			ReleaseTrackMapper trackDao = this.getTrackMapper();
 			
-			return this.saveTrack(trackIn, trackDao);
+			List<TrackModel> trackList = getTracks(idRelease, trackDao);
+			
+			return this.saveTrack(trackIn, trackDao, trackList);
 		} finally {
 			this.chiudiSessione();
 		}
@@ -67,10 +69,12 @@ public class TrackService extends RootService {
 			List<ReleaseTrack> trackIn = TransformerUtility.transformTracks(tracks,idRelease);
 			
 			List<TrackModel> result = new ArrayList<TrackModel>();
-			ReleaseTrackMapper videoDao = this.getTrackMapper();
+			ReleaseTrackMapper trackDao = this.getTrackMapper();
+			
+			List<TrackModel> trackList = getTracks(idRelease, trackDao);
 			
 			for(ReleaseTrack v : trackIn) {
-				result.add(this.saveTrack(v, videoDao));
+				result.add(this.saveTrack(v, trackDao, trackList));
 			}
 			
 			return result;
@@ -79,15 +83,16 @@ public class TrackService extends RootService {
 		}
 	}
 	
-	private TrackModel saveTrack(ReleaseTrack trackIn, ReleaseTrackMapper trackDao) throws BackEndException {
+	private TrackModel saveTrack(ReleaseTrack trackIn, ReleaseTrackMapper trackDao, List<TrackModel> trackList) throws BackEndException {
 		
 
 		if(trackIn!=null && trackIn.getIdRelease()!=null && trackIn.getTrackName()!=null) {
 			// controllo di esistenza del video sul DB
-			List<TrackModel> trackList = getTracks(trackIn.getIdRelease(), trackDao);
+			
 			boolean isPresente = false;
 			for(TrackModel v : trackList) {
-				if(v.getTrackName().equalsIgnoreCase(trackIn.getTrackName())) {
+				if(v.getTrackName().equalsIgnoreCase(trackIn.getTrackName()) && 
+						(v.getTrackNumber()+"").equals(trackIn.getTrackNumber())) {
 					log.info("La track e' gia' presente per la release ID_REL:"+trackIn.getIdRelease()+"  TRACK:"+trackIn.getTrackName());
 					isPresente = true;
 					break;

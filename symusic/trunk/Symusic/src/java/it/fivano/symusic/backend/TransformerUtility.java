@@ -1,8 +1,10 @@
 package it.fivano.symusic.backend;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.backend.model.Release;
 import it.fivano.symusic.backend.model.ReleaseLink;
 import it.fivano.symusic.backend.model.ReleaseTrack;
@@ -15,7 +17,7 @@ import it.fivano.symusic.model.VideoModel;
 public class TransformerUtility {
 	
 	
-	public static Release transformRelease(ReleaseModel model) {
+	public static Release transformRelease(ReleaseModel model) throws ParseException {
 		if(model==null)
 			return null;
 		
@@ -27,6 +29,7 @@ public class TransformerUtility {
 		res.setCrew(model.getCrew());
 		res.setSongName(model.getSong());
 		res.setYears(model.getYear());
+		res.setReleaseDate(SymusicUtility.getStandardDate(model.getReleaseDate()));
 				
 		return res;
 		
@@ -39,6 +42,7 @@ public class TransformerUtility {
 		
 		res.setIdRelease(idRelease);
 		res.setVideoLink(video.getLink());
+		res.setVideoName(video.getName());
 		
 		return res;
 	}
@@ -108,7 +112,7 @@ public class TransformerUtility {
 	
 	
 	
-	public static ReleaseModel transformReleaseToModel(Release rel) {
+	public static ReleaseModel transformReleaseToModel(Release rel) throws ParseException {
 		if(rel==null)
 			return null;
 		
@@ -120,6 +124,7 @@ public class TransformerUtility {
 		res.setCrew(rel.getCrew());
 		res.setSong(rel.getSongName());
 		res.setYear(rel.getYears());
+		res.setReleaseDate(SymusicUtility.getStandardDate(rel.getReleaseDate()));
 		
 //		res.setVideos(transformVideosToModel(rel.getReleaseVideos()));
 		
@@ -134,6 +139,7 @@ public class TransformerUtility {
 		VideoModel res = new VideoModel();
 		
 		res.setLink(video.getVideoLink());
+		res.setName(video.getVideoName());
 		
 		return res;
 	}

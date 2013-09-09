@@ -88,11 +88,16 @@ public class ScenelogService extends BaseService {
 				Element releaseTrack = doc.getElementsByClass(conf.RELEASE_TRACK_NAME).get(0);
 				
 				List<TextNode> textnodes = releaseTrack.textNodes();
+				int numTr = 1;
 				for(TextNode tx : textnodes) {
 					currTrack = new TrackModel();
-					currTrack.setTrackName(tx.text());
+					currTrack.setTrackNumber(numTr);
+					String text = tx.text().replaceFirst("\\d+\\.","");
+					System.out.println(text);
+					currTrack.setTrackName(text);
 					release.addTrack(currTrack);
 					log.info("    DETTAGLIO:  "+currTrack);
+					numTr++;
 					
 				}
 				
