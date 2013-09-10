@@ -27,11 +27,11 @@ public abstract class BaseService {
 			
 			result = name;
 		}
-		else if(split.length==5) {
+		else if(split.length==5 || split.length==6) {
 			
 			result = split[0]+"-"+split[1];
 		}
-		else if(split.length>5) {
+		else if(split.length>6) {
 			result = split[0]+"-"+split[1]+"-"+split[2];
 		}
 		else {
