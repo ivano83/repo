@@ -14,6 +14,7 @@ public class ReleaseModel {
 	private String song;
 	private String releaseDate;
 	private String recordLabel;
+	private GenreModel genre;
 	
 	private Integer voteValue;
 	private Double voteAverage;
@@ -142,4 +143,15 @@ public class ReleaseModel {
 	public void setVoteAverage(Double voteAverage) {
 		this.voteAverage = voteAverage;
 	}
+
+
+	public GenreModel getGenre() {
+		return genre;
+	}
+
+
+	public void setGenre(GenreModel genre) {
+		this.genre = genre;
+	}
+
 }

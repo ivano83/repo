@@ -2,12 +2,14 @@ package it.fivano.symusic.core;
 
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.backend.TransformerUtility;
+import it.fivano.symusic.backend.service.GenreService;
 import it.fivano.symusic.backend.service.LinkService;
 import it.fivano.symusic.backend.service.ReleaseService;
 import it.fivano.symusic.backend.service.VideoService;
 import it.fivano.symusic.conf.ZeroDayMusicConf;
 import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.exception.ParseReleaseException;
+import it.fivano.symusic.model.GenreModel;
 import it.fivano.symusic.model.LinkModel;
 import it.fivano.symusic.model.ReleaseModel;
 
@@ -116,7 +118,10 @@ public class Release0DayMusicService extends BaseService {
 				
 				int i = 0;
 				Elements links = e.getElementsByTag("a");
+				Elements genres = e.getElementsByTag("span");
+				int count = 0;
 				for(Element linkDoc : links) {
+					
 					release = new ReleaseModel();
 					
 					// name
@@ -126,6 +131,17 @@ public class Release0DayMusicService extends BaseService {
 					
 					// link
 					release.addLink(this.popolateLink(linkDoc));
+					
+					// genere
+					if(count<genres.size()) {
+						Element genre = genres.get(count);
+						GenreModel genere = new GenreModel();
+						genere.setName(genre.text());
+						
+						GenreService gServ = new GenreService();
+						genere = gServ.saveGenre(genere);
+						release.setGenre(genere);
+					}
 					
 					// release date
 					release.setReleaseDate(dateIn);
@@ -208,6 +224,7 @@ public class Release0DayMusicService extends BaseService {
 					youtube.addManualSearchLink(release); // link a youtube per la ricerca manuale
 					
 					listRelease.add(release);
+					count++;
 				}
 				
 			}

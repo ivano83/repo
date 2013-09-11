@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.fivano.symusic.SymusicUtility;
+import it.fivano.symusic.backend.model.Genre;
 import it.fivano.symusic.backend.model.Release;
 import it.fivano.symusic.backend.model.ReleaseLink;
 import it.fivano.symusic.backend.model.ReleaseTrack;
 import it.fivano.symusic.backend.model.ReleaseVideo;
+import it.fivano.symusic.model.GenreModel;
 import it.fivano.symusic.model.LinkModel;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.TrackModel;
@@ -97,6 +99,29 @@ public class TransformerUtility {
 		return res;
 	}
 	
+	public static List<Genre> transformGenres(List<GenreModel> genre) {
+		List<Genre> res = new ArrayList<Genre>();
+		
+		if(genre==null)
+			return res;
+		
+		for(GenreModel v : genre) {
+			res.add(transformGenre(v));
+		}
+		return res;
+	}
+	
+	public static Genre transformGenre(GenreModel genre) {
+		if(genre==null)
+			return null;
+		Genre res = new Genre();
+		
+		res.setIdGenre(genre.getId());
+		res.setName(genre.getName());
+		
+		return res;
+	}
+	
 	public static List<ReleaseTrack> transformTracks(List<TrackModel> link, Long idRelease) {
 		List<ReleaseTrack> res = new ArrayList<ReleaseTrack>();
 		
@@ -108,8 +133,6 @@ public class TransformerUtility {
 		}
 		return res;
 	}
-	
-	
 	
 	
 	public static ReleaseModel transformReleaseToModel(Release rel) throws ParseException {
@@ -194,15 +217,39 @@ public class TransformerUtility {
 		return res;
 	}
 	
-	public static List<TrackModel> transformTracksToModel(List<ReleaseTrack> video) {
+	public static List<TrackModel> transformTracksToModel(List<ReleaseTrack> tr) {
 		List<TrackModel> res = new ArrayList<TrackModel>();
 		
-		if(video==null)
+		if(tr==null)
 			return res;
 		
-		for(ReleaseTrack v : video) {
+		for(ReleaseTrack v : tr) {
 			res.add(transformTrackToModel(v));
 		}
+		return res;
+	}
+
+	public static List<GenreModel> transformGenreToModel(List<Genre> genres) {
+		List<GenreModel> res = new ArrayList<GenreModel>();
+		
+		if(genres==null)
+			return res;
+		
+		for(Genre g : genres) {
+			res.add(transformGenreToModel(g));
+		}
+		return res;
+	}
+	
+	public static GenreModel transformGenreToModel(Genre genre) {
+		
+		if(genre==null)
+			return null;
+		
+		GenreModel res = new GenreModel();
+		res.setId(genre.getIdGenre());
+		res.setName(genre.getName());
+		
 		return res;
 	}
 

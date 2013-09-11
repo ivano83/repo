@@ -1,6 +1,7 @@
 package it.fivano.symusic.backend.service;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -10,6 +11,7 @@ import it.fivano.symusic.backend.dao.ReleaseMapper;
 import it.fivano.symusic.backend.model.Release;
 import it.fivano.symusic.backend.model.ReleaseExample;
 import it.fivano.symusic.exception.BackEndException;
+import it.fivano.symusic.model.GenreModel;
 import it.fivano.symusic.model.LinkModel;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.TrackModel;
@@ -73,17 +75,26 @@ public class ReleaseService extends RootService {
 
 	public ReleaseModel getReleaseFull(String name) throws BackEndException {
 		
+		List<Release> res = new ArrayList<Release>();
+		
 		try {
 			ReleaseExample input = new ReleaseExample();
 			input.createCriteria().andReleaseNameEqualTo(name);
 			
 			ReleaseMapper releaseDao = this.getReleaseMapper();
 			
-			List<Release> res = releaseDao.selectByExample(input);
+			res = releaseDao.selectByExample(input);
 			
 			if(res.size()>1) {
 				log.warn("La ricerca per nome release = '"+name+"' ha restituito più di un valore");
 			}
+			
+		} finally {
+			this.chiudiSessione();
+		}
+		
+		try {
+		
 			if(res.size()==0)
 				return null;
 			else {
@@ -99,13 +110,13 @@ public class ReleaseService extends RootService {
 				List<TrackModel> tracks = new TrackService().getTracks(idRel);
 				relRes.setTracks(tracks);
 				
+				GenreModel genere = new GenreService().getGenre(res.get(0).getIdGenre());
+				relRes.setGenre(genere);
 				
 				return relRes;
 			}
 		} catch (ParseException e) {
 			throw new BackEndException(e);
-		} finally {
-			this.chiudiSessione();
 		}
 	}
 
