@@ -32,6 +32,9 @@ public class TransformerUtility {
 		res.setSongName(model.getSong());
 		res.setYears(model.getYear());
 		res.setReleaseDate(SymusicUtility.getStandardDate(model.getReleaseDate()));
+		
+		if(model.getGenre()!=null)
+			res.setIdGenre(model.getGenre().getId());
 				
 		return res;
 		
@@ -148,9 +151,13 @@ public class TransformerUtility {
 		res.setSong(rel.getSongName());
 		res.setYear(rel.getYears());
 		res.setReleaseDate(SymusicUtility.getStandardDate(rel.getReleaseDate()));
+		if(rel.getIdGenre()!=null) {
+			GenreModel genre = new GenreModel();
+			genre.setId(rel.getIdGenre());
+			res.setGenre(genre);
+		}
 		
-//		res.setVideos(transformVideosToModel(rel.getReleaseVideos()));
-		
+ 
 		return res;
 		
 	}

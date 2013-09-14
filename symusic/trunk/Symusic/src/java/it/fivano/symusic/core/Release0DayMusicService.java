@@ -136,7 +136,7 @@ public class Release0DayMusicService extends BaseService {
 					if(count<genres.size()) {
 						Element genre = genres.get(count);
 						GenreModel genere = new GenreModel();
-						genere.setName(genre.text());
+						genere.setName(genre.text().replaceAll("[()]", ""));
 						
 						GenreService gServ = new GenreService();
 						genere = gServ.saveGenre(genere);
@@ -294,9 +294,11 @@ public class Release0DayMusicService extends BaseService {
 		Date a = sdf.parse("20130803");
 		
 		Release0DayMusicService s = new Release0DayMusicService();
-		List<ReleaseModel> res = s.parse0DayMusicRelease("trance",da,a);
-		for(ReleaseModel r : res)
-			System.out.println(r);
+//		List<ReleaseModel> res = s.parse0DayMusicRelease("trance",da,a);
+//		for(ReleaseModel r : res)
+//			System.out.println(r);
+		
+		System.out.println("fhfh( dewdef) fef".replaceAll("[()]", ""));
 	}
 
 
