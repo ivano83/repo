@@ -1,6 +1,7 @@
 package it.fivano.symusic.action;
 
 import it.fivano.symusic.SymusicUtility;
+import it.fivano.symusic.core.Release0DayMp3Service;
 import it.fivano.symusic.core.Release0DayMusicService;
 import it.fivano.symusic.model.ReleaseModel;
 
@@ -69,6 +70,13 @@ public class ZeroDayMusicServlet extends HttpServlet {
 				else
 					zeroDay.setEnableBeatportService(false);
 				listRelease = zeroDay.parse0DayMusicRelease(genre, initDate, endDate);
+			} else if(site.equals("2")) {
+				Release0DayMp3Service zeroDay = new Release0DayMp3Service();
+				if(enableBeatport!=null && enableBeatport.equalsIgnoreCase("true"))
+					zeroDay.setEnableBeatportService(true);
+				else
+					zeroDay.setEnableBeatportService(false);
+				listRelease = zeroDay.parse0DayMp3Release(genre, initDate, endDate);
 			}
 			
 			request.getSession().setAttribute("listRelease", listRelease);

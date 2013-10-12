@@ -2,6 +2,7 @@ package it.fivano.symusic.core;
 
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.backend.service.GenreService;
+import it.fivano.symusic.conf.ZeroDayMp3Conf;
 import it.fivano.symusic.conf.ZeroDayMusicConf;
 import it.fivano.symusic.core.thread.SupportObject;
 import it.fivano.symusic.exception.BackEndException;
@@ -21,17 +22,18 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class Release0DayMusicService extends ReleaseSiteService {
+public class Release0DayMp3Service extends ReleaseSiteService {
 	
-	private ZeroDayMusicConf conf;
+	private ZeroDayMp3Conf conf;
+	private String genre;
 	
 	private boolean enableBeatportService;
 	private boolean enableScenelogService;
 	private boolean enableYoutubeService;
 	
-	public Release0DayMusicService() throws IOException {
+	public Release0DayMp3Service() throws IOException {
 		super();
-		conf = new ZeroDayMusicConf();
+		conf = new ZeroDayMp3Conf();
 		enableBeatportService = true;
 		enableScenelogService = true;
 		enableYoutubeService = true;
@@ -39,28 +41,29 @@ public class Release0DayMusicService extends ReleaseSiteService {
 	}
 	
 	
-	public List<ReleaseModel> parse0DayMusicRelease(String genere, Date da, Date a) throws BackEndException, ParseReleaseException {
+	public List<ReleaseModel> parse0DayMp3Release(String genere, Date da, Date a) throws BackEndException, ParseReleaseException {
 		
 		List<ReleaseModel> listRelease = null;
+		this.genre = genere;
 		
 		try {
 			
 			// PAGINA DI INIZIO
-			String urlConn = conf.URL+conf.URL_ACTION+"?"+conf.PARAMS.replace("{0}", genere);
+			String urlConn = conf.URL_CATEGORY+genere;
 			
 			// OGGETTO PER GESTIRE IL CARICAMENTO DELLE PAGINE SUCCESSIVE DEL SITO
-			ZeroDayMusicInfo info = new ZeroDayMusicInfo();
+			ZeroDayMp3Info info = new ZeroDayMp3Info();
 			info.setProcessNextPage(true);
 			
 			// PROCESSA LE RELEASE DELLA PRIMA PAGINA
-			listRelease = this.parse0DayMusic(urlConn, da, a, info);
+			listRelease = this.parse0DayMp3(urlConn, da, a, info);
 			
 			// SE C'È DA RECUPERARE ALTRE RELEASE, CAMBIA PAGINA
 			while(info.isProcessNextPage()) {
 				
 				log.info("Andiamo alla pagina successiva...");
 				// PROCESSA LE RELEASE DELLE PAGINE SUCCESSIVE
-				listRelease.addAll(this.parse0DayMusic(info.getNextPage(), da, a, info));
+				listRelease.addAll(this.parse0DayMp3(info.getNextPage(), da, a, info));
 				
 			}
 			
@@ -82,7 +85,7 @@ public class Release0DayMusicService extends ReleaseSiteService {
 	
 	
 	
-	private List<ReleaseModel> parse0DayMusic(String urlConn, Date da, Date a, ZeroDayMusicInfo info) throws BackEndException, ParseReleaseException, ParseException, IOException {
+	private List<ReleaseModel> parse0DayMp3(String urlConn, Date da, Date a, ZeroDayMp3Info info) throws BackEndException, ParseReleaseException, ParseException, IOException {
 		
 		List<ReleaseModel> listRelease = new ArrayList<ReleaseModel>();
 		
@@ -94,95 +97,97 @@ public class Release0DayMusicService extends ReleaseSiteService {
 		Document doc = Jsoup.connect(urlConn).get();
 
 		// SALVA LA URL DELLA PROSSIMA PAGINA (SE NECESSARIA)
-		info.setNextPage(this.extractNextPage(doc));
+		info.changePage(); // AGGIORNA IL NUMERO PAGINA
+		info.setNextPage(this.extractNextPage(info));
 
-		ReleaseModel release = null;
-		Elements releaseGroup = doc.getElementsByAttributeValue("id",conf.ID_RELEASE_GROUP);
-		// CICLO PER OGNI GIORNO NELLA PAGINA CORRENTE (RELEASE RAGGRUPPATE PER GIORNO)
-		for(Element e : releaseGroup) {
-
-			// DATE RELEASE
-			String dateIn = this.getStandardDateFormat(e.parent().getElementById(conf.ID_DAY).text());
-			Date dateInDate = SymusicUtility.getStandardDate(dateIn);
-			Elements genres = e.getElementsByTag("span");
-
-			// BISOGNA RECUPERARE ANCORA ALTRI GIORNI DI RELEASE?
-			if(da.compareTo(dateInDate)>0)
-				info.setProcessNextPage(false);
-
-			// RANGE DATA, SOLO LE RELEASE COMPRESE DA - A
-			if(!this.downloadReleaseDay(dateInDate, da, a)) {
-				continue;
-			}
-
-			Elements links = e.getElementsByTag("a");
-
-			// RECUPERA TUTTE LE RIGHE DELLE RELEASE DI UN DETERMINATO GIORNO
+		Elements releaseGroup = doc.getElementsByAttributeValue("id",conf.ID_CONTENT);
+		if(releaseGroup.size()>0) {
+			ReleaseModel release = null;
+			// OGNI TABLE CONTIENE UNA RELEASE
+			Elements tables = releaseGroup.get(0).getElementsByTag("table");
 			log.info("####################################");
-			int count = 0;
-			for(Element linkDoc : links) {
-				release = new ReleaseModel();
+			for(Element relTable : tables) {
+				
+				Elements components = relTable.getElementsByTag("td");
+				if(components.size()>=4) {
+					// OK CI SONO TUTTI I PEZZI
+					
+					// IN QUARTA POSIZIONE C'E' LA DATA RELEASE
+					Element dateComp = components.get(3);
+					String date = this.genericFilter(dateComp.text());
+					String dateIn = this.getStandardDateFormat(date);
+					Date dateInDate = SymusicUtility.getStandardDate(dateIn);
+					
+					// BISOGNA RECUPERARE ANCORA ALTRI GIORNI DI RELEASE?
+					if(da.compareTo(dateInDate)>0)
+						info.setProcessNextPage(false);
 
-				// RELEASE NAME
-				String title = linkDoc.attr("title");
-				release.setName(title.replace("_", " "));
-				release.setNameWithUnderscore(title.replace(" ", "_"));
-
-				// LINK
-				release.addLink(SymusicUtility.popolateLink(linkDoc));
-
-				// GENERE
-				if(count<genres.size()) {
-					Element genre = genres.get(count);
+					// RANGE DATA, SOLO LE RELEASE COMPRESE DA - A
+					if(!this.downloadReleaseDay(dateInDate, da, a)) {
+						continue;
+					}
+					
+					release = new ReleaseModel();
+					
+					// IN PRIMA POSIZIONE C'È IL NOME RELEASE E IL LINK
+					Element relComp = components.get(0);
+					// RELEASE NAME
+					String title = relComp.getElementsByTag("a").get(0).attr("title");
+					title = title.replace("Permalink to ","");
+					release.setName(title.replace("_", " "));
+					release.setNameWithUnderscore(title.replace(" ", "_"));
+					
+					// LINK
+					release.addLink(SymusicUtility.popolateLink(relComp.getElementsByTag("a").get(0)));
+					
+					// IN TERZA POSIZIONE C'È IL GENERE
+					Element genreComp = components.get(2);
+					String genre = this.genericFilter(genreComp.text());
 					GenreModel genere = new GenreModel();
-					genere.setName(genre.text().replaceAll("[()]", ""));
-
-					GenreService gServ = new GenreService();
-					genere = gServ.saveGenre(genere);
+					genere.setName(genre);
+					// RECUPERO/SALVATAGGIO DB DEL GENERE
+					genere = new GenreService().saveGenre(genere);
 					release.setGenre(genere);
-				}
+					
+					// DATE RELEASE
+					release.setReleaseDate(dateIn);
+					
+					// AGGIUNGE ULTERIORI INFO DELLA RELEASE A PARTIRE DAL NOME
+					// ES. CREW E ANNO RELEASE
+					SymusicUtility.processReleaseName(release);
+					
+					log.info("|"+release+"| acquisita");
+					log.info("####################################");
+									
+					listRelease.add(release);
+					
+				} 
 
-				// RELEASE DATE
-				release.setReleaseDate(dateIn);
-				
-				// AGGIUNGE ULTERIORI INFO DELLA RELEASE A PARTIRE DAL NOME
-				// ES. CREW E ANNO RELEASE
-				SymusicUtility.processReleaseName(release);
-				
-				log.info("|"+release+"| acquisita");
-				log.info("####################################");
-								
-				listRelease.add(release);
-				
-				count++;
 			}
+			
 		}
-
+			
 		return listRelease;
-		
+
 		
 	}
 	
 
-
-
-	private String extractNextPage(Document doc) {
-		
-		Element docSub = doc.getElementsByAttributeValue("id",conf.ID_NEXT_PAGES).get(0);
-		String currPage = docSub.getElementsByTag("span").get(0).text();
-		Elements nextPages = docSub.getElementsByTag("a");
-		for(Element page : nextPages) {
-			int pageNumb;
-			try {
-				pageNumb = Integer.parseInt(page.text());
-			} catch (NumberFormatException e) {
-				continue;
-			}
-			if(Integer.parseInt(currPage)+1 == pageNumb) {
-				return conf.URL+page.attr("href");
+	private String genericFilter(String text) {
+		if(text!=null) {
+			text = text.replaceAll("[()]", "").trim();
+			if(!String.valueOf(text.toCharArray()[0]).matches("[a-zA-Z0-9]")) {
+				return text.substring(1);
 			}
 		}
 		return null;
+	}
+
+
+	private String extractNextPage(ZeroDayMp3Info info) {
+		
+		return conf.URL_CATEGORY+genre+conf.PARAMS_PAGE+info.getNumPagina();
+
 	}
 
 
@@ -205,11 +210,12 @@ public class Release0DayMusicService extends ReleaseSiteService {
 		Date da = sdf.parse("20130802");
 		Date a = sdf.parse("20130803");
 		
-		Release0DayMusicService s = new Release0DayMusicService();
+		Release0DayMp3Service s = new Release0DayMp3Service();
 //		List<ReleaseModel> res = s.parse0DayMusicRelease("trance",da,a);
 //		for(ReleaseModel r : res)
 //			System.out.println(r);
-		
+		System.out.println(s.genericFilter("fhfh( dewdef) fef"));
+		System.out.println(s.genericFilter("fhfh( dewdef) fef"));
 		System.out.println("fhfh( dewdef) fef".replaceAll("[()]", ""));
 	}
 
@@ -230,10 +236,19 @@ public class Release0DayMusicService extends ReleaseSiteService {
 	}
 }
 
-class ZeroDayMusicInfo {
+class ZeroDayMp3Info {
 	
+	private int numPagina = 1;
 	private String nextPage;
 	private boolean processNextPage;
+	
+	public void changePage() {
+		numPagina = numPagina + 1;
+	}
+	
+	public int getNumPagina() {
+		return numPagina;
+	}
 	
 	public String getNextPage() {
 		return nextPage;

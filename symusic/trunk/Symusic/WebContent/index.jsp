@@ -18,7 +18,8 @@
 			</td>
 			<td>
 				<select name="site">
-					<option value="1" selected="selected">0DayMusic</option>
+					<option value="1">0DayMusic</option>
+					<option value="2" selected="selected">0DayMp3</option>
 				</select>
 			</td>
 		</tr>
