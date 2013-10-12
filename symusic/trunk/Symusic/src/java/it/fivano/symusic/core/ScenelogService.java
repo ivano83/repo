@@ -3,18 +3,15 @@ package it.fivano.symusic.core;
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.backend.service.LinkService;
 import it.fivano.symusic.backend.service.TrackService;
-import it.fivano.symusic.backend.service.VideoService;
 import it.fivano.symusic.conf.ScenelogConf;
 import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.exception.ParseReleaseException;
-import it.fivano.symusic.model.LinkModel;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.TrackModel;
 
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -24,11 +21,10 @@ import org.jsoup.select.Elements;
 public class ScenelogService extends BaseService {
 	
 	private ScenelogConf conf;
-	
-	Logger log = Logger.getLogger(getClass());
-	
+		
 	public ScenelogService() throws IOException {
 		conf = new ScenelogConf();
+		this.setLogger(getClass());
 	}
 	
 	public boolean parseScenelog(ReleaseModel release) throws ParseReleaseException, BackEndException {
@@ -56,7 +52,7 @@ public class ScenelogService extends BaseService {
 				
 					trovato = true;
 				} catch (Exception e1) {
-					log.error(e1.getMessage());
+					log.error(e1.getMessage(),e1);
 					tentativi++;
 				}
 				

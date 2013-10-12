@@ -10,12 +10,12 @@ import it.fivano.symusic.model.LinkModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 public class LinkService extends RootService {
-	
-	Logger log = Logger.getLogger(getClass());
-	
+
+	public LinkService() {
+		this.setLogger(getClass());
+	}
+
 	private ReleaseLinkMapper getLinkMapper() throws BackEndException {
 		return this.apriSessione().getMapper(ReleaseLinkMapper.class);
 	}

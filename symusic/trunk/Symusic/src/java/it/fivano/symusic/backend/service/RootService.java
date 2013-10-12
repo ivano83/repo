@@ -1,6 +1,6 @@
 package it.fivano.symusic.backend.service;
 
-import it.fivano.symusic.SymusicUtility;
+import it.fivano.symusic.MyLogger;
 import it.fivano.symusic.SymusicUtility.EnvironmentType;
 import it.fivano.symusic.backend.SqlSessionFactorySingleton;
 import it.fivano.symusic.exception.BackEndException;
@@ -12,6 +12,12 @@ public class RootService {
 	
 	private SqlSession session;
 	private EnvironmentType env;
+	protected MyLogger log;
+	
+
+	protected void setLogger(Class<?> classe) {
+		log = new MyLogger(classe);
+	}
 	
 	public SqlSession apriSessione() throws BackEndException {
 		

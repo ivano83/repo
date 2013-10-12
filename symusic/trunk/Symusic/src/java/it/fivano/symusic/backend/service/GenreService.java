@@ -9,11 +9,11 @@ import it.fivano.symusic.model.GenreModel;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 public class GenreService extends RootService {
 	
-	Logger log = Logger.getLogger(getClass());
+	public GenreService() {
+		this.setLogger(getClass());
+	}
 	
 	private GenreMapper getGenreMapper() throws BackEndException {
 		return this.apriSessione().getMapper(GenreMapper.class);
@@ -94,7 +94,7 @@ public class GenreService extends RootService {
 				
 				GenreModel g = this.getGenreByName(linkIn.getName(), gDao);
 				if(g!=null) {
-					log.info("Il Genere e' gia' presente - ID:"+linkIn.getId()+"  NAME:"+linkIn.getName());
+					log.info("Il Genere e' gia' presente - ID:"+g.getId()+"  NAME:"+g.getName());
 					return g;
 				}
 				

@@ -1,10 +1,30 @@
 package it.fivano.symusic.core;
 
+import java.io.IOException;
+
 import org.jsoup.nodes.Element;
 
+import it.fivano.symusic.MyLogger;
+import it.fivano.symusic.conf.SymusicConf;
 import it.fivano.symusic.model.LinkModel;
 
 public abstract class BaseService {
+	
+	protected MyLogger log;
+	protected SymusicConf generalConf;
+	
+	public BaseService() {
+		try {
+			generalConf = new SymusicConf();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	protected void setLogger(Class<?> classe) {
+		log = new MyLogger(classe);
+	}
 	
 	protected LinkModel popolateLink(Element dl) {
 		LinkModel currLink = new LinkModel();

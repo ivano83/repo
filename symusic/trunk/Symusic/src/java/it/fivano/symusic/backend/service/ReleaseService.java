@@ -7,22 +7,31 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import it.fivano.symusic.backend.TransformerUtility;
+import it.fivano.symusic.backend.dao.ReleaseExtractionMapper;
 import it.fivano.symusic.backend.dao.ReleaseMapper;
 import it.fivano.symusic.backend.model.Release;
 import it.fivano.symusic.backend.model.ReleaseExample;
+import it.fivano.symusic.backend.model.ReleaseExtraction;
+import it.fivano.symusic.backend.model.ReleaseExtractionExample;
 import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.model.GenreModel;
 import it.fivano.symusic.model.LinkModel;
+import it.fivano.symusic.model.ReleaseExtractionModel;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.TrackModel;
 import it.fivano.symusic.model.VideoModel;
 
 public class ReleaseService extends RootService {
 	
-	Logger log = Logger.getLogger(getClass());
+	public ReleaseService() {
+		this.setLogger(getClass());
+	}
 	
 	private ReleaseMapper getReleaseMapper() throws BackEndException {
 		return this.apriSessione().getMapper(ReleaseMapper.class);
+	}
+	private ReleaseExtractionMapper getReleaseExtractionMapper() throws BackEndException {
+		return this.apriSessione().getMapper(ReleaseExtractionMapper.class);
 	}
 	
 	public ReleaseModel getRelease(String name) throws BackEndException {
@@ -113,6 +122,9 @@ public class ReleaseService extends RootService {
 				GenreModel genere = new GenreService().getGenre(res.get(0).getIdGenre());
 				relRes.setGenre(genere);
 				
+				ReleaseExtractionModel extr = this.getReleaseExtraction(idRel);
+				relRes.setReleaseExtraction(extr);
+				
 				return relRes;
 			}
 		} catch (ParseException e) {
@@ -146,5 +158,68 @@ public class ReleaseService extends RootService {
 		}
 	}
 	
+	
+	public ReleaseExtractionModel getReleaseExtraction(Long idRelease) throws BackEndException {
+		
+		try {
+			ReleaseExtractionMapper releaseExtrDao = this.getReleaseExtractionMapper();
+			
+			return this.getReleaseExtraction(idRelease, releaseExtrDao);
+			
+		} catch (Exception e) {
+			throw new BackEndException(e);
+		} finally {
+			this.chiudiSessione();
+		}
+	}
+	
+	private ReleaseExtractionModel getReleaseExtraction(Long idRelease, ReleaseExtractionMapper releaseExtrDao) throws BackEndException {
+		
+		ReleaseExtractionExample input = new ReleaseExtractionExample();
+		input.createCriteria().andIdReleaseEqualTo(idRelease);
+
+		ReleaseExtraction res = releaseExtrDao.selectByPrimaryKey(idRelease);
+
+//		if(res==null) {
+//			log.warn("La ricerca delle estrazioni per id release = '"+idRelease+"' non ha restituito niente");
+//			ReleaseExtractionModel extr = new ReleaseExtractionModel();
+//			extr.setIdRelease(idRelease);
+//			extr = this.saveReleaseExtraction(extr);
+//			return extr;
+//		}
+
+		return TransformerUtility.transformReleaseExtractionToModel(res);
+			
+	}
+	
+	public ReleaseExtractionModel saveReleaseExtraction(ReleaseExtractionModel releaseExtr) throws BackEndException {
+		
+		try {
+			ReleaseExtraction rel = TransformerUtility.transformReleaseExtraction(releaseExtr);
+			
+			if(rel!=null && rel.getIdRelease()!=null) {
+				ReleaseExtractionMapper releaseExtrDao = this.getReleaseExtractionMapper();
+				
+				ReleaseExtractionExample input = new ReleaseExtractionExample();
+				input.createCriteria().andIdReleaseEqualTo(releaseExtr.getIdRelease());
+				ReleaseExtraction inputRes = releaseExtrDao.selectByPrimaryKey(releaseExtr.getIdRelease());
+				if(inputRes!=null) {
+					releaseExtrDao.updateByPrimaryKeySelective(rel);
+				}
+				else {
+					releaseExtrDao.insert(rel);
+				}
+				
+			}
+			else {
+				throw new BackEndException("Non ci sono dati sufficienti per salvare la release: "+rel);
+			}
+			return TransformerUtility.transformReleaseExtractionToModel(rel);
+		} catch (Exception e) {
+			throw new BackEndException(e);
+		} finally {
+			this.chiudiSessione();
+		}
+	}
 	
 }

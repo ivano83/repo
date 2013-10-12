@@ -1,6 +1,9 @@
 package it.fivano.symusic;
 
+import it.fivano.symusic.model.LinkModel;
+import it.fivano.symusic.model.ReleaseExtractionModel;
 import it.fivano.symusic.model.ReleaseModel;
+import it.fivano.symusic.model.ReleaseExtractionModel.AreaExtraction;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,6 +12,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.Random;
+
+import org.jsoup.nodes.Element;
 
 import com.wcohen.ss.Level2MongeElkan;
 import com.wcohen.ss.MongeElkan;
@@ -92,13 +98,13 @@ public class SymusicUtility {
 		
 		MongeElkan alg = new MongeElkan();
 		double score = alg.score(s1, s2);
-		System.out.println(score);
+//		System.out.println(score);
 		if(score > 0.85)
 			return true;
 		
 		Level2MongeElkan alg2 = new Level2MongeElkan();
 		score = alg2.score(s1, s2);
-		System.out.println(score);
+//		System.out.println(score);
 		if(score > 0.85)
 			return true;
 		
@@ -120,6 +126,60 @@ public class SymusicUtility {
 		
 		return new Date(data.getTime()+millisDaSottrarre);
 		
+	}
+	
+	public static LinkModel popolateLink(Element dl) {
+		LinkModel currLink = new LinkModel();
+		currLink.setLink(dl.attr("href"));
+		currLink.setName((dl.attr("href").length()>70)? dl.attr("href").substring(0,70)+"..." : dl.attr("href"));
+		
+		return currLink;
+	}
+	
+
+	public static void updateReleaseExtraction(ReleaseExtractionModel relExtr, boolean res, AreaExtraction area) {
+				
+		switch (area) {
+		case BEATPORT:
+			if(res) {
+				relExtr.setBeatport(true);;
+				relExtr.setBeatportDate(new Date());
+			}
+			else {
+				relExtr.setBeatport(false);
+			}
+			break;
+
+		case SCENELOG:
+			if(res) {
+				relExtr.setScenelog(true);
+				relExtr.setScenelogDate(new Date());
+			}
+			else {
+				relExtr.setScenelog(false);
+			}
+			break;
+
+		case YOUTUBE:
+			if(res) {
+				relExtr.setYoutube(true);
+				relExtr.setYoutubeDate(new Date());
+			}
+			else {
+				relExtr.setYoutube(false);
+			}
+			break;
+
+		default:
+			break;
+		}
+		
+	}
+	
+	public static void sleepRandom(long minMillis) {
+		try {
+			Thread.sleep(minMillis+(new Random().nextInt(200)));
+		} catch (InterruptedException e) { }
 	}
 
 	public static void main(String[] args) {

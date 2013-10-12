@@ -32,6 +32,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<mapper resource="it/fivano/symusic/backend/map/GenreMapper.xml" />
 		<mapper resource="it/fivano/symusic/backend/map/ReleaseLinkMapper.xml" />
 		<mapper resource="it/fivano/symusic/backend/map/ReleaseMapper.xml" />
+		<mapper resource="it/fivano/symusic/backend/map/ReleaseExtractionMapper.xml" />
 		<mapper resource="it/fivano/symusic/backend/map/ReleaseRatingMapper.xml" />
 		<mapper resource="it/fivano/symusic/backend/map/ReleaseTrackMapper.xml" />
 		<mapper resource="it/fivano/symusic/backend/map/ReleaseVideoMapper.xml" />

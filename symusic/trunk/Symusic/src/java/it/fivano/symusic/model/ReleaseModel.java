@@ -15,6 +15,7 @@ public class ReleaseModel {
 	private String releaseDate;
 	private String recordLabel;
 	private GenreModel genre;
+	private ReleaseExtractionModel releaseExtraction;
 	
 	private Integer voteValue;
 	private Double voteAverage;
@@ -90,7 +91,9 @@ public class ReleaseModel {
 	public void addLink(LinkModel link) {
 		if(this.links==null)
 			links = new ArrayList<LinkModel>();
-		links.add(link);
+		
+		if(!links.contains(link))
+			links.add(link);
 	}
 	
 	 @Override
@@ -106,7 +109,9 @@ public class ReleaseModel {
 	public void addTrack(TrackModel tr) {
 		if(this.tracks==null)
 			tracks = new ArrayList<TrackModel>();
-		tracks.add(tr);
+		
+		if(!tracks.contains(tr))
+			tracks.add(tr);
 	}
 	public List<VideoModel> getVideos() {
 		return videos;
@@ -117,7 +122,9 @@ public class ReleaseModel {
 	public void addVideo(VideoModel tr) {
 		if(this.videos==null)
 			videos = new ArrayList<VideoModel>();
-		videos.add(tr);
+		
+		if(!videos.contains(tr))
+			videos.add(tr);
 	}
 	public Long getId() {
 		return id;
@@ -152,6 +159,16 @@ public class ReleaseModel {
 
 	public void setGenre(GenreModel genre) {
 		this.genre = genre;
+	}
+
+
+	public ReleaseExtractionModel getReleaseExtraction() {
+		return releaseExtraction;
+	}
+
+
+	public void setReleaseExtraction(ReleaseExtractionModel releaseExtraction) {
+		this.releaseExtraction = releaseExtraction;
 	}
 
 }

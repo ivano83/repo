@@ -1,24 +1,20 @@
 package it.fivano.symusic.backend.service;
 
 import it.fivano.symusic.backend.TransformerUtility;
-import it.fivano.symusic.backend.dao.ReleaseLinkMapper;
 import it.fivano.symusic.backend.dao.ReleaseTrackMapper;
-import it.fivano.symusic.backend.model.ReleaseLink;
-import it.fivano.symusic.backend.model.ReleaseLinkExample;
 import it.fivano.symusic.backend.model.ReleaseTrack;
 import it.fivano.symusic.backend.model.ReleaseTrackExample;
 import it.fivano.symusic.exception.BackEndException;
-import it.fivano.symusic.model.LinkModel;
 import it.fivano.symusic.model.TrackModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 public class TrackService extends RootService {
 	
-	Logger log = Logger.getLogger(getClass());
+	public TrackService() {
+		this.setLogger(getClass());
+	}
 	
 	private ReleaseTrackMapper getTrackMapper() throws BackEndException {
 		return this.apriSessione().getMapper(ReleaseTrackMapper.class);

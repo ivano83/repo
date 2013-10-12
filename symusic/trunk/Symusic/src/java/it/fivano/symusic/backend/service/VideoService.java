@@ -1,23 +1,20 @@
 package it.fivano.symusic.backend.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import it.fivano.symusic.backend.TransformerUtility;
-import it.fivano.symusic.backend.dao.ReleaseMapper;
 import it.fivano.symusic.backend.dao.ReleaseVideoMapper;
-import it.fivano.symusic.backend.model.Release;
-import it.fivano.symusic.backend.model.ReleaseExample;
 import it.fivano.symusic.backend.model.ReleaseVideo;
 import it.fivano.symusic.backend.model.ReleaseVideoExample;
 import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.model.VideoModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class VideoService extends RootService {
 	
-	Logger log = Logger.getLogger(getClass());
+	public VideoService() {
+		this.setLogger(getClass());
+	}
 	
 	private ReleaseVideoMapper getVideoMapper() throws BackEndException {
 		return this.apriSessione().getMapper(ReleaseVideoMapper.class);

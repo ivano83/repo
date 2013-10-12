@@ -15,9 +15,9 @@
 <!--     <table tableName="genre" schema="symusic"> -->
 <!-- 		<generatedKey column="id_genre" sqlStatement="MySql" identity="true" /> -->
 <!-- 	</table> -->
-	<table tableName="release" schema="symusic" catalog="symusic" >
-		<generatedKey column="id_release" sqlStatement="MySql" identity="true" />
-	</table>
+<!-- 	<table tableName="release" schema="symusic" catalog="symusic" > -->
+<!-- 		<generatedKey column="id_release" sqlStatement="MySql" identity="true" /> -->
+<!-- 	</table> -->
 <!-- 	<table tableName="release_link" schema="symusic" catalog="symusic" > -->
 <!-- 		<generatedKey column="id_release_link" sqlStatement="MySql" identity="true" /> -->
 <!-- 	</table> -->
@@ -37,6 +37,9 @@
 <!-- 	<table tableName="user_preference" schema="symusic"> -->
 <!-- 		<generatedKey column="id_user_preference" sqlStatement="MySql" identity="true" /> -->
 <!-- 	</table> -->
+	<table tableName="release_extraction" schema="symusic" catalog="symusic" >
+		
+	</table>
 	
   </context>
 </generatorConfiguration>

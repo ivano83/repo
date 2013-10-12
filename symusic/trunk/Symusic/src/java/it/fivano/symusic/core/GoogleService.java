@@ -6,17 +6,13 @@ import it.fivano.symusic.model.ReleaseModel;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
-
 public class GoogleService extends BaseService {
 
-	
 	private GoogleConf conf;
-	
-	Logger log = Logger.getLogger(getClass());
-	
+		
 	public GoogleService() throws IOException {
 		conf = new GoogleConf();
+		this.setLogger(getClass());
 	}
 	
 	private String getUrlConnection(ReleaseModel release, int tentativi) {		

@@ -34,5 +34,13 @@ public class VideoModel {
 				link!=null? link+" | " : ""+
 						eta!=null? eta+" | " : "";
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(this.link!=null)
+			return this.link.equalsIgnoreCase(((VideoModel)obj).getLink());
+		else 
+			return super.equals(obj);
+	}
 
 }

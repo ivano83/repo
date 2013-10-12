@@ -1,6 +1,5 @@
 package it.fivano.symusic.core;
 
-import it.fivano.symusic.backend.service.LinkService;
 import it.fivano.symusic.backend.service.TrackService;
 import it.fivano.symusic.conf.BeatportConf;
 import it.fivano.symusic.exception.BackEndException;
@@ -11,7 +10,6 @@ import it.fivano.symusic.model.TrackModel;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -21,10 +19,10 @@ public class BeatportService extends BaseService {
 
 	private BeatportConf conf;
 	
-	Logger log = Logger.getLogger(getClass());
 	
 	public BeatportService() throws IOException {
 		conf = new BeatportConf();
+		this.setLogger(getClass());
 	}
 	
 	public boolean parseBeatport(ReleaseModel release) throws ParseReleaseException, BackEndException {

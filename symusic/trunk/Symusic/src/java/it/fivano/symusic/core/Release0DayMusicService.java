@@ -1,12 +1,12 @@
 package it.fivano.symusic.core;
 
 import it.fivano.symusic.SymusicUtility;
-import it.fivano.symusic.backend.TransformerUtility;
 import it.fivano.symusic.backend.service.GenreService;
-import it.fivano.symusic.backend.service.LinkService;
-import it.fivano.symusic.backend.service.ReleaseService;
-import it.fivano.symusic.backend.service.VideoService;
+import it.fivano.symusic.conf.SymusicConf;
 import it.fivano.symusic.conf.ZeroDayMusicConf;
+import it.fivano.symusic.core.thread.ReleaseProcessModule;
+import it.fivano.symusic.core.thread.ReleaseThreadObject;
+import it.fivano.symusic.core.thread.SupportObject;
 import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.GenreModel;
@@ -17,64 +17,69 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
-import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class Release0DayMusicService extends BaseService {
+public class Release0DayMusicService extends ReleaseSiteService {
 	
 	private ZeroDayMusicConf conf;
+	
 	private boolean enableBeatportService;
 	private boolean enableScenelogService;
 	private boolean enableYoutubeService;
 	
-	Logger log = Logger.getLogger(getClass());
-	
 	public Release0DayMusicService() throws IOException {
+		super();
 		conf = new ZeroDayMusicConf();
 		enableBeatportService = true;
 		enableScenelogService = true;
 		enableYoutubeService = true;
+		this.setLogger(getClass());
 	}
 	
 	
-	public List<ReleaseModel> parse0DayMusicRelease(String genere, Date da, Date a) throws BackEndException {
+	public List<ReleaseModel> parse0DayMusicRelease(String genere, Date da, Date a) throws BackEndException, ParseReleaseException {
 		
 		List<ReleaseModel> listRelease = null;
 		
 		try {
 			
-			// pagina di inizio
+			// PAGINA DI INIZIO
 			String urlConn = conf.URL+conf.URL_ACTION+"?"+conf.PARAMS.replace("{0}", genere);
+			
+			// OGGETTO PER GESTIRE IL CARICAMENTO DELLE PAGINE SUCCESSIVE DEL SITO
 			ZeroDayMusicInfo info = new ZeroDayMusicInfo();
 			info.setProcessNextPage(true);
 			
+			// PROCESSA LE RELEASE DELLA PRIMA PAGINA
 			listRelease = this.parse0DayMusic(urlConn, da, a, info);
 			
-			// se c'è da recuperare altre release, cambia pagina
+			// SE C'È DA RECUPERARE ALTRE RELEASE, CAMBIA PAGINA
 			while(info.isProcessNextPage()) {
 				
 				log.info("Andiamo alla pagina successiva...");
-				
+				// PROCESSA LE RELEASE DELLE PAGINE SUCCESSIVE
 				listRelease.addAll(this.parse0DayMusic(info.getNextPage(), da, a, info));
 				
 			}
 			
+			// INIT OGGETTO DI SUPPORTO UNICO PER TUTTI I THREAD
+			SupportObject supp = new SupportObject();
+			supp.setEnableBeatportService(enableBeatportService);
+			supp.setEnableScenelogService(enableScenelogService);
+			supp.setEnableYoutubeService(enableYoutubeService);
 			
+			listRelease = this.arricchimentoRelease(listRelease, supp);
 			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (Exception e) {
+			throw new ParseReleaseException("Errore nel parsing delle pagine",e);
+		} 
 
 		return listRelease;
 		
@@ -82,161 +87,80 @@ public class Release0DayMusicService extends BaseService {
 	
 	
 	
-	private List<ReleaseModel> parse0DayMusic(String urlConn, Date da, Date a, ZeroDayMusicInfo info) throws IOException, ParseException, BackEndException {
+	private List<ReleaseModel> parse0DayMusic(String urlConn, Date da, Date a, ZeroDayMusicInfo info) throws BackEndException, ParseReleaseException, ParseException, IOException {
 		
 		List<ReleaseModel> listRelease = new ArrayList<ReleaseModel>();
 		
-		try {
-			
-			if(urlConn == null)
-				return listRelease;
-			
-			ReleaseModel release = null;
-			LinkModel link = null;
-			
-			log.info("Connessione in corso --> "+urlConn);
-			Document doc = Jsoup.connect(urlConn).get();
-			
-			info.setNextPage(this.extractNextPage(doc));
+		if(urlConn == null)
+			return listRelease;
 
-			Elements releaseGroup = doc.getElementsByAttributeValue("id",conf.ID_RELEASE_GROUP);
-			for(Element e : releaseGroup) {
-				
-				// date release
-				String dateIn = this.getStandardDateFormat(e.parent().getElementById(conf.ID_DAY).text());
-				Date dateInDate = SymusicUtility.getStandardDate(dateIn);
-				
-				// bisogna recuperare ancora altri giorni di release
-				if(da.compareTo(dateInDate)>0)
-					info.setProcessNextPage(false);
-				
-				// range data, solo le release comprese da - a
-				if(!this.downloadReleaseDay(dateInDate, da, a)) {
-					continue;
-				}
-				
-				
-				int i = 0;
-				Elements links = e.getElementsByTag("a");
-				Elements genres = e.getElementsByTag("span");
-				int count = 0;
-				for(Element linkDoc : links) {
-					
-					release = new ReleaseModel();
-					
-					// name
-					String title = linkDoc.attr("title");
-					release.setName(title.replace("_", " "));
-					release.setNameWithUnderscore(title.replace(" ", "_"));
-					
-					// link
-					release.addLink(this.popolateLink(linkDoc));
-					
-					// genere
-					if(count<genres.size()) {
-						Element genre = genres.get(count);
-						GenreModel genere = new GenreModel();
-						genere.setName(genre.text().replaceAll("[()]", ""));
-						
-						GenreService gServ = new GenreService();
-						genere = gServ.saveGenre(genere);
-						release.setGenre(genere);
-					}
-					
-					// release date
-					release.setReleaseDate(dateIn);
-					
-					SymusicUtility.processReleaseName(release);
-					log.info("#####################");
-					log.info("|"+release+"|");
-					
-					enableYoutubeService = this.verificaAbilitazioneYoutube(release);
-					
-					boolean isRecuperato = false;
-					ReleaseService relServ = new ReleaseService();
-					ReleaseModel relDb = relServ.getReleaseFull(release.getNameWithUnderscore());
-					if(relDb!=null) {
-						enableScenelogService = false;
-						enableYoutubeService = false;
-						isRecuperato = true;
-						release = relDb;
-					}
-					
+		// CONNESSIONE ALLA PAGINA
+		log.info("Connessione in corso --> "+urlConn);
+		Document doc = Jsoup.connect(urlConn).get();
 
-					// salva sul db
-					if(!isRecuperato) {
-						ReleaseModel r = relServ.saveRelease(release);
-						release.setId(r.getId());
-					}
-					
-					// recupero e inserimento dati sul DB
-					// TODO recupero e inserimento dati sul DB
-					double rounded = (double) Math.round(new Double(new Random().nextInt(5)*0.8) * 100) / 100;
-					release.setVoteAverage(rounded);
-					
-					if(i==0 || i==3) {
-						release.setVoted(true);
-						release.setVoteValue(new Random().nextInt(4));
-					}
-					i++;
-					
-					
-	
-					// ########## SCENELOG ############
-					try {
-						ScenelogService scenelog = new ScenelogService();
-						if(enableScenelogService) {
-							// recupera dati da Scenelog per la tracklist e link download
-							scenelog.parseScenelog(release);
-						}
-					} catch (ParseReleaseException e1) {
-						log.warn("ScenelogService fallito!");
-					}
-					
-					
-					// ########## BEATPORT ############
-					try {
-						if(enableBeatportService) {
-							// recupera dati da beatport per il dettaglio della release
-							BeatportService beatport = new BeatportService();
-							beatport.parseBeatport(release);
-						}
-						
-					} catch (ParseReleaseException e1) {
-						log.warn("BeatportService fallito!");
-					}
-					
-					// ########## YOUTUBE ############
-					YoutubeService youtube = new YoutubeService();
-					try {
-						if(enableYoutubeService) {
-							// recupera dati da youtube per i video
-							youtube.extractYoutubeVideo(release);
-						}
-						
-					} catch (ParseReleaseException e1) {
-						log.warn("YoutubeService fallito!");
-					}
+		// SALVA LA URL DELLA PROSSIMA PAGINA (SE NECESSARIA)
+		info.setNextPage(this.extractNextPage(doc));
 
-					
-					GoogleService google = new GoogleService();
-					google.addManualSearchLink(release);
-					youtube.addManualSearchLink(release); // link a youtube per la ricerca manuale
-					
-					listRelease.add(release);
-					count++;
-				}
-				
+		ReleaseModel release = null;
+		Elements releaseGroup = doc.getElementsByAttributeValue("id",conf.ID_RELEASE_GROUP);
+		// CICLO PER OGNI GIORNO NELLA PAGINA CORRENTE (RELEASE RAGGRUPPATE PER GIORNO)
+		for(Element e : releaseGroup) {
+
+			// DATE RELEASE
+			String dateIn = this.getStandardDateFormat(e.parent().getElementById(conf.ID_DAY).text());
+			Date dateInDate = SymusicUtility.getStandardDate(dateIn);
+			Elements genres = e.getElementsByTag("span");
+
+			// BISOGNA RECUPERARE ANCORA ALTRI GIORNI DI RELEASE?
+			if(da.compareTo(dateInDate)>0)
+				info.setProcessNextPage(false);
+
+			// RANGE DATA, SOLO LE RELEASE COMPRESE DA - A
+			if(!this.downloadReleaseDay(dateInDate, da, a)) {
+				continue;
 			}
 
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
+			Elements links = e.getElementsByTag("a");
+
+			// RECUPERA TUTTE LE RIGHE DELLE RELEASE DI UN DETERMINATO GIORNO
+			log.info("####################################");
+			int count = 0;
+			for(Element linkDoc : links) {
+				release = new ReleaseModel();
+
+				// RELEASE NAME
+				String title = linkDoc.attr("title");
+				release.setName(title.replace("_", " "));
+				release.setNameWithUnderscore(title.replace(" ", "_"));
+
+				// LINK
+				release.addLink(SymusicUtility.popolateLink(linkDoc));
+
+				// GENERE
+				if(count<genres.size()) {
+					Element genre = genres.get(count);
+					GenreModel genere = new GenreModel();
+					genere.setName(genre.text().replaceAll("[()]", ""));
+
+					GenreService gServ = new GenreService();
+					genere = gServ.saveGenre(genere);
+					release.setGenre(genere);
+				}
+
+				// RELEASE DATE
+				release.setReleaseDate(dateIn);
+				
+				// AGGIUNGE ULTERIORI INFO DELLA RELEASE A PARTIRE DAL NOME
+				// ES. CREW E ANNO RELEASE
+				SymusicUtility.processReleaseName(release);
+				
+				log.info("|"+release+"| acquisita");
+				log.info("####################################");
+								
+				listRelease.add(release);
+				
+				count++;
+			}
 		}
 
 		return listRelease;
@@ -244,14 +168,7 @@ public class Release0DayMusicService extends BaseService {
 		
 	}
 	
-	private boolean verificaAbilitazioneYoutube(ReleaseModel release) {
-		
-		String name = release.getName().toUpperCase();
-		if(name.startsWith("VA-") || name.startsWith("VA -"))
-			return false;
-		
-		return true;
-	}
+
 
 
 	private String extractNextPage(Document doc) {

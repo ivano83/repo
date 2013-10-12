@@ -1,31 +1,28 @@
 package it.fivano.symusic.core;
 
-import java.io.IOException;
-
-import org.apache.log4j.Logger;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.backend.service.VideoService;
 import it.fivano.symusic.conf.YoutubeConf;
 import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.ReleaseModel;
-import it.fivano.symusic.model.TrackModel;
 import it.fivano.symusic.model.VideoModel;
+
+import java.io.IOException;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 
 public class YoutubeService extends BaseService {
 	
 	YoutubeConf conf;
-	
-	Logger log = Logger.getLogger(getClass());
-	
+		
 	public YoutubeService() throws IOException {
 		conf = new YoutubeConf();
+		this.setLogger(getClass());
 	}
 
 	
@@ -80,6 +77,8 @@ public class YoutubeService extends BaseService {
 						}
 						
 						
+						// AGGIUNGE IL VIDEO ALLA LISTA SOLO SE NON E' PRESENTE
+						// (NEL CASO DI RECUPERO DA DB POTREBBE GIA' ESSERCI)
 						log.info("    VIDEO:  "+yt);
 						release.addVideo(yt);
 						
@@ -89,9 +88,10 @@ public class YoutubeService extends BaseService {
 							break;
 					}
 
-					if(release.getVideos().isEmpty())
+					if(release.getVideos().isEmpty()) {
 						trovato = false;
-					else
+						tentativi++;
+					} else
 						trovato = true;
 				} catch (Exception e1) {
 					tentativi++;

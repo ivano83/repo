@@ -7,11 +7,13 @@ import java.util.List;
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.backend.model.Genre;
 import it.fivano.symusic.backend.model.Release;
+import it.fivano.symusic.backend.model.ReleaseExtraction;
 import it.fivano.symusic.backend.model.ReleaseLink;
 import it.fivano.symusic.backend.model.ReleaseTrack;
 import it.fivano.symusic.backend.model.ReleaseVideo;
 import it.fivano.symusic.model.GenreModel;
 import it.fivano.symusic.model.LinkModel;
+import it.fivano.symusic.model.ReleaseExtractionModel;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.TrackModel;
 import it.fivano.symusic.model.VideoModel;
@@ -137,6 +139,23 @@ public class TransformerUtility {
 		return res;
 	}
 	
+	public static ReleaseExtraction transformReleaseExtraction(ReleaseExtractionModel relExtr) {
+		
+		if(relExtr==null)
+			return null;
+		
+		ReleaseExtraction res = new ReleaseExtraction();
+		res.setIdRelease(relExtr.getIdRelease());
+		res.setBeatport(relExtr.getBeatport());
+		res.setBeatportDateExtraction(relExtr.getBeatportDate());
+		res.setYoutube(relExtr.getYoutube());
+		res.setYoutubeDateExtraction(relExtr.getYoutubeDate());
+		res.setScenelog(relExtr.getScenelog());
+		res.setScenelogDateExtraction(relExtr.getScenelogDate());
+		return res;
+	}
+	
+	
 	
 	public static ReleaseModel transformReleaseToModel(Release rel) throws ParseException {
 		if(rel==null)
@@ -260,4 +279,19 @@ public class TransformerUtility {
 		return res;
 	}
 
+	public static ReleaseExtractionModel transformReleaseExtractionToModel(ReleaseExtraction relExtr) {
+		
+		if(relExtr==null)
+			return null;
+		
+		ReleaseExtractionModel res = new ReleaseExtractionModel();
+		res.setIdRelease(relExtr.getIdRelease());
+		res.setBeatport(relExtr.getBeatport());
+		res.setBeatportDate(relExtr.getBeatportDateExtraction());
+		res.setYoutube(relExtr.getYoutube());
+		res.setYoutubeDate(relExtr.getYoutubeDateExtraction());
+		res.setScenelog(relExtr.getScenelog());
+		res.setScenelogDate(relExtr.getScenelogDateExtraction());
+		return res;
+	}
 }

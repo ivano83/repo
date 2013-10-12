@@ -56,5 +56,16 @@ public class TrackModel {
 	public void setTrackNumber(Integer trackNumber) {
 		this.trackNumber = trackNumber;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(this.trackNumber!=null && this.trackName!=null) {
+			
+			return this.trackNumber.equals(((TrackModel)obj).getTrackNumber()) &&
+					this.trackName.equalsIgnoreCase(((TrackModel)obj).getTrackName());
+		}
+		else 
+			return super.equals(obj);
+	}
 
 }
