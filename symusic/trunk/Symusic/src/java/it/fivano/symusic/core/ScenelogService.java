@@ -10,7 +10,9 @@ import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.TrackModel;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -21,6 +23,7 @@ import org.jsoup.select.Elements;
 public class ScenelogService extends BaseService {
 	
 	private ScenelogConf conf;
+	
 		
 	public ScenelogService() throws IOException {
 		conf = new ScenelogConf();
@@ -32,7 +35,8 @@ public class ScenelogService extends BaseService {
 		try {
 			int tentativi = 0;
 			boolean trovato = false;
-			String userAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0";
+			
+			String userAgent = this.randomUserAgent();
 			
 			Elements releaseItems = null;
 			Document doc = null;
@@ -42,17 +46,19 @@ public class ScenelogService extends BaseService {
 					// pagina di inizio
 					String urlConn = this.getUrlConnection(release, tentativi);
 					log.info("Connessione in corso --> "+urlConn);
-					doc = Jsoup.connect(urlConn).userAgent(userAgent).get();
+					doc = Jsoup.connect(urlConn).timeout((tentativi+1)*TIMEOUT).userAgent(userAgent).get();
 					
 					releaseItems = doc.getElementsByClass(conf.CLASS_RELEASE_ITEM);
 					
 					if(releaseItems==null || releaseItems.isEmpty()) {
-						throw new ParseReleaseException();
+						throw new ParseReleaseException("Tentativo "+tentativi+" fallito!");
 					}
 				
 					trovato = true;
 				} catch (Exception e1) {
+					log.info("USER_AGENT_ERROR = "+userAgent);
 					log.error(e1.getMessage(),e1);
+					userAgent = this.randomUserAgent(); // proviamo un nuovo user agent
 					tentativi++;
 				}
 				
@@ -61,6 +67,8 @@ public class ScenelogService extends BaseService {
 			if(releaseItems==null) {
 				throw new ParseReleaseException("[SCENELOG] Nessun risultato ottenuto per la release = "+release);
 			}
+			
+			log.info("USER_AGENT = "+userAgent);
 			
 			String releaseLinkGood = null;
 			for(Element e : releaseItems) {
@@ -88,11 +96,11 @@ public class ScenelogService extends BaseService {
 				for(TextNode tx : textnodes) {
 					currTrack = new TrackModel();
 					currTrack.setTrackNumber(numTr);
-					String text = tx.text().replaceFirst("\\d+\\.","");
-					System.out.println(text);
+					String text = tx.text().replaceFirst("\\d+\\.",""); // se c'e' il numero di track, lo elimina
+//					System.out.println(text);
 					currTrack.setTrackName(text);
 					release.addTrack(currTrack);
-					log.info("    DETTAGLIO:  "+currTrack);
+					log.info("ID_RELEASE="+release.getId()+"\tTRACK:  "+numTr+"."+currTrack);
 					numTr++;
 					
 				}
@@ -131,6 +139,24 @@ public class ScenelogService extends BaseService {
 		
 	}
 	
+	private static List<String> getUserAgentList() {
+		List<String> lista = new ArrayList<String>();
+		lista.add("Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)");
+		lista.add("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0");
+		lista.add("Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)");
+		lista.add("Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)");
+		lista.add("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0");
+		lista.add("Opera/12.80 (Windows NT 5.1; U; en) Presto/2.10.289 Version/12.02");
+		lista.add("Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; fr) Presto/2.9.168 Version/11.52");
+		
+		return lista;
+	}
+	
+	private String randomUserAgent() {
+		
+		return getUserAgentList().get(new Random().nextInt(getUserAgentList().size()-1));
+	}
+
 	private String getUrlConnection(ReleaseModel release, int tentativi) {
 		String query = release.getNameWithUnderscore();
 		

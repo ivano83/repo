@@ -27,6 +27,8 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 	private ZeroDayMp3Conf conf;
 	private String genre;
 	
+	private List<ReleaseModel> listRelease;
+	
 	private boolean enableBeatportService;
 	private boolean enableScenelogService;
 	private boolean enableYoutubeService;
@@ -43,9 +45,8 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 	
 	public List<ReleaseModel> parse0DayMp3Release(String genere, Date da, Date a) throws BackEndException, ParseReleaseException {
 		
-		List<ReleaseModel> listRelease = null;
 		this.genre = genere;
-		
+		listRelease = new ArrayList<ReleaseModel>();
 		try {
 			
 			// PAGINA DI INIZIO
@@ -56,14 +57,14 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 			info.setProcessNextPage(true);
 			
 			// PROCESSA LE RELEASE DELLA PRIMA PAGINA
-			listRelease = this.parse0DayMp3(urlConn, da, a, info);
+			this.parse0DayMp3(urlConn, da, a, info);
 			
 			// SE C'È DA RECUPERARE ALTRE RELEASE, CAMBIA PAGINA
 			while(info.isProcessNextPage()) {
 				
 				log.info("Andiamo alla pagina successiva...");
 				// PROCESSA LE RELEASE DELLE PAGINE SUCCESSIVE
-				listRelease.addAll(this.parse0DayMp3(info.getNextPage(), da, a, info));
+				this.parse0DayMp3(info.getNextPage(), da, a, info);
 				
 			}
 			
@@ -85,16 +86,16 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 	
 	
 	
-	private List<ReleaseModel> parse0DayMp3(String urlConn, Date da, Date a, ZeroDayMp3Info info) throws BackEndException, ParseReleaseException, ParseException, IOException {
+	private void parse0DayMp3(String urlConn, Date da, Date a, ZeroDayMp3Info info) throws BackEndException, ParseReleaseException, ParseException, IOException {
 		
-		List<ReleaseModel> listRelease = new ArrayList<ReleaseModel>();
+//		List<ReleaseModel> listRelease = new ArrayList<ReleaseModel>();
 		
 		if(urlConn == null)
-			return listRelease;
+			return;
 
 		// CONNESSIONE ALLA PAGINA
 		log.info("Connessione in corso --> "+urlConn);
-		Document doc = Jsoup.connect(urlConn).get();
+		Document doc = Jsoup.connect(urlConn).timeout(TIMEOUT).get();
 
 		// SALVA LA URL DELLA PROSSIMA PAGINA (SE NECESSARIA)
 		info.changePage(); // AGGIORNA IL NUMERO PAGINA
@@ -137,9 +138,6 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 					release.setName(title.replace("_", " "));
 					release.setNameWithUnderscore(title.replace(" ", "_"));
 					
-					// LINK
-					release.addLink(SymusicUtility.popolateLink(relComp.getElementsByTag("a").get(0)));
-					
 					// IN TERZA POSIZIONE C'È IL GENERE
 					Element genreComp = components.get(2);
 					String genre = this.genericFilter(genreComp.text());
@@ -156,10 +154,31 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 					// ES. CREW E ANNO RELEASE
 					SymusicUtility.processReleaseName(release);
 					
-					log.info("|"+release+"| acquisita");
-					log.info("####################################");
-									
-					listRelease.add(release);
+					// SE E' GIA' PRESENTE IL LISTA, PRENDE QUELLA
+					ReleaseModel relInList = this.verificaPresenzaInLista(release);
+					if(relInList!=null) {
+						
+						release = relInList;
+						// LINK
+						release.addLink(SymusicUtility.popolateLink(relComp.getElementsByTag("a").get(0)));
+						
+						log.info("|"+release+"| fusa con quella gia' presente");
+						log.info("####################################");
+						
+					} else {
+						
+						// LINK
+						release.addLink(SymusicUtility.popolateLink(relComp.getElementsByTag("a").get(0)));
+						
+						
+						log.info("|"+release+"| acquisita");
+						log.info("####################################");
+										
+						listRelease.add(release);
+						
+					}
+										
+					
 					
 				} 
 
@@ -167,11 +186,22 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 			
 		}
 			
-		return listRelease;
+//		return listRelease;
 
 		
 	}
 	
+
+	private ReleaseModel verificaPresenzaInLista(ReleaseModel release) {
+		for(ReleaseModel r : listRelease) {
+			if(r.equals(release)) {
+				log.info("Release "+release+" e' gia' presente in lista, si effettuera' la fusione");
+				return r;
+			}
+		}
+		return null;
+	}
+
 
 	private String genericFilter(String text) {
 		if(text!=null) {

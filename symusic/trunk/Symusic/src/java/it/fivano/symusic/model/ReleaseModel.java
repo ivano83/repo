@@ -170,5 +170,18 @@ public class ReleaseModel {
 	public void setReleaseExtraction(ReleaseExtractionModel releaseExtraction) {
 		this.releaseExtraction = releaseExtraction;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(this.nameWithUnderscore!=null) {
+			ReleaseModel rel = (ReleaseModel)obj;
+			return this.nameWithUnderscore.equalsIgnoreCase(rel.getNameWithUnderscore());
+		}
+		else if(name!=null) {
+			ReleaseModel rel = (ReleaseModel)obj;
+			return this.name.equalsIgnoreCase(rel.getName());
+		}
+		return super.equals(obj);
+	}
 
 }

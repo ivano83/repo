@@ -83,7 +83,7 @@ public class TrackService extends RootService {
 		
 
 		if(trackIn!=null && trackIn.getIdRelease()!=null && trackIn.getTrackName()!=null) {
-			// controllo di esistenza del video sul DB
+			// controllo di esistenza della traccia sul DB
 			
 			boolean isPresente = false;
 			for(TrackModel v : trackList) {

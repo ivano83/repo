@@ -9,9 +9,6 @@ import it.fivano.symusic.model.ReleaseModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 public abstract class ReleaseSiteService extends BaseService {
 
 	

@@ -3,26 +3,15 @@ package it.fivano.symusic.core.thread;
 import it.fivano.symusic.LoggerSync;
 import it.fivano.symusic.MyLogger;
 import it.fivano.symusic.SymusicUtility;
-import it.fivano.symusic.backend.service.GenreService;
 import it.fivano.symusic.backend.service.ReleaseService;
 import it.fivano.symusic.core.BeatportService;
 import it.fivano.symusic.core.GoogleService;
 import it.fivano.symusic.core.ScenelogService;
 import it.fivano.symusic.core.YoutubeService;
-import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.exception.ParseReleaseException;
-import it.fivano.symusic.model.GenreModel;
 import it.fivano.symusic.model.ReleaseExtractionModel;
 import it.fivano.symusic.model.ReleaseExtractionModel.AreaExtraction;
 import it.fivano.symusic.model.ReleaseModel;
-
-import java.io.IOException;
-import java.util.Date;
-import java.util.Random;
-
-import org.apache.log4j.Logger;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 public class ReleaseProcessModule extends Thread {
 	
@@ -72,8 +61,8 @@ public class ReleaseProcessModule extends Thread {
 				ReleaseExtractionModel extr = relDb.getReleaseExtraction();
 				
 				if(extr!=null ){
-					enableScenelogService = extr.getScenelog();
-					enableYoutubeService = extr.getYoutube();
+					enableScenelogService = !extr.getScenelog();
+					enableYoutubeService = !extr.getYoutube();
 //					enableBeatportService = extr.getBeatport();
 				}
 				isRecuperato = true;

@@ -142,8 +142,9 @@ public class SymusicUtility {
 		switch (area) {
 		case BEATPORT:
 			if(res) {
-				relExtr.setBeatport(true);;
-				relExtr.setBeatportDate(new Date());
+				relExtr.setBeatport(true);
+				if(relExtr.getBeatportDate()==null)
+					relExtr.setBeatportDate(new Date());
 			}
 			else {
 				relExtr.setBeatport(false);
@@ -153,7 +154,8 @@ public class SymusicUtility {
 		case SCENELOG:
 			if(res) {
 				relExtr.setScenelog(true);
-				relExtr.setScenelogDate(new Date());
+				if(relExtr.getScenelogDate()==null)
+					relExtr.setScenelogDate(new Date());
 			}
 			else {
 				relExtr.setScenelog(false);
@@ -163,7 +165,8 @@ public class SymusicUtility {
 		case YOUTUBE:
 			if(res) {
 				relExtr.setYoutube(true);
-				relExtr.setYoutubeDate(new Date());
+				if(relExtr.getYoutubeDate()==null)
+					relExtr.setYoutubeDate(new Date());
 			}
 			else {
 				relExtr.setYoutube(false);

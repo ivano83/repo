@@ -91,7 +91,7 @@ public class Release0DayMusicService extends ReleaseSiteService {
 
 		// CONNESSIONE ALLA PAGINA
 		log.info("Connessione in corso --> "+urlConn);
-		Document doc = Jsoup.connect(urlConn).get();
+		Document doc = Jsoup.connect(urlConn).timeout(TIMEOUT).get();
 
 		// SALVA LA URL DELLA PROSSIMA PAGINA (SE NECESSARIA)
 		info.setNextPage(this.extractNextPage(doc));

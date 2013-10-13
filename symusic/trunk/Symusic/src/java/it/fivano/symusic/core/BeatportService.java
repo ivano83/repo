@@ -40,7 +40,7 @@ public class BeatportService extends BaseService {
 					// pagina di inizio
 					String urlConn = conf.URL+conf.URL_ACTION+"?"+conf.PARAMS.replace("{0}", query);
 					log.info("Connessione in corso --> "+urlConn);
-					doc = Jsoup.connect(urlConn).get();
+					doc = Jsoup.connect(urlConn).timeout(TIMEOUT).get();
 					
 					releaseGroup = doc.getElementsByAttributeValue(conf.ATTR_RELEASE_NAME,conf.ATTR_RELEASE_VALUE).get(0);
 				

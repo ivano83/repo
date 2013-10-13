@@ -43,7 +43,7 @@ public class YoutubeService extends BaseService {
 					// pagina di inizio
 					urlConn = this.getUrlConnection(release, tentativi);
 					log.info("Connessione in corso --> "+urlConn);
-					doc = Jsoup.connect(urlConn).get();
+					doc = Jsoup.connect(urlConn).timeout(TIMEOUT).get();
 					
 					videoGroup = doc.getElementsByClass(conf.CLASS_VIDEO);
 					if(videoGroup.isEmpty())
@@ -79,7 +79,7 @@ public class YoutubeService extends BaseService {
 						
 						// AGGIUNGE IL VIDEO ALLA LISTA SOLO SE NON E' PRESENTE
 						// (NEL CASO DI RECUPERO DA DB POTREBBE GIA' ESSERCI)
-						log.info("    VIDEO:  "+yt);
+						log.info("ID_RELEASE="+idRel+"\tVIDEO:  "+yt);
 						release.addVideo(yt);
 						
 						// salva solo MAX_VIDEO_EXTRACT video

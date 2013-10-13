@@ -12,6 +12,7 @@ public abstract class BaseService {
 	
 	protected MyLogger log;
 	protected SymusicConf generalConf;
+	protected static final int TIMEOUT = 5000;
 	
 	public BaseService() {
 		try {
