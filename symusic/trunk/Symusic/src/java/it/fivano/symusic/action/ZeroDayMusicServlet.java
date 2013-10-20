@@ -51,31 +51,32 @@ public class ZeroDayMusicServlet extends HttpServlet {
 			String eDate = request.getParameter("endDate");
 			
 			String enableBeatport = request.getParameter("enableBeatport");
+			String excludeReleaseRip = request.getParameter("excludeRelaseRip");
+			boolean flagBeatport = (enableBeatport!=null && enableBeatport.equalsIgnoreCase("true"))?true:false;
+			boolean flagRip = (excludeReleaseRip!=null && excludeReleaseRip.equalsIgnoreCase("true"))?true:false;
 			
 			// se non presente le date sono inizializzate alla data corrente
 			initDate = (iDate==null || iDate.isEmpty())? sdf.parse(sdf.format(new Date())) : sdf.parse(iDate);
 			endDate = (eDate==null || eDate.isEmpty())? sdf.parse(sdf.format(new Date())) : sdf.parse(eDate);
 
 			urlPrecedente = request.getRequestURI()+"?site="+site+"&genre="+genre+"&initDate="+sdf.format(SymusicUtility.sottraiData(initDate, 2))+"&endDate="+sdf.format(SymusicUtility.sottraiData(initDate, 1));
+			urlPrecedente += "&enableBeatport="+flagBeatport+"&excludeRelaseRip="+flagRip;
 			urlSuccessivo = request.getRequestURI()+"?site="+site+"&genre="+genre+"&initDate="+sdf.format(SymusicUtility.aggiungiData(endDate, 1))+"&endDate="+sdf.format(SymusicUtility.aggiungiData(endDate, 2));
-
+			urlSuccessivo += "&enableBeatport="+flagBeatport+"&excludeRelaseRip="+flagRip;
+			
 			request.setAttribute("urlPrecedente", urlPrecedente);
 			request.setAttribute("urlSuccessivo", urlSuccessivo);
 			
 			List<ReleaseModel> listRelease = new ArrayList<ReleaseModel>();
 			if(site.equals("1")) {
 				Release0DayMusicService zeroDay = new Release0DayMusicService();
-				if(enableBeatport!=null && enableBeatport.equalsIgnoreCase("true"))
-					zeroDay.setEnableBeatportService(true);
-				else
-					zeroDay.setEnableBeatportService(false);
+				zeroDay.setEnableBeatportService(flagBeatport);
+				zeroDay.setExcludeRipRelease(flagRip);
 				listRelease = zeroDay.parse0DayMusicRelease(genre, initDate, endDate);
 			} else if(site.equals("2")) {
 				Release0DayMp3Service zeroDay = new Release0DayMp3Service();
-				if(enableBeatport!=null && enableBeatport.equalsIgnoreCase("true"))
-					zeroDay.setEnableBeatportService(true);
-				else
-					zeroDay.setEnableBeatportService(false);
+				zeroDay.setEnableBeatportService(flagBeatport);
+				zeroDay.setExcludeRipRelease(flagRip);
 				listRelease = zeroDay.parse0DayMp3Release(genre, initDate, endDate);
 			}
 			

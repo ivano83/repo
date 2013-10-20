@@ -127,6 +127,10 @@ public class Release0DayMusicService extends ReleaseSiteService {
 				String title = linkDoc.attr("title");
 				release.setName(title.replace("_", " "));
 				release.setNameWithUnderscore(title.replace(" ", "_"));
+				
+				if(excludeRipRelease && this.isRadioRipRelease(release)) {
+					continue;
+				}
 
 				// LINK
 				release.addLink(SymusicUtility.popolateLink(linkDoc));

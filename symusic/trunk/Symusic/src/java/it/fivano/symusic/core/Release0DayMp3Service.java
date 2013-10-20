@@ -3,7 +3,6 @@ package it.fivano.symusic.core;
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.backend.service.GenreService;
 import it.fivano.symusic.conf.ZeroDayMp3Conf;
-import it.fivano.symusic.conf.ZeroDayMusicConf;
 import it.fivano.symusic.core.thread.SupportObject;
 import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.exception.ParseReleaseException;
@@ -29,9 +28,7 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 	
 	private List<ReleaseModel> listRelease;
 	
-	private boolean enableBeatportService;
-	private boolean enableScenelogService;
-	private boolean enableYoutubeService;
+
 	
 	public Release0DayMp3Service() throws IOException {
 		super();
@@ -39,6 +36,7 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 		enableBeatportService = true;
 		enableScenelogService = true;
 		enableYoutubeService = true;
+		excludeRipRelease = true;
 		this.setLogger(getClass());
 	}
 	
@@ -138,6 +136,10 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 					release.setName(title.replace("_", " "));
 					release.setNameWithUnderscore(title.replace(" ", "_"));
 					
+					if(excludeRipRelease && this.isRadioRipRelease(release)) {
+						continue;
+					}
+					
 					// IN TERZA POSIZIONE C'È IL GENERE
 					Element genreComp = components.get(2);
 					String genre = this.genericFilter(genreComp.text());
@@ -190,7 +192,7 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 
 		
 	}
-	
+
 
 	private ReleaseModel verificaPresenzaInLista(ReleaseModel release) {
 		for(ReleaseModel r : listRelease) {
@@ -250,20 +252,13 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 	}
 
 
-	public boolean isEnableBeatportService() {
-		return enableBeatportService;
-	}
-
-
-	public void setEnableBeatportService(boolean enableBeatportService) {
-		this.enableBeatportService = enableBeatportService;
-	}
-
 
 	@Override
 	protected String applyFilterSearch(String result) {
 		return result;
 	}
+
+
 }
 
 class ZeroDayMp3Info {

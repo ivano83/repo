@@ -121,7 +121,7 @@ public class MyLogger {
 				buff.append("\tat "+tmp.toString()+"\n");
 				lastInd++;
 			}
-			else if(tmp.getClassName().startsWith("it.avcp.spc")) {
+			else if(tmp.getClassName().startsWith("it.fivano.symusic")) {
 				buff.append("\tat "+tmp.toString()+"\n");
 				if(ind>lastInd+1)
 					buff.append("\t"+"..."+"\n");

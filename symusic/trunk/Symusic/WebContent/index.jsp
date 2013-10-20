@@ -60,6 +60,14 @@
 				<input type="checkbox" name="enableBeatport" value="true"/>
 			</td>
 		</tr>
+		<tr>
+			<td>
+				<div>Ignora Release Radio/Sat RIP</div>
+			</td>
+			<td>
+				<input type="checkbox" name="excludeRelaseRip" value="true" checked="checked" />
+			</td>
+		</tr>
 	</table>
 	<input type="submit" value="Ricerca">
 	

@@ -11,6 +11,10 @@ import java.util.List;
 
 public abstract class ReleaseSiteService extends BaseService {
 
+	protected boolean enableBeatportService;
+	protected boolean enableScenelogService;
+	protected boolean enableYoutubeService;
+	protected boolean excludeRipRelease;
 	
 	protected List<ReleaseModel> arricchimentoRelease(List<ReleaseModel> releases, SupportObject supp) throws ParseReleaseException {
 		
@@ -49,8 +53,33 @@ public abstract class ReleaseSiteService extends BaseService {
 		return new ArrayList<ReleaseModel>(threadObject.getReleaseResults().values());
 	}
 	
+	protected boolean isRadioRipRelease(ReleaseModel release) {
+		for(String rip : generalConf.RELEASE_EXCLUSION) {
+			if(release.getNameWithUnderscore().contains(rip))
+				return true;
+		}
+		return false;
+	}
 	
 	@Override
 	protected abstract String applyFilterSearch(String result);
 	
+	public boolean isEnableBeatportService() {
+		return enableBeatportService;
+	}
+
+
+	public void setEnableBeatportService(boolean enableBeatportService) {
+		this.enableBeatportService = enableBeatportService;
+	}
+
+
+	public boolean isExcludeRipRelease() {
+		return excludeRipRelease;
+	}
+
+
+	public void setExcludeRipRelease(boolean excludeRipRelease) {
+		this.excludeRipRelease = excludeRipRelease;
+	}
 }
