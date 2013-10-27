@@ -56,19 +56,19 @@ public class ScenelogService extends BaseService {
 				
 					trovato = true;
 				} catch (Exception e1) {
-					log.info("USER_AGENT_ERROR = "+userAgent);
+//					log.info("USER_AGENT_ERROR = "+userAgent);
 					log.error(e1.getMessage(),e1);
 					userAgent = this.randomUserAgent(); // proviamo un nuovo user agent
 					tentativi++;
 				}
 				
-			} while(tentativi<=2 && !trovato);
+			} while(tentativi<2 && !trovato);
 			
 			if(releaseItems==null) {
 				throw new ParseReleaseException("[SCENELOG] Nessun risultato ottenuto per la release = "+release);
 			}
 			
-			log.info("USER_AGENT = "+userAgent);
+//			log.info("USER_AGENT = "+userAgent);
 			
 			String releaseLinkGood = null;
 			for(Element e : releaseItems) {
@@ -100,7 +100,7 @@ public class ScenelogService extends BaseService {
 //					System.out.println(text);
 					currTrack.setTrackName(text);
 					release.addTrack(currTrack);
-					log.info("ID_RELEASE="+release.getId()+"\tTRACK:  "+numTr+"."+currTrack);
+					log.info("ID_RELEASE="+release.getId()+"\t TRACK:  "+numTr+"."+currTrack);
 					numTr++;
 					
 				}

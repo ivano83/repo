@@ -1,5 +1,6 @@
 package it.fivano.symusic.core;
 
+import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.backend.service.TrackService;
 import it.fivano.symusic.conf.BeatportConf;
 import it.fivano.symusic.exception.BackEndException;
@@ -9,6 +10,7 @@ import it.fivano.symusic.model.TrackModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -60,7 +62,7 @@ public class BeatportService extends BaseService {
 			for(Element e : releaseList) {
 				Element title = e.getElementsByClass(conf.CLASS_RELEASE_TITLE).get(0);
 				String titleString = title.text();
-				if(release.getName().contains(titleString)) {
+				if(SymusicUtility.compareStringSimilarity(release.getName(),titleString)) {
 					releaseLink = title.attr("href");
 					log.info("[BEATPORT] Trovata la release: "+titleString+" - "+releaseLink+"\n");
 					break;
@@ -83,13 +85,17 @@ public class BeatportService extends BaseService {
 				}
 
 				TrackModel currTrack = null;
+				List<TrackModel> listTrack = new ArrayList<TrackModel>();
 				Elements releaseTracks = doc.getElementsByClass(conf.TABLE_RELEASE_TRACK);
 				
 				if(!releaseTracks.isEmpty()) { // reset tracks se presenti su beatport (sono più dettagliate)
 					release.setTracks(new ArrayList<TrackModel>());
 				}
+				int numTr = 1;
 				for(Element track : releaseTracks) {
 					currTrack = new TrackModel();
+					// track number
+					currTrack.setTrackNumber(numTr);
 					// artista
 					currTrack.setArtist(release.getArtist());
 					// genere
@@ -98,7 +104,12 @@ public class BeatportService extends BaseService {
 					//traccia
 					String trackName = "";
 					for(Element ee : track.getElementsByClass(conf.RELEASE_TRACK_NAME).get(0).children()) {
-						trackName += ee.text()+" ";
+						if(ee.attr("class")!= null && ee.attr("class").contains(conf.RELEASE_TRACK_RMX)) {
+							trackName += "("+ee.text()+") ";
+						}
+						else {
+							trackName += ee.text()+" ";
+						}
 					}
 					currTrack.setTrackName(trackName.trim());
 					
@@ -114,9 +125,13 @@ public class BeatportService extends BaseService {
 					}
 					
 					
-					release.addTrack(currTrack);
-					log.info("    DETTAGLIO:  "+currTrack);
+					listTrack.add(currTrack);
+					log.info("ID_RELEASE="+release.getId()+"\t TRACK:  "+numTr+"."+currTrack);
+					
+					numTr++;
 				}
+				
+				// TODO controllare se e' il caso di sostituire le traccie o meno
 				
 				// salva sul db
 				TrackService lserv = new TrackService();
@@ -148,7 +163,8 @@ public class BeatportService extends BaseService {
 	public static void main(String[] args) throws IOException, ParseReleaseException, BackEndException {
 		BeatportService s = new BeatportService();
 		ReleaseModel r = new ReleaseModel();
-		r.setName("Houseshaker Feat. Amanda Blush-Light the Sky-(7000042629)-WEB-2013-DWM");
+		r.setName("Modana Feat. Tay Edwards-Dance The Night Away-WEB-2013-UKHx");
+		r.setNameWithUnderscore("Modana_Feat._Tay_Edwards-Dance_The_Night_Away-WEB-2013-UKHx");
 //		r.setName("Cyberfactory - Into The Light-WEB-2013-ZzZz");
 //		r.setName("Pepe and Shehu feat Morgana - Summer Love-(SYLIFE 167)-WEB-2013-ZzZz");
 		s.parseBeatport(r);

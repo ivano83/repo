@@ -89,6 +89,8 @@ public class SymusicUtility {
 	}
 	
 	public static boolean compareStringSimilarity(String s1, String s2) {
+		s1 = s1.toLowerCase();
+		s2 = s2.toLowerCase();
 		
 		if(s1.contains(s2))
 			return true;

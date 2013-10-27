@@ -17,6 +17,7 @@ public class BeatportConf {
 	public String TABLE_RELEASE_TRACK;
 	public String RELEASE_TRACK_NAME;
 	public String RELEASE_TRACK_GENRE;
+	public String RELEASE_TRACK_RMX;
 	
 	public BeatportConf() throws IOException {
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("beatport.properties");
@@ -34,6 +35,7 @@ public class BeatportConf {
 		TABLE_RELEASE_TRACK = props.getProperty("table_release_track");
 		RELEASE_TRACK_NAME = props.getProperty("release_track_name");
 		RELEASE_TRACK_GENRE = props.getProperty("release_track_genre");
+		RELEASE_TRACK_RMX = props.getProperty("release_track_rmx");
 	}
 
 }
