@@ -8,7 +8,7 @@ public class TrackModel {
 	private String time;
 	private String bpm;
 	private String genere;
-	
+	private Long idTrack;
 	
 	public String getTrackName() {
 		return trackName;
@@ -66,6 +66,12 @@ public class TrackModel {
 		}
 		else 
 			return super.equals(obj);
+	}
+	public Long getIdTrack() {
+		return idTrack;
+	}
+	public void setIdTrack(Long idTrack) {
+		this.idTrack = idTrack;
 	}
 
 }

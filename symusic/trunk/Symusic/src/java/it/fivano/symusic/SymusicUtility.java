@@ -4,12 +4,14 @@ import it.fivano.symusic.model.LinkModel;
 import it.fivano.symusic.model.ReleaseExtractionModel;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.ReleaseExtractionModel.AreaExtraction;
+import it.fivano.symusic.model.TrackModel;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Random;
@@ -138,6 +140,16 @@ public class SymusicUtility {
 		return currLink;
 	}
 	
+	public static List<TrackModel> chooseTrack(List<TrackModel> tracks1, List<TrackModel> tracks2) {
+		if(!tracks1.isEmpty() && !tracks2.isEmpty() && tracks1.size()!=tracks2.size())
+			return tracks1;
+		
+		if(tracks1.isEmpty() && !tracks2.isEmpty()) 
+			return tracks2;
+		else 
+			return tracks1;
+
+	}
 
 	public static void updateReleaseExtraction(ReleaseExtractionModel relExtr, boolean res, AreaExtraction area) {
 				

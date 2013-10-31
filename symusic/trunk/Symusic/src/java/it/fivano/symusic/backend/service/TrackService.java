@@ -97,7 +97,49 @@ public class TrackService extends RootService {
 
 			if(!isPresente) {
 				trackDao.insert(trackIn);
-				log.info("Il link e' stato salvato con ID:"+trackIn.getIdReleaseTrack()+"  ID_REL:"+trackIn.getIdRelease()+"  TRACK:"+trackIn.getTrackName());
+				log.info("La track e' stata salvata con ID:"+trackIn.getIdReleaseTrack()+"  ID_REL:"+trackIn.getIdRelease()+"  TRACK:"+trackIn.getTrackName());
+			}
+
+		}
+		else {
+			throw new BackEndException("Non ci sono dati sufficienti per salvare la track: "+trackIn);
+		}
+		return TransformerUtility.transformTrackToModel(trackIn);
+	}
+	
+	public List<TrackModel> updateTracks(List<TrackModel> tracks, Long idRelease) throws BackEndException {
+		
+		try {
+			List<ReleaseTrack> trackIn = TransformerUtility.transformTracks(tracks,idRelease);
+			
+			List<TrackModel> result = new ArrayList<TrackModel>();
+			ReleaseTrackMapper trackDao = this.getTrackMapper();
+			
+			List<TrackModel> trackList = getTracks(idRelease, trackDao);
+			
+			for(ReleaseTrack v : trackIn) {
+				result.add(this.updateTrack(v, trackDao, trackList));
+			}
+			
+			return result;
+		} finally {
+			this.chiudiSessione();
+		}
+	}
+	
+	private TrackModel updateTrack(ReleaseTrack trackIn, ReleaseTrackMapper trackDao, List<TrackModel> trackList) throws BackEndException {
+		
+
+		if(trackIn!=null && trackIn.getIdRelease()!=null && trackIn.getTrackName()!=null) {
+			// controllo di esistenza della traccia sul DB
+			
+			for(TrackModel v : trackList) {
+				if((v.getTrackNumber()+"").equals(trackIn.getTrackNumber())) {
+					trackIn.setIdReleaseTrack(v.getIdTrack());
+					trackDao.updateByPrimaryKeySelective(trackIn);
+					log.info("La track e' stata aggiornata - ID:"+trackIn.getIdReleaseTrack()+"  ID_REL:"+trackIn.getIdRelease()+"  TRACK:"+trackIn.getTrackName());
+					break;
+				}
 			}
 
 		}

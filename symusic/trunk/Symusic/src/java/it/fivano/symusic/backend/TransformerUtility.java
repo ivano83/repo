@@ -89,17 +89,18 @@ public class TransformerUtility {
 		return res;
 	}
 	
-	public static ReleaseTrack transformTrack(TrackModel link, Long idRelease) {
-		if(link==null)
+	public static ReleaseTrack transformTrack(TrackModel track, Long idRelease) {
+		if(track==null)
 			return null;
 		ReleaseTrack res = new ReleaseTrack();
 		
 		res.setIdRelease(idRelease);
-		res.setTrackName(link.getTrackName());
-		res.setTrackBpm(link.getBpm());
-		res.setTrackNumber((link.getTrackNumber()==null)? null : link.getTrackNumber().toString());
-		res.setTrackGenere(link.getGenere());
-		res.setTrackTime(link.getTime());
+		res.setTrackName(track.getTrackName());
+		res.setTrackBpm(track.getBpm());
+		res.setTrackNumber((track.getTrackNumber()==null)? null : track.getTrackNumber().toString());
+		res.setTrackGenere(track.getGenere());
+		res.setTrackTime(track.getTime());
+		res.setIdReleaseTrack(track.getIdTrack());
 		
 		return res;
 	}
@@ -239,6 +240,7 @@ public class TransformerUtility {
 		res.setGenere(track.getTrackGenere());
 		res.setTime(track.getTrackTime());
 		res.setTrackNumber((track.getTrackNumber()==null)?null : Integer.parseInt(track.getTrackNumber()));
+		res.setIdTrack(track.getIdReleaseTrack());
 		
 		return res;
 	}

@@ -88,9 +88,10 @@ public class BeatportService extends BaseService {
 				List<TrackModel> listTrack = new ArrayList<TrackModel>();
 				Elements releaseTracks = doc.getElementsByClass(conf.TABLE_RELEASE_TRACK);
 				
-				if(!releaseTracks.isEmpty()) { // reset tracks se presenti su beatport (sono più dettagliate)
-					release.setTracks(new ArrayList<TrackModel>());
-				}
+//				if(!releaseTracks.isEmpty()) { // reset tracks se presenti su beatport (sono più dettagliate)
+//					release.setTracks(new ArrayList<TrackModel>());
+//				}
+				
 				int numTr = 1;
 				for(Element track : releaseTracks) {
 					currTrack = new TrackModel();
@@ -132,10 +133,23 @@ public class BeatportService extends BaseService {
 				}
 				
 				// TODO controllare se e' il caso di sostituire le traccie o meno
-				
-				// salva sul db
 				TrackService lserv = new TrackService();
-				lserv.saveTracks(release.getTracks(), release.getId());
+				if(release.getTracks().isEmpty()){
+					release.setTracks(listTrack);
+					
+					// salva sul db
+					
+					lserv.saveTracks(release.getTracks(), release.getId());
+				}
+				else {
+					// scelta tra quelle gia' presenti e quelle recuperate
+					release.setTracks(SymusicUtility.chooseTrack(release.getTracks(), listTrack));
+					lserv.updateTracks(release.getTracks(), release.getId());
+					
+				}
+				
+				
+				
 
 			}
 			else {
