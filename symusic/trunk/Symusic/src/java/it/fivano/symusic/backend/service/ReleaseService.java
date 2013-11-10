@@ -9,10 +9,13 @@ import org.apache.log4j.Logger;
 import it.fivano.symusic.backend.TransformerUtility;
 import it.fivano.symusic.backend.dao.ReleaseExtractionMapper;
 import it.fivano.symusic.backend.dao.ReleaseMapper;
+import it.fivano.symusic.backend.dao.ReleaseTrackMapper;
 import it.fivano.symusic.backend.model.Release;
 import it.fivano.symusic.backend.model.ReleaseExample;
 import it.fivano.symusic.backend.model.ReleaseExtraction;
 import it.fivano.symusic.backend.model.ReleaseExtractionExample;
+import it.fivano.symusic.backend.model.ReleaseTrack;
+import it.fivano.symusic.backend.model.ReleaseTrackExample;
 import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.model.GenreModel;
 import it.fivano.symusic.model.LinkModel;
@@ -131,6 +134,42 @@ public class ReleaseService extends RootService {
 			throw new BackEndException(e);
 		}
 	}
+	
+	public void deleteReleaseFull(Long idRelease) throws BackEndException {
+		
+		
+		try {
+			
+			ReleaseMapper releaseDao = this.getReleaseMapper();
+			
+			Release res = releaseDao.selectByPrimaryKey(idRelease);
+			
+			if(res == null) {
+				log.error("Impossibile eliminare la release con ID '"+idRelease+"' in quanto non esiste");
+				throw new BackEndException("Impossibile eliminare la release con ID '"+idRelease+"' in quanto non esiste");
+			}
+			
+			int count = new VideoService().deleteReleaseVideos(idRelease);
+			log.info("RELEASE "+idRelease+" - Eliminati "+count+" Video");
+			
+			count = new LinkService().deleteReleaseLinks(idRelease);
+			log.info("RELEASE "+idRelease+" - Eliminati "+count+" Link");
+			
+			count = new TrackService().deleteReleaseTracks(idRelease);
+			log.info("RELEASE "+idRelease+" - Eliminati "+count+" Track");
+			
+			count = this.deleteReleaseExtraction(idRelease);
+			log.info("RELEASE "+idRelease+" - Eliminati "+count+" ReleaseExtraction");
+			
+			count = releaseDao.deleteByPrimaryKey(idRelease);
+			log.info("RELEASE "+idRelease+" - Eliminata la release "+res.getReleaseName());
+			
+			
+		} finally {
+			this.chiudiSessione();
+		}
+		
+	}
 
 	
 	public ReleaseModel saveRelease(ReleaseModel release) throws BackEndException {
@@ -217,6 +256,22 @@ public class ReleaseService extends RootService {
 			return TransformerUtility.transformReleaseExtractionToModel(rel);
 		} catch (Exception e) {
 			throw new BackEndException(e);
+		} finally {
+			this.chiudiSessione();
+		}
+	}
+	
+	public int deleteReleaseExtraction(Long idrelease) throws BackEndException {
+		
+		try {
+			
+			ReleaseExtractionMapper releaseExtrDao = this.getReleaseExtractionMapper();
+			ReleaseExtractionExample input = new ReleaseExtractionExample();
+			input.createCriteria().andIdReleaseEqualTo(idrelease);
+			
+			int result = releaseExtrDao.deleteByExample(input);
+			
+			return result;
 		} finally {
 			this.chiudiSessione();
 		}

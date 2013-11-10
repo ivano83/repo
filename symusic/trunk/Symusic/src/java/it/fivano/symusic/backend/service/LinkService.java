@@ -80,9 +80,9 @@ public class LinkService extends RootService {
 
 		if(linkIn!=null && linkIn.getIdRelease()!=null && linkIn.getReleaseLink()!=null) {
 			// controllo di esistenza del video sul DB
-			List<LinkModel> videoList = getLinks(linkIn.getIdRelease(), linkDao);
+			List<LinkModel> linkList = getLinks(linkIn.getIdRelease(), linkDao);
 			boolean isPresente = false;
-			for(LinkModel v : videoList) {
+			for(LinkModel v : linkList) {
 				if(v.getLink().equalsIgnoreCase(linkIn.getReleaseLink())) {
 					log.info("Il link e' gia' presente per la release ID_REL:"+linkIn.getIdRelease()+"  LINK:"+linkIn.getReleaseLink());
 					isPresente = true;
@@ -100,6 +100,42 @@ public class LinkService extends RootService {
 			throw new BackEndException("Non ci sono dati sufficienti per salvare il link: "+linkIn);
 		}
 		return TransformerUtility.transformLinkToModel(linkIn);
+	}
+	
+	public int deleteLink(Long idlink) throws BackEndException {
+		
+		try {
+			
+			ReleaseLinkMapper linkDao = this.getLinkMapper();
+			
+			int result = linkDao.deleteByPrimaryKey(idlink);
+			
+			return result;
+		} finally {
+			this.chiudiSessione();
+		}
+	}
+	
+	public int deleteReleaseLinks(Long idrelease) throws BackEndException {
+		
+		try {
+			
+			ReleaseLinkMapper linkDao = this.getLinkMapper();
+			
+			ReleaseLinkExample input = new ReleaseLinkExample();
+			input.createCriteria().andIdReleaseEqualTo(idrelease);
+			
+			int result = 0;
+			List<ReleaseLink> linkList = linkDao.selectByExample(input);
+			for(ReleaseLink link : linkList) {
+				linkDao.deleteByPrimaryKey(link.getIdReleaseLink());
+				result++;
+			}
+			
+			return result;
+		} finally {
+			this.chiudiSessione();
+		}
 	}
 	
 }

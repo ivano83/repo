@@ -18,12 +18,18 @@ import java.util.Random;
 
 import org.jsoup.nodes.Element;
 
+import com.wcohen.ss.JaroWinkler;
 import com.wcohen.ss.Level2MongeElkan;
 import com.wcohen.ss.MongeElkan;
 
 public class SymusicUtility {
 	
 	public static final String STANDARD_DATE_FORMAT = "dd/MM/yyyy";
+	
+	public enum LevelSimilarity {
+		MEDIO, ALTO, ALTISSIMO;
+		
+	}
 	
 	public enum EnvironmentType {
 		TESTING("testing");
@@ -113,6 +119,40 @@ public class SymusicUtility {
 			return true;
 		
 		return false;
+
+	}
+	
+	public static double getStringSimilarity(String s1, String s2, LevelSimilarity levelSimil) {
+		s1 = s1.toLowerCase();
+		s2 = s2.toLowerCase();
+		
+		double soglia = 0.85;
+		if(LevelSimilarity.ALTO.toString().equals(levelSimil)) {
+			soglia = 0.9;
+		}
+		else if(LevelSimilarity.ALTISSIMO.toString().equals(levelSimil)) {
+			soglia = 0.95;
+		}
+		
+		if(s1.contains(s2))
+			return 1;
+		
+		if(s2.contains(s1))
+			return 1;
+		
+		MongeElkan alg = new MongeElkan();
+		double score = alg.score(s1, s2);
+//		System.out.println(score);
+		if(score > soglia)
+			return score;
+		
+		Level2MongeElkan alg2 = new Level2MongeElkan();
+		score = alg2.score(s1, s2);
+//		System.out.println(score);
+		if(score > soglia)
+			return score;
+		
+		return 0;
 
 	}
 	

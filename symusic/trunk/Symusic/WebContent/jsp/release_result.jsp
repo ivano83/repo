@@ -35,6 +35,7 @@
 					</c:when>
 				</c:choose>
 				</span>
+				<div class="rel_link"><a href="${item.id}" target="_blank">Resetta dati</a></div>
 			</td>
 			<td>
 				<ol>

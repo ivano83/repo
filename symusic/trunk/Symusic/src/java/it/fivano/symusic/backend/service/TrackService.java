@@ -1,7 +1,10 @@
 package it.fivano.symusic.backend.service;
 
 import it.fivano.symusic.backend.TransformerUtility;
+import it.fivano.symusic.backend.dao.ReleaseLinkMapper;
 import it.fivano.symusic.backend.dao.ReleaseTrackMapper;
+import it.fivano.symusic.backend.model.ReleaseLink;
+import it.fivano.symusic.backend.model.ReleaseLinkExample;
 import it.fivano.symusic.backend.model.ReleaseTrack;
 import it.fivano.symusic.backend.model.ReleaseTrackExample;
 import it.fivano.symusic.exception.BackEndException;
@@ -147,6 +150,40 @@ public class TrackService extends RootService {
 			throw new BackEndException("Non ci sono dati sufficienti per salvare la track: "+trackIn);
 		}
 		return TransformerUtility.transformTrackToModel(trackIn);
+	}
+	
+	public int deleteTrack(Long idtrack) throws BackEndException {
+		
+		try {
+			
+			ReleaseTrackMapper trackDao = this.getTrackMapper();
+			int result = trackDao.deleteByPrimaryKey(idtrack);
+			
+			return result;
+		} finally {
+			this.chiudiSessione();
+		}
+	}
+	
+	public int deleteReleaseTracks(Long idrelease) throws BackEndException {
+		
+		try {
+			
+			ReleaseTrackMapper trackDao = this.getTrackMapper();
+			ReleaseTrackExample input = new ReleaseTrackExample();
+			input.createCriteria().andIdReleaseEqualTo(idrelease);
+			
+			int result = 0;
+			List<ReleaseTrack> linkList = trackDao.selectByExample(input);
+			for(ReleaseTrack track : linkList) {
+				trackDao.deleteByPrimaryKey(track.getIdReleaseTrack());
+				result++;
+			}
+			
+			return result;
+		} finally {
+			this.chiudiSessione();
+		}
 	}
 	
 }

@@ -1,7 +1,10 @@
 package it.fivano.symusic.backend.service;
 
 import it.fivano.symusic.backend.TransformerUtility;
+import it.fivano.symusic.backend.dao.ReleaseTrackMapper;
 import it.fivano.symusic.backend.dao.ReleaseVideoMapper;
+import it.fivano.symusic.backend.model.ReleaseTrack;
+import it.fivano.symusic.backend.model.ReleaseTrackExample;
 import it.fivano.symusic.backend.model.ReleaseVideo;
 import it.fivano.symusic.backend.model.ReleaseVideoExample;
 import it.fivano.symusic.exception.BackEndException;
@@ -100,5 +103,40 @@ public class VideoService extends RootService {
 		}
 		return TransformerUtility.transformVideoToModel(videoIn);
 	}
+	
+	public int deleteVideo(Long idvideo) throws BackEndException {
+		
+		try {
+			
+			ReleaseVideoMapper videoDao = this.getVideoMapper();
+			int result = videoDao.deleteByPrimaryKey(idvideo);
+			
+			return result;
+		} finally {
+			this.chiudiSessione();
+		}
+	}
+	
+	public int deleteReleaseVideos(Long idrelease) throws BackEndException {
+		
+		try {
+			
+			ReleaseVideoMapper videoDao = this.getVideoMapper();
+			ReleaseVideoExample input = new ReleaseVideoExample();
+			input.createCriteria().andIdReleaseEqualTo(idrelease);
+			
+			int result = 0;
+			List<ReleaseVideo> linkList = videoDao.selectByExample(input);
+			for(ReleaseVideo track : linkList) {
+				videoDao.deleteByPrimaryKey(track.getIdReleaseVideo());
+				result++;
+			}
+			
+			return result;
+		} finally {
+			this.chiudiSessione();
+		}
+	}
+	
 	
 }

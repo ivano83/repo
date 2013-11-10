@@ -1,6 +1,7 @@
 package it.fivano.symusic.core;
 
 import it.fivano.symusic.SymusicUtility;
+import it.fivano.symusic.SymusicUtility.LevelSimilarity;
 import it.fivano.symusic.backend.service.TrackService;
 import it.fivano.symusic.conf.BeatportConf;
 import it.fivano.symusic.exception.BackEndException;
@@ -10,7 +11,10 @@ import it.fivano.symusic.model.TrackModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -57,17 +61,36 @@ public class BeatportService extends BaseService {
 				throw new ParseReleaseException("Nessun risultato ottenuto per la release = "+release);
 			}
 			
+			Map<Double,String> mappaSimilarity = new TreeMap<Double,String>(); // TODO ordinare risultati similarita e prendere il piu vicino
 			Elements releaseList = releaseGroup.getElementsByClass(conf.CLASS_RELEASE_ITEM);
 			String releaseLink = null;
 			for(Element e : releaseList) {
 				Element title = e.getElementsByClass(conf.CLASS_RELEASE_TITLE).get(0);
-				String titleString = title.text();
-				if(SymusicUtility.compareStringSimilarity(release.getName(),titleString)) {
-					releaseLink = title.attr("href");
-					log.info("[BEATPORT] Trovata la release: "+titleString+" - "+releaseLink+"\n");
-					break;
-				}
+				// concatena titolo release con l'autore ed applica la similarità
+				String author = e.getElementsByClass(conf.CLASS_RELEASE_AUTHOR).get(0).text();
+				String titleString = author+"-"+title.text();
 				
+				double simil = SymusicUtility.getStringSimilarity(release.getName(),titleString,LevelSimilarity.ALTO);
+				releaseLink = title.attr("href");
+				if(simil!=0)
+					mappaSimilarity.put(simil, releaseLink);
+				
+//				if(SymusicUtility.compareStringSimilarity(release.getName(),titleString)) {
+//					releaseLink = title.attr("href");
+//					log.info("[BEATPORT] Trovata la release: "+titleString+" - "+releaseLink+"\n");
+//					break;
+//				}
+				
+			}
+			
+			List<String> listaSimilarity = new ArrayList<String>(mappaSimilarity.values());
+			Collections.reverse(listaSimilarity);
+			
+			if(listaSimilarity.isEmpty())
+				releaseLink = null;
+			else {
+				releaseLink = listaSimilarity.get(0);
+				log.info("[BEATPORT] Trovata la release... LINK: "+releaseLink+"\n");
 			}
 			
 			
@@ -134,17 +157,16 @@ public class BeatportService extends BaseService {
 				
 				// TODO controllare se e' il caso di sostituire le traccie o meno
 				TrackService lserv = new TrackService();
-				if(release.getTracks().isEmpty()){
-					release.setTracks(listTrack);
-					
-					// salva sul db
-					
+				if(release.getTracks()!=null && release.getTracks().isEmpty()){
+					// scelta tra quelle gia' presenti e quelle recuperate
+					release.setTracks(SymusicUtility.chooseTrack(release.getTracks(), listTrack));
 					lserv.saveTracks(release.getTracks(), release.getId());
 				}
 				else {
 					// scelta tra quelle gia' presenti e quelle recuperate
 					release.setTracks(SymusicUtility.chooseTrack(release.getTracks(), listTrack));
 					lserv.updateTracks(release.getTracks(), release.getId());
+					log.info("Aggiornamento track:  ID_RELEASE="+release.getId()+"\t TRACK:  "+numTr+"."+currTrack);
 					
 				}
 				

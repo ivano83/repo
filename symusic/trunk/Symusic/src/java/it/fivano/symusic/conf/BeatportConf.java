@@ -13,6 +13,7 @@ public class BeatportConf {
 	public String ATTR_RELEASE_VALUE;
 	public String CLASS_RELEASE_ITEM;
 	public String CLASS_RELEASE_TITLE;
+	public String CLASS_RELEASE_AUTHOR;
 	public String RELEASE_DETAIL;
 	public String TABLE_RELEASE_TRACK;
 	public String RELEASE_TRACK_NAME;
@@ -31,6 +32,7 @@ public class BeatportConf {
 		ATTR_RELEASE_VALUE = props.getProperty("attr_release_value");
 		CLASS_RELEASE_ITEM = props.getProperty("class_release_item");
 		CLASS_RELEASE_TITLE = props.getProperty("class_release_title");
+		CLASS_RELEASE_AUTHOR = props.getProperty("class_release_author");
 		RELEASE_DETAIL = props.getProperty("release_detail");
 		TABLE_RELEASE_TRACK = props.getProperty("table_release_track");
 		RELEASE_TRACK_NAME = props.getProperty("release_track_name");
