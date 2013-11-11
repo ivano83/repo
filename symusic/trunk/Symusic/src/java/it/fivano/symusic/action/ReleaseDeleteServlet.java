@@ -31,10 +31,12 @@ public class ReleaseDeleteServlet  extends HttpServlet {
 			id="ID unknown";
 		}
 		
+		System.out.println("ReleaseDeleteServlet con id "+id);
+		
 		Long idRelease = request.getParameter("id")!=null ? Long.parseLong(request.getParameter("id")) : null;
 		
 		try {
-			if(idRelease!=null)
+			if(idRelease!=null && false==true)
 				new ReleaseService().deleteReleaseFull(idRelease);
 		} catch (BackEndException e) {
 			// TODO Auto-generated catch block

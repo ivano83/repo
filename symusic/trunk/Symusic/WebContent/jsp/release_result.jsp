@@ -13,6 +13,19 @@
 		});
 	  });
 	</script>
+	
+	<script type="text/javascript">
+	function delrel(idBox) {
+		 $.get('ReleaseDeleteServlet',{id:idBox},function(responseText) { 
+             $('.del_'+idBox).html('<div>I dati della release sono stati eliminati!</div>');
+             $('.rel_link_'+idBox).html('');
+             $('.rel_track_all_'+idBox).html('');
+             $('.rel_video_'+idBox).html('');
+             $('.artist_'+idBox).html('');
+             $('.title_'+idBox).html('');
+     });
+	}
+	</script>
 	<title>SYMUSIC - Risultati ricerca</title>
 </head>
 <body>
@@ -25,8 +38,8 @@
 			<td width="30%">
 				<div>Data: ${item.releaseDate}</div>
 				<div class="rel_name">${item.nameWithUnderscore}</div>
-				<div>Artista: ${item.artist}</div>
-				<div>Titolo release: ${item.song}</div>
+				<div>Artista: <span class="artist_${item.id}">${item.artist}</span></div>
+				<div>Titolo release: <span class="title_${item.id}">${item.song}</span></div>
 				<div class="rating" data-average="${item.voteAverage}" data-id="${item.id}" data-value="${item.voteValue}" disable="${item.voted}"></div>
 				<span class="voted voted_${item.id}">${item.voteAverage}/5
 				<c:choose>
@@ -35,12 +48,13 @@
 					</c:when>
 				</c:choose>
 				</span>
-				<div class="rel_link"><a href="${item.id}" target="_blank">Resetta dati</a></div>
+				<div class="delrel" data-id="${item.id}">
+				<span class="rel_link del_${item.id}"><a href="#" onclick="javascript:delrel(${item.id})">Resetta dati</a></span></div>
 			</td>
 			<td>
-				<ol>
+				<ol class="rel_track_all_${item.id}">
 					<c:forEach items="${item.tracks}" var="track">
-						<li class="rel_tracks"><span>${track.trackName}</span>
+						<li class="rel_tracks rel_track_${item.id}"><span>${track.trackName}</span>
 						<span>${track.time}</span>
 						<span>${track.bpm}</span>
 						<span>${track.genere}</span></li>
@@ -50,11 +64,11 @@
 			<td>
 				<div>VIDEO</div>
 				<c:forEach items="${item.videos}" var="video">
-					<div class="rel_video"><a href="${video.link}" target="_blank">${video.name}</a></div>
+					<div class="rel_video rel_video_${item.id}"><a href="${video.link}" target="_blank">${video.name}</a></div>
 				</c:forEach>
 				<div>DOWNLOAD</div>
 				<c:forEach items="${item.links}" var="link">
-					<div class="rel_link"><a href="${link.link}" target="_blank">${link.name}</a></div>
+					<div class="rel_link rel_link_${item.id}"><a href="${link.link}" target="_blank">${link.name}</a></div>
 				</c:forEach>
 			</td>
 		</tr>

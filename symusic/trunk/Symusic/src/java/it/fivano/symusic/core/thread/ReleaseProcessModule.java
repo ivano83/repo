@@ -3,6 +3,7 @@ package it.fivano.symusic.core.thread;
 import it.fivano.symusic.LoggerSync;
 import it.fivano.symusic.MyLogger;
 import it.fivano.symusic.SymusicUtility;
+import it.fivano.symusic.backend.service.ReleaseExtractionService;
 import it.fivano.symusic.backend.service.ReleaseService;
 import it.fivano.symusic.core.BeatportService;
 import it.fivano.symusic.core.GoogleService;
@@ -139,7 +140,7 @@ public class ReleaseProcessModule extends Thread {
 			log.info("Salvataggio del release extraction con idRelease="+release.getId());
 			// AGGIORNA/SALVA I FLAG DI ESTRAZIONE
 			relExtr.setIdRelease(release.getId());
-			relServ.saveReleaseExtraction(relExtr);
+			new ReleaseExtractionService().saveReleaseExtraction(relExtr);
 			
 			
 			// AGGIUNGE I LINK DI RICERCA MANUALE (DIRETTAMENTE SU GOOGLE E YOUTUBE)

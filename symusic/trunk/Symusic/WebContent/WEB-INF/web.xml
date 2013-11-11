@@ -12,6 +12,11 @@
 		<servlet-name>RatingServlet</servlet-name>
 		<servlet-class>it.fivano.symusic.action.RatingServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<display-name>ReleaseDeleteServlet</display-name>
+		<servlet-name>ReleaseDeleteServlet</servlet-name>
+		<servlet-class>it.fivano.symusic.action.ReleaseDeleteServlet</servlet-class>
+	</servlet>
 	
 	<servlet-mapping>
 		<servlet-name>ZeroDayMusicServlet</servlet-name>
@@ -20,6 +25,10 @@
 	<servlet-mapping>
 		<servlet-name>RatingServlet</servlet-name>
 		<url-pattern>/RatingServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ReleaseDeleteServlet</servlet-name>
+		<url-pattern>/ReleaseDeleteServlet</url-pattern>
 	</servlet-mapping>
 
 	<welcome-file-list>
