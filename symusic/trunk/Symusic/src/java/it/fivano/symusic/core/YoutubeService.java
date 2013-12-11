@@ -142,7 +142,7 @@ public class YoutubeService extends BaseService {
 	}
 	
 	protected String applyFilterSearch(String t) {
-		t = t.replace("-", " ").replace(",", " ").replace("feat", " ").replace("ft", " ")
+		t = t.replace("-", " ").replace(",", " ").replace(" feat ", " ").replace(" ft ", " ")
 				.replace(".", " ").replace("  ", " ").replace(" and ", " ").replace(" ", "+");
 		return t;
 	}

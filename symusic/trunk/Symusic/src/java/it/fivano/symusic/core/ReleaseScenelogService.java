@@ -2,6 +2,7 @@ package it.fivano.symusic.core;
 
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.backend.service.GenreService;
+import it.fivano.symusic.conf.ScenelogConf;
 import it.fivano.symusic.conf.ZeroDayMp3Conf;
 import it.fivano.symusic.core.thread.SupportObject;
 import it.fivano.symusic.exception.BackEndException;
@@ -21,18 +22,18 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class Release0DayMp3Service extends ReleaseSiteService {
+public class ReleaseScenelogService extends ReleaseSiteService {
 	
-	private ZeroDayMp3Conf conf;
+	private ScenelogConf conf;
 	private String genre;
 	
 	private List<ReleaseModel> listRelease;
 	
 
 	
-	public Release0DayMp3Service() throws IOException {
+	public ReleaseScenelogService() throws IOException {
 		super();
-		conf = new ZeroDayMp3Conf();
+		conf = new ScenelogConf();
 		enableBeatportService = true;
 		enableScenelogService = true;
 		enableYoutubeService = true;
@@ -41,28 +42,27 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 	}
 	
 	
-	public List<ReleaseModel> parse0DayMp3Release(String genere, Date da, Date a) throws BackEndException, ParseReleaseException {
+	public List<ReleaseModel> parseScenelogRelease(Date da, Date a) throws BackEndException, ParseReleaseException {
 		
-		this.genre = genere;
 		listRelease = new ArrayList<ReleaseModel>();
 		try {
 			
 			// PAGINA DI INIZIO
-			String urlConn = conf.URL_CATEGORY+genere;
+			String urlConn = conf.URL_MUSIC;
 			
 			// OGGETTO PER GESTIRE IL CARICAMENTO DELLE PAGINE SUCCESSIVE DEL SITO
 			ScenelogInfo info = new ScenelogInfo();
 			info.setProcessNextPage(true);
 			
 			// PROCESSA LE RELEASE DELLA PRIMA PAGINA
-			this.parse0DayMp3(urlConn, da, a, info);
+			this.parseScenelog(urlConn, da, a, info);
 			
 			// SE C'È DA RECUPERARE ALTRE RELEASE, CAMBIA PAGINA
 			while(info.isProcessNextPage()) {
 				
 				log.info("Andiamo alla pagina successiva...");
 				// PROCESSA LE RELEASE DELLE PAGINE SUCCESSIVE
-				this.parse0DayMp3(info.getNextPage(), da, a, info);
+				this.parseScenelog(info.getNextPage(), da, a, info);
 				
 			}
 			
@@ -84,7 +84,7 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 	
 	
 	
-	private void parse0DayMp3(String urlConn, Date da, Date a, ScenelogInfo info) throws BackEndException, ParseReleaseException, ParseException, IOException {
+	private void parseScenelog(String urlConn, Date da, Date a, ScenelogInfo info) throws BackEndException, ParseReleaseException, ParseException, IOException {
 		
 //		List<ReleaseModel> listRelease = new ArrayList<ReleaseModel>();
 		
@@ -92,25 +92,41 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 			return;
 
 		// CONNESSIONE ALLA PAGINA
+		String userAgent = this.randomUserAgent();
 		log.info("Connessione in corso --> "+urlConn);
-		Document doc = Jsoup.connect(urlConn).timeout(TIMEOUT).get();
+		Document doc = Jsoup.connect(urlConn).timeout(TIMEOUT).userAgent(userAgent).get();
 
 		// SALVA LA URL DELLA PROSSIMA PAGINA (SE NECESSARIA)
 		info.changePage(); // AGGIORNA IL NUMERO PAGINA
 		info.setNextPage(this.extractNextPage(info));
 
-		Elements releaseGroup = doc.getElementsByAttributeValue("id",conf.ID_CONTENT);
+		Elements releaseGroup = doc.getElementsByClass(conf.CLASS_RELEASE_LIST_ITEM);
 		if(releaseGroup.size()>0) {
 			ReleaseModel release = null;
-			// OGNI TABLE CONTIENE UNA RELEASE
-			Elements tables = releaseGroup.get(0).getElementsByTag("table");
 			log.info("####################################");
-			for(Element relTable : tables) {
+			for(Element tmp : releaseGroup) {
 				
-				Elements components = relTable.getElementsByTag("td");
-				if(components.size()>=4) {
-					// OK CI SONO TUTTI I PEZZI
-					
+				Element releaseItem = tmp.getElementsByTag("h1").get(0).getElementsByTag("a").get(0);
+				String releaseName = releaseItem.text();
+				String releaseUrl = releaseItem.attr("href");
+				
+				Element relDate = tmp.getElementsByClass(conf.CLASS_RELEASE_LIST_DATA).get(0);
+				String data = relDate.text();
+				
+				release = new ReleaseModel();
+				release.setName(releaseName.replace("_", " "));
+				release.setNameWithUnderscore(releaseName.replace(" ", "_"));
+				
+				if(excludeRipRelease && this.isRadioRipRelease(release)) {
+					continue;
+				}
+				
+				System.out.println(data+" - "+ releaseUrl);
+				
+				
+				// 
+				
+				/*
 					// IN QUARTA POSIZIONE C'E' LA DATA RELEASE
 					Element dateComp = components.get(3);
 					String date = this.genericFilter(dateComp.text());
@@ -183,8 +199,9 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 					
 					
 				} 
-
+*/
 			}
+			
 			
 		}
 			
@@ -218,7 +235,7 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 
 	private String extractNextPage(ScenelogInfo info) {
 		
-		return conf.URL_CATEGORY+genre+conf.PARAMS_PAGE+info.getNumPagina();
+		return conf.URL_MUSIC+"page/"+info.getNumPagina();
 
 	}
 
@@ -231,18 +248,19 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 
 	private String getStandardDateFormat(String dateIn) throws ParseException {
 		
-		String zeroDayFormat = conf.DAY_FORMAT;
+		String zeroDayFormat = conf.DATE_FORMAT;
 		
 		return SymusicUtility.getStandardDateFormat(dateIn, zeroDayFormat);
 	
 	}
 
-	public static void main(String[] args) throws IOException, ParseException, BackEndException {
+	public static void main(String[] args) throws IOException, ParseException, BackEndException, ParseReleaseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		Date da = sdf.parse("20130802");
 		Date a = sdf.parse("20130803");
 		
-		Release0DayMp3Service s = new Release0DayMp3Service();
+		ReleaseScenelogService s = new ReleaseScenelogService();
+		s.parseScenelogRelease(da, a);
 //		List<ReleaseModel> res = s.parse0DayMusicRelease("trance",da,a);
 //		for(ReleaseModel r : res)
 //			System.out.println(r);
@@ -261,7 +279,7 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 
 }
 
-class ZeroDayMp3Info {
+class ScenelogInfo {
 	
 	private int numPagina = 1;
 	private String nextPage;
