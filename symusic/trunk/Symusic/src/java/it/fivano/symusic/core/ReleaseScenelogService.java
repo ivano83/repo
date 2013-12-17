@@ -2,13 +2,16 @@ package it.fivano.symusic.core;
 
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.backend.service.GenreService;
+import it.fivano.symusic.backend.service.ReleaseService;
 import it.fivano.symusic.conf.ScenelogConf;
 import it.fivano.symusic.conf.ZeroDayMp3Conf;
 import it.fivano.symusic.core.thread.SupportObject;
 import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.GenreModel;
+import it.fivano.symusic.model.ReleaseExtractionModel;
 import it.fivano.symusic.model.ReleaseModel;
+import it.fivano.symusic.model.ReleaseExtractionModel.AreaExtraction;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -16,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -111,7 +115,19 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 				String releaseUrl = releaseItem.attr("href");
 				
 				Element relDate = tmp.getElementsByClass(conf.CLASS_RELEASE_LIST_DATA).get(0);
-				String data = relDate.text();
+				String dateIn = relDate.text();
+				dateIn = this.getStandardDateFormat(dateIn);
+				Date dateInDate = SymusicUtility.getStandardDate(dateIn);
+				
+				// BISOGNA RECUPERARE ANCORA ALTRI GIORNI DI RELEASE?
+				if(da.compareTo(dateInDate)>0)
+					info.setProcessNextPage(false);
+
+				// RANGE DATA, SOLO LE RELEASE COMPRESE DA - A
+				if(!this.downloadReleaseDay(dateInDate, da, a)) {
+					continue;
+				}
+
 				
 				release = new ReleaseModel();
 				release.setName(releaseName.replace("_", " "));
@@ -121,8 +137,61 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 					continue;
 				}
 				
-				System.out.println(data+" - "+ releaseUrl);
+				System.out.println(dateIn+" - "+ releaseUrl);
 				
+				// RELEASE DATE
+				release.setReleaseDate(dateIn);
+				
+				// AGGIUNGE ULTERIORI INFO DELLA RELEASE A PARTIRE DAL NOME
+				// ES. CREW E ANNO RELEASE
+				SymusicUtility.processReleaseName(release);
+				
+				log.info("|"+release+"| acquisita");
+				log.info("####################################");
+								
+				listRelease.add(release);
+								
+				
+//				
+//				
+//				// CONTROLLA SE LA RELEASE E' GIA' PRESENTE
+//				boolean isRecuperato = false;
+//				ReleaseService relServ = new ReleaseService();
+//				ReleaseModel relDb = relServ.getReleaseFull(release.getNameWithUnderscore());
+//				if(relDb!=null) {
+//					log.info(release+" e' gia' presente nel database con id = "+relDb.getId());
+//					
+//					// controlla sul db se le varie estrazioni hanno avuto successo
+//					ReleaseExtractionModel extr = relDb.getReleaseExtraction();
+//					
+//					if(extr!=null ){
+//						enableScenelogService = !extr.getScenelog();
+//						enableYoutubeService = !extr.getYoutube();
+////						enableBeatportService = extr.getBeatport();
+//					}
+//					isRecuperato = true;
+//					release = relDb; // SOSTITUISCE I DATI FINO AD ORA ESTRATTI CON QUELLI DEL DB
+//				}
+//				
+//				// OGGETTO CHE CONTIENE I FLAG PER ESTRARRE O MENO DETERMINATI DATI
+//				ReleaseExtractionModel relExtr = (release.getReleaseExtraction()==null)? new ReleaseExtractionModel() : release.getReleaseExtraction();
+//				
+//				
+//				
+//				// ########## BEATPORT ############
+//				try {
+//					if(enableBeatportService) {
+//						// recupera dati da beatport per il dettaglio della release
+//						BeatportService beatport = new BeatportService();
+//						boolean res = beatport.parseBeatport(release);
+//						
+//						SymusicUtility.updateReleaseExtraction(relExtr,res,AreaExtraction.BEATPORT);
+//					}
+//					
+//				} catch (ParseReleaseException e1) {
+//					log.warn("BeatportService fallito! " + e1.getMessage());
+//					relExtr.setBeatport(false);
+//				}
 				
 				// 
 				
@@ -250,6 +319,8 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 		
 		String zeroDayFormat = conf.DATE_FORMAT;
 		
+		dateIn = dateIn.replace("th,", "").replace("rd,", "").replace("st,", "");
+		
 		return SymusicUtility.getStandardDateFormat(dateIn, zeroDayFormat);
 	
 	}
@@ -267,6 +338,11 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 		System.out.println(s.genericFilter("fhfh( dewdef) fef"));
 		System.out.println(s.genericFilter("fhfh( dewdef) fef"));
 		System.out.println("fhfh( dewdef) fef".replaceAll("[()]", ""));
+		
+		sdf = new SimpleDateFormat("MMMMM d yyyy", new Locale("English"));
+		System.out.println(sdf.parse("December 12 2013"));
+		
+		
 	}
 
 

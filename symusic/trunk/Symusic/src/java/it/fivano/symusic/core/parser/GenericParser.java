@@ -1,4 +1,8 @@
-package it.fivano.symusic.core;
+package it.fivano.symusic.core.parser;
+
+import it.fivano.symusic.MyLogger;
+import it.fivano.symusic.conf.SymusicConf;
+import it.fivano.symusic.model.LinkModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,17 +11,13 @@ import java.util.Random;
 
 import org.jsoup.nodes.Element;
 
-import it.fivano.symusic.MyLogger;
-import it.fivano.symusic.conf.SymusicConf;
-import it.fivano.symusic.model.LinkModel;
-
-public abstract class BaseService {
+public abstract class GenericParser {
 	
 	protected MyLogger log;
 	protected SymusicConf generalConf;
 	protected static final int TIMEOUT = 8000;
 	
-	public BaseService() {
+	public GenericParser() {
 		try {
 			generalConf = new SymusicConf();
 		} catch (IOException e) {
