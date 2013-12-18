@@ -38,6 +38,14 @@ public abstract class GenericParser {
 		return currLink;
 	}
 	
+	protected boolean isRadioRipRelease(String releaseName) {
+		for(String rip : generalConf.RELEASE_EXCLUSION) {
+			if(releaseName.contains(rip))
+				return true;
+		}
+		return false;
+	}
+	
 	protected String formatQueryString(String name, int wordToDelete) {
 		
 		int index = name.indexOf("(");
