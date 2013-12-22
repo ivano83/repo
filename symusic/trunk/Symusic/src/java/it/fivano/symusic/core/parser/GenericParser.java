@@ -6,6 +6,7 @@ import it.fivano.symusic.model.LinkModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -16,6 +17,9 @@ public abstract class GenericParser {
 	protected MyLogger log;
 	protected SymusicConf generalConf;
 	protected static final int TIMEOUT = 8000;
+	
+	protected Date dataDa;
+	protected Date dataA;
 	
 	public GenericParser() {
 		try {
@@ -94,6 +98,11 @@ public abstract class GenericParser {
 	protected String randomUserAgent() {
 		
 		return getUserAgentList().get(new Random().nextInt(getUserAgentList().size()-1));
+	}
+	
+	protected boolean downloadReleaseDay(Date dateInDate, Date da, Date a) {
+		boolean result = (dateInDate.compareTo(da)>=0) && (dateInDate.compareTo(a)<=0);
+		return result;
 	}
 	
 	protected abstract String applyFilterSearch(String result);

@@ -1,6 +1,9 @@
 package it.fivano.symusic.core.parser.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import sun.java2d.pipe.SpanShapeRenderer.Simple;
 
 public class ScenelogParserModel {
 	
@@ -44,6 +47,11 @@ public class ScenelogParserModel {
 	}
 	
 	
-	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		return releaseName+" ["+sdf.format(releaseDate)+"] "+((radioRip)?"[isRadioRip] ":"")+((dateInRange)?"[dataInRange] ":"");
+	}
 
 }
