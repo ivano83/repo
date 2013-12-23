@@ -11,6 +11,7 @@ public class BeatportConf {
 	public String PARAMS;
 	public String ATTR_RELEASE_NAME;
 	public String ATTR_RELEASE_VALUE;
+	public String CLASS_RELEASE_LIST;
 	public String CLASS_RELEASE_ITEM;
 	public String CLASS_RELEASE_TITLE;
 	public String CLASS_RELEASE_AUTHOR;
@@ -30,6 +31,7 @@ public class BeatportConf {
 		PARAMS = props.getProperty("params");
 		ATTR_RELEASE_NAME = props.getProperty("attr_release_name");
 		ATTR_RELEASE_VALUE = props.getProperty("attr_release_value");
+		CLASS_RELEASE_LIST = props.getProperty("class_release_list");
 		CLASS_RELEASE_ITEM = props.getProperty("class_release_item");
 		CLASS_RELEASE_TITLE = props.getProperty("class_release_title");
 		CLASS_RELEASE_AUTHOR = props.getProperty("class_release_author");

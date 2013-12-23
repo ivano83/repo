@@ -247,7 +247,7 @@ public class ScenelogParser extends GenericParser {
 		// CONTROLLA SE E' UN RADIO/SAT RIP
 		release.setRadioRip(this.isRadioRipRelease(releaseName));
 		
-		System.out.println(release);
+//		System.out.println(release);
 		log.info("|"+release+"| acquisita");
 		
 		return release;
