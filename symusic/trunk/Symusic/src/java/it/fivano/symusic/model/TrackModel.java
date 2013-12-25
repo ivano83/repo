@@ -44,11 +44,11 @@ public class TrackModel {
 	@Override
 	public String toString() {
 		
-		return (trackName!=null? trackName+" | " : "") + 
-					(artist!=null? artist+" | " : "") + 
-						(time!=null? time+" | " : "") + 
-								(genere!=null? genere+" | " : "") + 
-										(bpm!=null? bpm+" | " : "") ;
+		return (artist!=null? artist+" - " : "") + 
+					(trackName!=null? trackName+" " : "") + 
+						(time!=null? "{"+time+"}" : "") + 
+								(genere!=null? "{"+genere+"}" : "") + 
+										(bpm!=null? "{"+bpm+"}" : "") ;
 	}
 	public Integer getTrackNumber() {
 		return trackNumber;

@@ -181,8 +181,12 @@ public class SymusicUtility {
 	}
 	
 	public static List<TrackModel> chooseTrack(List<TrackModel> tracks1, List<TrackModel> tracks2) {
-		if(!tracks1.isEmpty() && !tracks2.isEmpty() && tracks1.size()!=tracks2.size())
-			return tracks1;
+		if(!tracks1.isEmpty() && !tracks2.isEmpty()) {
+			if(tracks1.size()!=tracks2.size())
+				return tracks1;
+			else
+				return tracks2;
+		}
 		
 		if(tracks1.isEmpty() && !tracks2.isEmpty()) 
 			return tracks2;

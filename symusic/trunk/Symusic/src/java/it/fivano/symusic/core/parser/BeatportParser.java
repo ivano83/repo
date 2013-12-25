@@ -2,7 +2,6 @@ package it.fivano.symusic.core.parser;
 
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.SymusicUtility.LevelSimilarity;
-import it.fivano.symusic.backend.service.TrackService;
 import it.fivano.symusic.conf.BeatportConf;
 import it.fivano.symusic.core.parser.model.BeatportParserModel;
 import it.fivano.symusic.core.parser.model.ScenelogParserModel;
@@ -171,17 +170,19 @@ public class BeatportParser extends GenericParser {
 				numTr++;
 			}
 			
+			System.out.println("\tSCENELOG_TRACK: "+release.getTracks().size()+" "+release.getTracks());
+			System.out.println("\tBEATPORT_TRACK: "+listTrack.size()+" "+listTrack);
 			// TODO controllare se e' il caso di sostituire le traccie o meno
-			TrackService lserv = new TrackService();
+//			TrackService lserv = new TrackService();
 			if(release.getTracks()!=null && release.getTracks().isEmpty()){
 				// scelta tra quelle gia' presenti e quelle recuperate
 				release.setTracks(SymusicUtility.chooseTrack(release.getTracks(), listTrack));
-				lserv.saveTracks(release.getTracks(), release.getId());
+//				lserv.saveTracks(release.getTracks(), release.getId());
 			}
 			else {
 				// scelta tra quelle gia' presenti e quelle recuperate
 				release.setTracks(SymusicUtility.chooseTrack(release.getTracks(), listTrack));
-				lserv.updateTracks(release.getTracks(), release.getId());
+//				lserv.updateTracks(release.getTracks(), release.getId());
 				log.info("Aggiornamento track:  ID_RELEASE="+release.getId()+"\t TRACK:  "+numTr+"."+currTrack);
 				
 			}
@@ -202,6 +203,7 @@ public class BeatportParser extends GenericParser {
 		String author = e.getElementsByClass(conf.CLASS_RELEASE_AUTHOR).get(0).text();
 		String titleString = author+"-"+title.text();
 		
+		releaseName = this.formatQueryString(releaseName,0).replace("+", " ");
 		double simil = SymusicUtility.getStringSimilarity(releaseName,titleString,LevelSimilarity.ALTO);
 		String releaseLink = title.attr("href");
 		if(simil!=0) {
@@ -254,7 +256,11 @@ public class BeatportParser extends GenericParser {
 			List<BeatportParserModel> m2 = p2.searchRelease(mm.getNameWithUnderscore());
 			
 			for(BeatportParserModel tmp : m2) {
-				System.out.println(tmp);
+				System.out.println("TROVATO: "+tmp);
+			}
+			if(!m2.isEmpty()) {
+				mm = p2.parseReleaseDetails(m2.get(0), mm);
+				System.out.println("\t"+mm.getTracks());
 			}
 			
 		}
