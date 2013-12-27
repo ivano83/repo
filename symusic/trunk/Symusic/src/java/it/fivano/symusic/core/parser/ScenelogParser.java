@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
@@ -52,7 +53,11 @@ public class ScenelogParser extends GenericParser {
 			// CONNESSIONE ALLA PAGINA
 			String userAgent = this.randomUserAgent();
 			log.info("Connessione in corso --> "+urlPage);
-			Document doc = Jsoup.connect(urlPage).timeout(TIMEOUT).userAgent(userAgent).get();
+			Document doc = Jsoup.connect(urlPage).timeout(TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
+			
+			if(this.isAntiDDOS(doc)) {
+				doc = this.bypassAntiDDOS(doc);
+			}
 
 			Elements releaseGroup = doc.getElementsByClass(conf.CLASS_RELEASE_LIST_ITEM);
 			if(releaseGroup.size()>0) {
@@ -79,6 +84,52 @@ public class ScenelogParser extends GenericParser {
 	}
 
 	
+	private Document bypassAntiDDOS(Document doc) throws IOException {
+		String jschl_vc = doc.getElementsByAttributeValue("name", "jschl_vc").get(0).attr("value");
+		System.out.println(jschl_vc);
+		Elements scriptElements = doc.getElementsByTag("script");
+		String numberCalcLine = null;
+		for (Element element :scriptElements ){                
+			for (DataNode node : element.dataNodes()) {
+				String text = node.getWholeData();
+				String[] lines = text.split("\n");
+				for(String scriptLine : lines) {
+					if(scriptLine.trim().startsWith("a.value = ")) {
+						numberCalcLine = scriptLine.replace(";", "").replace("a.value = ", "").trim();
+						break;
+					}
+				}
+
+			}
+			System.out.println(numberCalcLine);            
+		}
+		
+		int jschl_answer = 0;
+		if(numberCalcLine!=null) {
+			String[] addizioni = numberCalcLine.split("\\+");
+			int i1,i2,i3;
+			i1 = Integer.parseInt(addizioni[0]);
+			String[] moltipl = addizioni[1].split("\\*");
+			i2 = Integer.parseInt(moltipl[0]);
+			i3 = Integer.parseInt(moltipl[1]);
+			
+			jschl_answer = ((i2*i3)+i1)+11;
+		}
+		
+		String urlPage = conf.URL+"cdn-cgi/l/chk_jschl";
+		String userAgent = this.randomUserAgent();
+		doc = Jsoup.connect(urlPage).timeout(TIMEOUT).userAgent(userAgent).data("jschl_vc", jschl_vc).data("jschl_answer", jschl_answer+"").ignoreHttpErrors(true).get();
+		
+		
+		return doc;
+	}
+
+	private boolean isAntiDDOS(Document doc) {
+		Elements res = doc.getElementsByClass("cf-browser-verification");
+		System.out.println("DDOS protection: "+(res.size()==0 ? false : true));
+		return res.size()==0 ? false : true;
+	}
+
 	public ScenelogParserModel searchRelease(String releaseName) throws ParseReleaseException {
 		
 		ScenelogParserModel result = null;
@@ -102,7 +153,11 @@ public class ScenelogParser extends GenericParser {
 					// pagina di inizio
 					String urlConn = conf.URL+conf.URL_ACTION+"?"+conf.PARAMS.replace("{0}", releaseName);
 					log.info("Connessione in corso --> "+urlConn);
-					doc = Jsoup.connect(urlConn).timeout((tentativi+1)*TIMEOUT).userAgent(userAgent).get();
+					doc = Jsoup.connect(urlConn).timeout((tentativi+1)*TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
+					
+					if(this.isAntiDDOS(doc)) {
+						doc = this.bypassAntiDDOS(doc);
+					}
 					
 					releaseItems = doc.getElementsByClass(conf.CLASS_RELEASE_ITEM);
 					
@@ -169,7 +224,11 @@ public class ScenelogParser extends GenericParser {
 
 			// release trovata
 			String userAgent = this.randomUserAgent();
-			doc = Jsoup.connect(scenelogModel.getUrlReleaseDetails()).userAgent(userAgent).get();
+			doc = Jsoup.connect(scenelogModel.getUrlReleaseDetails()).userAgent(userAgent).ignoreHttpErrors(true).get();
+			
+			if(this.isAntiDDOS(doc)) {
+				doc = this.bypassAntiDDOS(doc);
+			}
 
 			TrackModel currTrack = null;
 			Element releaseTrack = doc.getElementsByClass(conf.RELEASE_TRACK_NAME).get(0);

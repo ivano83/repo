@@ -244,7 +244,7 @@ public class BeatportParser extends GenericParser {
 	
 	public static void main(String[] args) throws Exception {
 		ScenelogParser p = new ScenelogParser();
-		List<ScenelogParserModel> m = p.parseFullPage("http://scenelog.eu/music/page/3/");
+		List<ScenelogParserModel> m = p.parseFullPage("http://scenelog.eu/music/page/4/");
 		
 		for(ScenelogParserModel tt : m) {
 			
