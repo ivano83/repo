@@ -7,6 +7,7 @@ import it.fivano.symusic.core.parser.model.BeatportParserModel;
 import it.fivano.symusic.core.parser.model.ScenelogParserModel;
 import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.exception.ParseReleaseException;
+import it.fivano.symusic.model.GenreModel;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.TrackModel;
 
@@ -14,8 +15,10 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.jsoup.Jsoup;
@@ -172,20 +175,12 @@ public class BeatportParser extends GenericParser {
 			
 			System.out.println("\tSCENELOG_TRACK: "+release.getTracks().size()+" "+release.getTracks());
 			System.out.println("\tBEATPORT_TRACK: "+listTrack.size()+" "+listTrack);
-			// TODO controllare se e' il caso di sostituire le traccie o meno
-//			TrackService lserv = new TrackService();
-			if(release.getTracks()!=null && release.getTracks().isEmpty()){
-				// scelta tra quelle gia' presenti e quelle recuperate
-				release.setTracks(SymusicUtility.chooseTrack(release.getTracks(), listTrack));
-//				lserv.saveTracks(release.getTracks(), release.getId());
-			}
-			else {
-				// scelta tra quelle gia' presenti e quelle recuperate
-				release.setTracks(SymusicUtility.chooseTrack(release.getTracks(), listTrack));
-//				lserv.updateTracks(release.getTracks(), release.getId());
-				log.info("Aggiornamento track:  ID_RELEASE="+release.getId()+"\t TRACK:  "+numTr+"."+currTrack);
-				
-			}
+
+			release.setTracks(SymusicUtility.chooseTrack(release.getTracks(), listTrack));
+			
+			// prova a recuperare il genere dalle tracce, se e' stato recuperato da beatport
+			if(release.getGenre()==null)
+				this.popolaGenre(release);
 
 		} catch(Exception e) {
 			log.error("Errore nel parsing", e);
@@ -234,6 +229,35 @@ public class BeatportParser extends GenericParser {
 		}
 
 		return release;
+	}
+	
+	private void popolaGenre(ReleaseModel release) {
+		Map<String,Integer> result = new HashMap<String, Integer>();
+		String trackGenre = null;
+		for(TrackModel track : release.getTracks()) {
+			trackGenre = track.getGenere();
+			if(trackGenre!=null) {
+				Integer count = result.remove(trackGenre);
+				if(count == null) count = 1;
+				else count++;
+				result.put(trackGenre, count);
+			}
+		}
+		if(!result.isEmpty()) {
+			String genre = null;
+			Integer count = 0;
+			Set<String> keyset = result.keySet();
+			for(String currGenre : keyset) {
+				if(result.get(currGenre)>count) {
+					count = result.get(currGenre);
+					genre = currGenre;
+				}
+			}
+			
+			GenreModel g = new GenreModel();
+			g.setName(genre);
+			release.setGenre(g);
+		}
 	}
 
 	@Override

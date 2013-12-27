@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -127,18 +128,22 @@ public class SymusicUtility {
 		s2 = s2.toLowerCase();
 		
 		double soglia = 0.85;
-		if(LevelSimilarity.ALTO.toString().equals(levelSimil)) {
+		if(LevelSimilarity.ALTO.toString().equals(levelSimil.toString())) {
 			soglia = 0.9;
 		}
-		else if(LevelSimilarity.ALTISSIMO.toString().equals(levelSimil)) {
+		else if(LevelSimilarity.ALTISSIMO.toString().equals(levelSimil.toString())) {
 			soglia = 0.95;
 		}
 		
 		if(s1.contains(s2))
-			return 1;
+			return 1.2;
 		
 		if(s2.contains(s1))
-			return 1;
+			return 1.2;
+		
+		if(customCompare(s1,s2)) {
+			return 1.1;
+		}
 		
 		MongeElkan alg = new MongeElkan();
 		double score = alg.score(s1, s2);
@@ -156,6 +161,31 @@ public class SymusicUtility {
 
 	}
 	
+	private static boolean customCompare(String s1, String s2) {
+		String pattern = "[ ,!?']";
+		s1 = s1.replaceAll(pattern,"-");
+		s2 = s2.replaceAll(pattern,"-");
+		do { s1 = s1.replace("--", "-"); }while(s1.contains("--"));
+		do { s2 = s2.replace("--", "-"); }while(s2.contains("--"));
+		if(s1.endsWith("-")) s1 = s1.substring(0,s1.length()-1);
+		if(s2.endsWith("-")) s2 = s2.substring(0,s2.length()-1);
+		
+		String[] parole1 = s1.split("-");
+		int totParoleTrovate = 0;
+		List<String> parole2 = Arrays.asList(s2.split("-"));
+		for(String s : parole1) {
+			if(parole2.contains(s)) {
+				totParoleTrovate++;
+			}
+		}
+		
+		if(totParoleTrovate==parole1.length)
+			return true;
+		else 
+			return false;
+	}
+
+
 	public static Date sottraiData(Date data, int numGiorniDaSottrarre) {
 		
 		Long millisDaSottrarre = (60*60*24*numGiorniDaSottrarre)*1000L;
@@ -250,6 +280,8 @@ public class SymusicUtility {
 		System.out.println(compareStringSimilarity("Houseshaker Feat. Amanda Blush","Amanda Blush Feat Houseshaker"));
 
 		sottraiData(new Date(), 2);
+		
+		customCompare("ciao-pippo e paperino, bene!!?!", "");
 	}
 }
 
