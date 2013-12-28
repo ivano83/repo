@@ -5,6 +5,10 @@ import it.fivano.symusic.backend.service.GenreService;
 import it.fivano.symusic.backend.service.ReleaseService;
 import it.fivano.symusic.conf.ScenelogConf;
 import it.fivano.symusic.conf.ZeroDayMp3Conf;
+import it.fivano.symusic.core.parser.BeatportParser;
+import it.fivano.symusic.core.parser.ScenelogParser;
+import it.fivano.symusic.core.parser.model.BeatportParserModel;
+import it.fivano.symusic.core.parser.model.ScenelogParserModel;
 import it.fivano.symusic.core.thread.SupportObject;
 import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.exception.ParseReleaseException;
@@ -18,6 +22,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -51,24 +56,57 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 		listRelease = new ArrayList<ReleaseModel>();
 		try {
 			
+			
 			// PAGINA DI INIZIO
 			String urlConn = conf.URL_MUSIC;
 			
 			// OGGETTO PER GESTIRE IL CARICAMENTO DELLE PAGINE SUCCESSIVE DEL SITO
 			ScenelogInfo info = new ScenelogInfo();
 			info.setProcessNextPage(true);
+			info.setA(a);
+			info.setDa(da);
 			
 			// PROCESSA LE RELEASE DELLA PRIMA PAGINA
-			this.parseScenelog(urlConn, da, a, info);
-			
+			ScenelogParser scenelog = new ScenelogParser();
+			List<ScenelogParserModel> resScenelog = scenelog.parseFullPage(urlConn, da, a);
+			this.checkProcessPage(resScenelog, info);
+				
 			// SE C'È DA RECUPERARE ALTRE RELEASE, CAMBIA PAGINA
 			while(info.isProcessNextPage()) {
 				
+				// SALVA LA URL DELLA PROSSIMA PAGINA (SE NECESSARIA)
+				info.changePage(); // AGGIORNA IL NUMERO PAGINA
+				info.setNextPage(this.extractNextPage(info));
+						
 				log.info("Andiamo alla pagina successiva...");
 				// PROCESSA LE RELEASE DELLE PAGINE SUCCESSIVE
-				this.parseScenelog(info.getNextPage(), da, a, info);
+				List<ScenelogParserModel> resScenelogTmp = scenelog.parseFullPage(urlConn, da, a);
+				this.checkProcessPage(resScenelogTmp, info);
+				resScenelog.addAll(resScenelogTmp);
 				
 			}
+			
+			
+			// per ogni release scenelog recupera i dati da beatport
+			BeatportParser beatport = new BeatportParser();
+			List<BeatportParserModel> beatportRes = null;
+			for(ScenelogParserModel sc : resScenelog) {
+				
+				ReleaseModel release = null;
+				beatportRes = beatport.searchRelease(sc.getReleaseName());
+				if(!beatportRes.isEmpty()) {
+					BeatportParserModel beatportCandidate = beatportRes.get(0);
+					
+					release = beatport.parseReleaseDetails(beatportCandidate, release);
+					
+					// TODO se la release è di un genere richiesto si procede con il dettaglio di scenelog
+					// e i video di youtube
+					
+				}
+			}
+			
+			
+			
 			
 			// INIT OGGETTO DI SUPPORTO UNICO PER TUTTI I THREAD
 			SupportObject supp = new SupportObject();
@@ -88,6 +126,45 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 	
 	
 	
+	private void checkProcessPage(List<ScenelogParserModel> resScenelog, ScenelogInfo info) {
+		Date max = null;
+		Date min = null;
+		if(!resScenelog.isEmpty()) {
+			Iterator<ScenelogParserModel> it = resScenelog.iterator();
+			while(it.hasNext()) {
+				ScenelogParserModel sc = it.next();
+
+				if(max == null) max = sc.getReleaseDate();
+				if(min == null) min = sc.getReleaseDate();
+				
+				if(sc.getReleaseDate().after(info.getA())) {
+					max = sc.getReleaseDate();
+				}
+				if(sc.getReleaseDate().before(info.getDa())) {
+					min = sc.getReleaseDate();
+				}
+				
+				if(!sc.isDateInRange()) {
+					it.remove();
+				}
+			}
+			
+			// la pagina ha superato il range scelto
+			if(min.after(info.getA())) {
+				info.setProcessNextPage(false);
+			}
+			
+			// ancora non si e' arrivati al range scelto, si prosegue con pagine successive
+			if(max.before(info.getDa())) {
+				info.setProcessNextPage(true);
+			}
+				
+		}
+		
+		
+	}
+
+
 	private void parseScenelog(String urlConn, Date da, Date a, ScenelogInfo info) throws BackEndException, ParseReleaseException, ParseException, IOException {
 		
 //		List<ReleaseModel> listRelease = new ArrayList<ReleaseModel>();
@@ -360,6 +437,8 @@ class ScenelogInfo {
 	private int numPagina = 1;
 	private String nextPage;
 	private boolean processNextPage;
+	private Date da;
+	private Date a;
 	
 	public void changePage() {
 		numPagina = numPagina + 1;
@@ -380,6 +459,22 @@ class ScenelogInfo {
 	}
 	public void setProcessNextPage(boolean processNextPage) {
 		this.processNextPage = processNextPage;
+	}
+
+	public Date getDa() {
+		return da;
+	}
+
+	public void setDa(Date da) {
+		this.da = da;
+	}
+
+	public Date getA() {
+		return a;
+	}
+
+	public void setA(Date a) {
+		this.a = a;
 	}
 	
 	

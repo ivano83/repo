@@ -1,6 +1,7 @@
 package it.fivano.symusic.core;
 
 import it.fivano.symusic.SymusicUtility;
+import it.fivano.symusic.SymusicUtility.LevelSimilarity;
 import it.fivano.symusic.backend.service.LinkService;
 import it.fivano.symusic.backend.service.TrackService;
 import it.fivano.symusic.conf.ScenelogConf;
@@ -75,7 +76,7 @@ public class ScenelogService extends BaseService {
 				Element title = e.getElementsByClass(conf.CLASS_RELEASE_TITLE).get(0);
 				Element relCandidate = title.select("h1 > a").get(0);
 				
-				if(SymusicUtility.compareStringSimilarity(release.getName(), relCandidate.text())) {
+				if(SymusicUtility.compareStringSimilarity(release.getName(), relCandidate.text(), LevelSimilarity.ALTO)) {
 					releaseLinkGood = relCandidate.attr("href");
 					log.info("[SCENELOG] Trovata la release: "+relCandidate.text()+" - "+releaseLinkGood);
 					break;

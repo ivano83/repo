@@ -1,6 +1,7 @@
 package it.fivano.symusic.core;
 
 import it.fivano.symusic.SymusicUtility;
+import it.fivano.symusic.SymusicUtility.LevelSimilarity;
 import it.fivano.symusic.backend.service.VideoService;
 import it.fivano.symusic.conf.YoutubeConf;
 import it.fivano.symusic.exception.BackEndException;
@@ -59,7 +60,7 @@ public class YoutubeService extends BaseService {
 						title = videoTitle.text();
 						
 						String relName = this.formatQueryString(release.getName(),tentativi);
-						boolean similarity = SymusicUtility.compareStringSimilarity(relName, title);
+						boolean similarity = SymusicUtility.compareStringSimilarity(relName, title, LevelSimilarity.ALTO);
 						if(!similarity) {
 							continue;
 						}

@@ -1,6 +1,7 @@
 package it.fivano.symusic.core.parser;
 
 import it.fivano.symusic.SymusicUtility;
+import it.fivano.symusic.SymusicUtility.LevelSimilarity;
 import it.fivano.symusic.backend.service.LinkService;
 import it.fivano.symusic.backend.service.TrackService;
 import it.fivano.symusic.conf.ScenelogConf;
@@ -183,7 +184,7 @@ public class ScenelogParser extends GenericParser {
 				Element title = e.getElementsByClass(conf.CLASS_RELEASE_TITLE).get(0);
 				Element relCandidate = title.select("h1 > a").get(0);
 								
-				if(SymusicUtility.compareStringSimilarity(releaseName, relCandidate.text())) {
+				if(SymusicUtility.compareStringSimilarity(releaseName, relCandidate.text(), LevelSimilarity.ALTO)) {
 					releaseLinkGood = relCandidate.attr("href");
 					log.info("[SCENELOG] Trovata la release: "+relCandidate.text()+" - "+releaseLinkGood);
 					
@@ -235,16 +236,21 @@ public class ScenelogParser extends GenericParser {
 
 			List<TextNode> textnodes = releaseTrack.textNodes();
 			int numTr = 1;
+			List<TrackModel> tracks = new ArrayList<TrackModel>();
 			for(TextNode tx : textnodes) {
 				currTrack = new TrackModel();
 				currTrack.setTrackNumber(numTr);
 				String text = tx.text().replaceFirst("\\d+\\.",""); // se c'e' il numero di track, lo elimina
 //				System.out.println(text);
 				currTrack.setTrackName(text);
-				release.addTrack(currTrack);
+				tracks.add(currTrack);
 				log.info("ID_RELEASE="+release.getId()+"\t TRACK:  "+numTr+"."+currTrack);
 				numTr++;
 
+			}
+			
+			if(release.getTracks().isEmpty()) {
+				release.setTracks(tracks);
 			}
 
 			Element releaseDownloads = doc.getElementsByClass(conf.RELEASE_DOWNLOAD).get(0);

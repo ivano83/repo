@@ -97,29 +97,12 @@ public class SymusicUtility {
 		
 	}
 	
-	public static boolean compareStringSimilarity(String s1, String s2) {
-		s1 = s1.toLowerCase();
-		s2 = s2.toLowerCase();
+	public static boolean compareStringSimilarity(String s1, String s2, LevelSimilarity levelSimil) {
+		double res = getStringSimilarity(s1, s2, levelSimil);
+		if(res == 0)
+			return false;
 		
-		if(s1.contains(s2))
-			return true;
-		
-		if(s2.contains(s1))
-			return true;
-		
-		MongeElkan alg = new MongeElkan();
-		double score = alg.score(s1, s2);
-//		System.out.println(score);
-		if(score > 0.85)
-			return true;
-		
-		Level2MongeElkan alg2 = new Level2MongeElkan();
-		score = alg2.score(s1, s2);
-//		System.out.println(score);
-		if(score > 0.85)
-			return true;
-		
-		return false;
+		return true;
 
 	}
 	
@@ -274,10 +257,10 @@ public class SymusicUtility {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(compareStringSimilarity("Houseshaker Feat. Amanda Blush","Houseshaker Feat Amanda Blush"));
-		System.out.println(compareStringSimilarity("Houseshaker Feat. Amanda Blush","Houseshaker"));
-		System.out.println(compareStringSimilarity("Houseshaker Feat. Amanda Blush","Houseshaker Amanda Blush"));
-		System.out.println(compareStringSimilarity("Houseshaker Feat. Amanda Blush","Amanda Blush Feat Houseshaker"));
+		System.out.println(compareStringSimilarity("Houseshaker Feat. Amanda Blush","Houseshaker Feat Amanda Blush",LevelSimilarity.ALTO));
+		System.out.println(compareStringSimilarity("Houseshaker Feat. Amanda Blush","Houseshaker",LevelSimilarity.ALTO));
+		System.out.println(compareStringSimilarity("Houseshaker Feat. Amanda Blush","Houseshaker Amanda Blush",LevelSimilarity.ALTO));
+		System.out.println(compareStringSimilarity("Houseshaker Feat. Amanda Blush","Amawfewnda Blasdewush Feat Houfeseshaker",LevelSimilarity.ALTO));
 
 		sottraiData(new Date(), 2);
 		

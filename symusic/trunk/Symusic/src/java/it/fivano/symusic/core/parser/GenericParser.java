@@ -100,6 +100,10 @@ public abstract class GenericParser {
 		return getUserAgentList().get(new Random().nextInt(getUserAgentList().size()-1));
 	}
 	
+	protected String getReleaseNameWithoutUnderscore(String releaseName) {
+		return releaseName.replace("_", " ");
+	}
+	
 	protected boolean downloadReleaseDay(Date dateInDate, Date da, Date a) {
 		boolean result = (dateInDate.compareTo(da)>=0) && (dateInDate.compareTo(a)<=0);
 		return result;

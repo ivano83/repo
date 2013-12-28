@@ -45,7 +45,7 @@ public class BeatportParser extends GenericParser {
 			
 			Element releaseGroup = null;
 			Document doc = null;
-			releaseName = releaseName.replace("_", " ");
+			releaseName = this.getReleaseNameWithoutUnderscore(releaseName);
 			do  {
 				try {
 					String query = this.formatQueryString(releaseName,tentativi);
