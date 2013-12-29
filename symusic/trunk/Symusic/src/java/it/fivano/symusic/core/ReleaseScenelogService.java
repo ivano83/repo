@@ -7,6 +7,7 @@ import it.fivano.symusic.conf.ScenelogConf;
 import it.fivano.symusic.conf.ZeroDayMp3Conf;
 import it.fivano.symusic.core.parser.BeatportParser;
 import it.fivano.symusic.core.parser.ScenelogParser;
+import it.fivano.symusic.core.parser.YoutubeParser;
 import it.fivano.symusic.core.parser.model.BeatportParserModel;
 import it.fivano.symusic.core.parser.model.ScenelogParserModel;
 import it.fivano.symusic.core.thread.SupportObject;
@@ -15,6 +16,7 @@ import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.GenreModel;
 import it.fivano.symusic.model.ReleaseExtractionModel;
 import it.fivano.symusic.model.ReleaseModel;
+import it.fivano.symusic.model.VideoModel;
 import it.fivano.symusic.model.ReleaseExtractionModel.AreaExtraction;
 
 import java.io.IOException;
@@ -34,7 +36,7 @@ import org.jsoup.select.Elements;
 public class ReleaseScenelogService extends ReleaseSiteService {
 	
 	private ScenelogConf conf;
-	private String genre;
+	private List<String> genreFilter;
 	
 	private List<ReleaseModel> listRelease;
 	
@@ -48,6 +50,11 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 		enableYoutubeService = true;
 		excludeRipRelease = true;
 		this.setLogger(getClass());
+	}
+	
+	public ReleaseScenelogService(List<String> genreFilter) throws IOException {
+		this();
+		this.genreFilter = genreFilter;
 	}
 	
 	
@@ -80,7 +87,7 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 						
 				log.info("Andiamo alla pagina successiva...");
 				// PROCESSA LE RELEASE DELLE PAGINE SUCCESSIVE
-				List<ScenelogParserModel> resScenelogTmp = scenelog.parseFullPage(urlConn, da, a);
+				List<ScenelogParserModel> resScenelogTmp = scenelog.parseFullPage(info.getNextPage(), da, a);
 				this.checkProcessPage(resScenelogTmp, info);
 				resScenelog.addAll(resScenelogTmp);
 				
@@ -97,15 +104,34 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 				if(!beatportRes.isEmpty()) {
 					BeatportParserModel beatportCandidate = beatportRes.get(0);
 					
+					// SCARICA IL DETTAGLIO BEATPORT
 					release = beatport.parseReleaseDetails(beatportCandidate, release);
 					
-					// TODO se la release è di un genere richiesto si procede con il dettaglio di scenelog
-					// e i video di youtube
+					// SE NON E' UN GENERE INTERESSATO, NON VIENE SCARICATO IL DETTAGLIO SCENELOG
+					boolean extractDetails = true;
+					if(genreFilter != null && release.getGenre()!=null && !genreFilter.contains(release.getGenre().getName().toLowerCase())) {
+						extractDetails = false;
+					}
 					
+					if(extractDetails) {
+						// DETTAGLIO SCENELOG
+						release = scenelog.parseReleaseDetails(sc, release);
+						
+						// YOUTUBE VIDEO
+						YoutubeParser youtube = new YoutubeParser();
+						List<VideoModel> youtubeVideos = youtube.searchYoutubeVideos(release.getName());
+						release.setVideos(youtubeVideos);
+						
+						// AGGIUNGE I LINK DI RICERCA MANUALE (DIRETTAMENTE SU GOOGLE E YOUTUBE)
+						GoogleService google = new GoogleService();
+						google.addManualSearchLink(release);
+						youtube.addManualSearchLink(release); // link a youtube per la ricerca manuale
+						
+						listRelease.add(release);
+					}
+
 				}
 			}
-			
-			
 			
 			
 			// INIT OGGETTO DI SUPPORTO UNICO PER TUTTI I THREAD
@@ -114,7 +140,7 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 			supp.setEnableScenelogService(enableScenelogService);
 			supp.setEnableYoutubeService(enableYoutubeService);
 			
-			listRelease = this.arricchimentoRelease(listRelease, supp);
+//			listRelease = this.arricchimentoRelease(listRelease, supp);
 			
 		} catch (Exception e) {
 			throw new ParseReleaseException("Errore nel parsing delle pagine",e);
@@ -137,27 +163,29 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 				if(max == null) max = sc.getReleaseDate();
 				if(min == null) min = sc.getReleaseDate();
 				
-				if(sc.getReleaseDate().after(info.getA())) {
+				if(sc.getReleaseDate().after(max)) {
 					max = sc.getReleaseDate();
 				}
-				if(sc.getReleaseDate().before(info.getDa())) {
+				if(sc.getReleaseDate().before(min)) {
 					min = sc.getReleaseDate();
 				}
 				
 				if(!sc.isDateInRange()) {
 					it.remove();
 				}
+				System.out.println(min + "   "+max);
 			}
 			
+			
 			// la pagina ha superato il range scelto
-			if(min.after(info.getA())) {
+			if(min.before(info.getDa())) {
 				info.setProcessNextPage(false);
 			}
 			
 			// ancora non si e' arrivati al range scelto, si prosegue con pagine successive
-			if(max.before(info.getDa())) {
-				info.setProcessNextPage(true);
-			}
+//			if(max.before(info.getA())) {
+//				info.setProcessNextPage(true);
+//			}
 				
 		}
 		

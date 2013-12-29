@@ -73,6 +73,55 @@
 	
 </form>
 
+<div style="padding-bottom: 60px"></div>
+
+<h3>Ricerca Scenelog</h3>
+<form action="ScenelogServlet"> 
+
+	<table>
+
+		<tr>
+			<td>
+				<div>Data inizio </div>
+			</td>
+			<td>
+				<input type="text" name="initDate" class="tcal">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>Data Fine </div>
+			</td>
+			<td>
+				<input type="text" name="endDate" class="tcal">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>Ignora Release Radio/Sat RIP</div>
+			</td>
+			<td>
+				<input type="checkbox" name="excludeRelaseRip" value="true" checked="checked" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>Generi ricercati</div>
+			</td>
+			<td>
+				<select name="genre" multiple="multiple">
+					<option value="dance" selected="selected">Dance</option>
+					<option value="trance">Trance</option>
+					<option value="house">House</option>
+					<option value="electro house">Electro House</option>
+				</select>
+			</td>
+		</tr>
+	</table>
+	<input type="submit" value="Ricerca">
+	
+</form>
+
 
 
 </body>

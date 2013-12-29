@@ -42,6 +42,7 @@ public class BeatportParser extends GenericParser {
 		try {
 			int tentativi = 0;
 			boolean trovato = false;
+			String originalReleaseName = releaseName;
 			
 			Element releaseGroup = null;
 			Document doc = null;
@@ -69,7 +70,7 @@ public class BeatportParser extends GenericParser {
 			} while(tentativi<2 && !trovato);
 			
 			if(releaseGroup==null) {
-				log.warn("[BEATPORT] Nessun risultato ottenuto per la release = "+releaseName);
+				log.warn("[BEATPORT] Nessun risultato ottenuto per la release = "+originalReleaseName);
 				return result;
 			}
 			
@@ -77,7 +78,7 @@ public class BeatportParser extends GenericParser {
 			Elements releaseList = releaseGroup.getElementsByClass(conf.CLASS_RELEASE_ITEM);
 			BeatportParserModel tmp = null;
 			for(Element e : releaseList) {
-				tmp = this.popolaBeatport(e, releaseName);
+				tmp = this.popolaBeatport(e, originalReleaseName);
 
 				if(tmp!=null) {
 					mappaSimilarity.put(tmp.getLevelSimilarity(), tmp);
@@ -173,8 +174,8 @@ public class BeatportParser extends GenericParser {
 				numTr++;
 			}
 			
-			System.out.println("\tSCENELOG_TRACK: "+release.getTracks().size()+" "+release.getTracks());
-			System.out.println("\tBEATPORT_TRACK: "+listTrack.size()+" "+listTrack);
+//			System.out.println("\tSCENELOG_TRACK: "+release.getTracks().size()+" "+release.getTracks());
+//			System.out.println("\tBEATPORT_TRACK: "+listTrack.size()+" "+listTrack);
 
 			release.setTracks(SymusicUtility.chooseTrack(release.getTracks(), listTrack));
 			
@@ -198,8 +199,8 @@ public class BeatportParser extends GenericParser {
 		String author = e.getElementsByClass(conf.CLASS_RELEASE_AUTHOR).get(0).text();
 		String titleString = author+"-"+title.text();
 		
-		releaseName = this.formatQueryString(releaseName,0).replace("+", " ");
-		double simil = SymusicUtility.getStringSimilarity(releaseName,titleString,LevelSimilarity.ALTO);
+		String releaseNameSearch = this.formatQueryString(releaseName,0).replace("_", " ");
+		double simil = SymusicUtility.getStringSimilarity(releaseNameSearch,titleString,LevelSimilarity.ALTO);
 		String releaseLink = title.attr("href");
 		if(simil!=0) {
 			BeatportParserModel res = new BeatportParserModel();
@@ -208,6 +209,7 @@ public class BeatportParser extends GenericParser {
 			res.setTitle(title.text());
 			res.setLevelSimilarity(simil);
 			res.setUrlReleaseDetails(releaseLink);
+			res.setReleaseName(releaseName);
 			
 			return res;
 			

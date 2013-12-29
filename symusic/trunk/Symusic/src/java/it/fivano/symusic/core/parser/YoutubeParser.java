@@ -117,6 +117,15 @@ public class YoutubeParser extends GenericParser {
 
 	}
 	
+	public void addManualSearchLink(ReleaseModel release) {
+		
+		VideoModel yt = new VideoModel();
+		yt.setLink(this.getUrlConnection(release.getName(), 0));
+		yt.setName("[......CERCA SU YOUTUBE......]");
+		release.addVideo(yt);
+		
+	}
+	
 	private String getUrlConnection(String releaseName, int tentativi) {
 //		String rel = release.getName();
 //		if(release.getArtist()!=null && release.getSong()!=null)

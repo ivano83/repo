@@ -101,6 +101,8 @@ public class ReleaseModel {
 		return name + " ["+releaseDate+"]";
 	}
 	public List<TrackModel> getTracks() {
+		if(this.tracks==null)
+			tracks = new ArrayList<TrackModel>();
 		return tracks;
 	}
 	public void setTracks(List<TrackModel> tracks) {
@@ -114,6 +116,8 @@ public class ReleaseModel {
 			tracks.add(tr);
 	}
 	public List<VideoModel> getVideos() {
+		if(this.videos==null)
+			videos = new ArrayList<VideoModel>();
 		return videos;
 	}
 	public void setVideos(List<VideoModel> videos) {
