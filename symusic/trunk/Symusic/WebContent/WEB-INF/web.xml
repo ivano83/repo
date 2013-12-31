@@ -3,6 +3,11 @@
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<display-name>Symusic</display-name>
 	<servlet>
+		<display-name>InitServlet</display-name>
+		<servlet-name>InitServlet</servlet-name>
+		<servlet-class>it.fivano.symusic.action.InitServlet</servlet-class>
+	</servlet>
+	<servlet>
 		<display-name>ZeroDayMusicServlet</display-name>
 		<servlet-name>ZeroDayMusicServlet</servlet-name>
 		<servlet-class>it.fivano.symusic.action.ZeroDayMusicServlet</servlet-class>
@@ -24,6 +29,10 @@
 	</servlet>
 	
 	<servlet-mapping>
+		<servlet-name>InitServlet</servlet-name>
+		<url-pattern>/InitServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>ZeroDayMusicServlet</servlet-name>
 		<url-pattern>/ZeroDayMusicServlet</url-pattern>
 	</servlet-mapping>
@@ -41,6 +50,6 @@
 	</servlet-mapping>
 
 	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>InitServlet</welcome-file>
 	</welcome-file-list>
 </web-app>

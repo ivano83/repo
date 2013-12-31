@@ -21,6 +21,11 @@ public class BeatportConf {
 	public String RELEASE_TRACK_GENRE;
 	public String RELEASE_TRACK_RMX;
 	
+	public String GENRE_LIST;
+	public String GENRE_NEW_RELEASE;
+	public String GENRE_NEW_RELEASE_ITEM_AUTHOR;
+	public String GENRE_NEW_RELEASE_ITEM_TITLE;
+	
 	public BeatportConf() throws IOException {
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("beatport.properties");
 		Properties props = new Properties();
@@ -40,6 +45,10 @@ public class BeatportConf {
 		RELEASE_TRACK_NAME = props.getProperty("release_track_name");
 		RELEASE_TRACK_GENRE = props.getProperty("release_track_genre");
 		RELEASE_TRACK_RMX = props.getProperty("release_track_rmx");
+		GENRE_LIST = props.getProperty("genre_list");
+		GENRE_NEW_RELEASE = props.getProperty("genre_new_release");
+		GENRE_NEW_RELEASE_ITEM_AUTHOR = props.getProperty("genre_new_release_item_author");
+		GENRE_NEW_RELEASE_ITEM_TITLE = props.getProperty("genre_new_release_item_title");
 	}
 
 }

@@ -4,6 +4,7 @@ import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.SymusicUtility.LevelSimilarity;
 import it.fivano.symusic.backend.service.TrackService;
 import it.fivano.symusic.conf.BeatportConf;
+import it.fivano.symusic.core.parser.BeatportParser;
 import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.ReleaseModel;
@@ -190,6 +191,20 @@ public class BeatportService extends BaseService {
 
 		return true;
 		
+	}
+	
+	public Map<String,String> getGenreList() throws ParseReleaseException {
+		
+
+		try {
+		
+			BeatportParser parser = new BeatportParser();
+			return parser.getAllGenre();
+			
+		} catch (Exception e) {
+			log.error("[BEATPORT] Errore nel recupero della lista dei generi");
+			throw new ParseReleaseException("[BEATPORT] Errore nel recupero della lista dei generi",e);
+		} 
 	}
 	
 	protected String applyFilterSearch(String t) {

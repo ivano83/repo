@@ -193,6 +193,70 @@ public class BeatportParser extends GenericParser {
 		
 	}
 	
+	public Map<String,String> getAllGenre() throws ParseReleaseException {
+		
+		Document doc = null;
+		try {
+			
+			String urlConn = conf.URL;
+			log.info("Connessione in corso --> "+urlConn);
+			doc = Jsoup.connect(urlConn).timeout(TIMEOUT).get();
+			
+			Map<String,String> result = new HashMap<String, String>();
+			Elements genreGroup = doc.getElementsByClass(conf.GENRE_LIST).get(0).getElementsByTag("a");
+			
+			for(Element el : genreGroup) {
+				
+				result.put(el.text(), el.attr("href"));
+			}
+			
+			return result;
+			
+		} catch(Exception e) {
+			log.error("Errore nel parsing", e);
+			throw new ParseReleaseException("Errore nel parsing",e);
+		}
+		
+		
+	}
+	
+	public List<BeatportParserModel> searchNewReleases(String url) throws ParseReleaseException {
+		
+		Document doc = null;
+		List<BeatportParserModel> result = new ArrayList<BeatportParserModel>();
+		try {
+			
+			log.info("Connessione in corso --> "+url);
+			doc = Jsoup.connect(url).timeout(TIMEOUT).get();
+			
+			
+			Elements genreGroup = doc.select(conf.GENRE_NEW_RELEASE);
+			
+			BeatportParserModel tmp = null;
+			for(Element el : genreGroup) {
+				
+				String title = el.getElementsByClass(conf.GENRE_NEW_RELEASE_ITEM_TITLE).get(0).text();
+				String urlRelease = el.getElementsByClass(conf.GENRE_NEW_RELEASE_ITEM_TITLE).get(0).attr("href");
+				if(urlRelease.startsWith("/") && conf.URL.endsWith("/")) 
+					urlRelease = urlRelease.substring(1);
+				urlRelease = conf.URL+urlRelease;
+				String author = el.getElementsByClass(conf.GENRE_NEW_RELEASE_ITEM_AUTHOR).get(0).text();
+				
+				tmp = new BeatportParserModel();
+				tmp.setArtist(author);
+				tmp.setTitle(title);
+				tmp.setUrlReleaseDetails(urlRelease);
+				result.add(tmp);
+			}
+			
+			return result;
+			
+		} catch(Exception e) {
+			log.error("Errore nel parsing", e);
+			throw new ParseReleaseException("Errore nel parsing",e);
+		}
+	}
+	
 	private BeatportParserModel popolaBeatport(Element e, String releaseName) {
 		
 		Element title = e.getElementsByClass(conf.CLASS_RELEASE_TITLE).get(0);
@@ -270,7 +334,11 @@ public class BeatportParser extends GenericParser {
 
 	
 	public static void main(String[] args) throws Exception {
+		
+		
+		/**
 		ScenelogParser p = new ScenelogParser();
+				
 		List<ScenelogParserModel> m = p.parseFullPage("http://scenelog.eu/music/page/4/");
 		
 		for(ScenelogParserModel tt : m) {
@@ -290,10 +358,13 @@ public class BeatportParser extends GenericParser {
 				System.out.println("\t"+mm.getTracks());
 			}
 			
+			
 		}
+		*/
 		
-		
-		
-		
+		BeatportParser p2 = new BeatportParser();
+		List<BeatportParserModel> res = p2.searchNewReleases("http://www.beatport.com/genre/trance/7");
+		System.out.println(res);
+
 	}
 }
