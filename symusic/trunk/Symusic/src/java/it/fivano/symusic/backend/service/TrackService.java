@@ -102,6 +102,9 @@ public class TrackService extends RootService {
 				trackDao.insert(trackIn);
 				log.info("La track e' stata salvata con ID:"+trackIn.getIdReleaseTrack()+"  ID_REL:"+trackIn.getIdRelease()+"  TRACK:"+trackIn.getTrackName());
 			}
+			else {
+				this.updateTrack(trackIn, trackDao, trackList);
+			}
 
 		}
 		else {

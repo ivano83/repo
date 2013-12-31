@@ -87,7 +87,7 @@ public class ScenelogParser extends GenericParser {
 	
 	private Document bypassAntiDDOS(Document doc) throws IOException {
 		String jschl_vc = doc.getElementsByAttributeValue("name", "jschl_vc").get(0).attr("value");
-		System.out.println(jschl_vc);
+//		System.out.println(jschl_vc);
 		Elements scriptElements = doc.getElementsByTag("script");
 		String numberCalcLine = null;
 		for (Element element :scriptElements ){                
@@ -102,7 +102,7 @@ public class ScenelogParser extends GenericParser {
 				}
 
 			}
-			System.out.println(numberCalcLine);            
+//			System.out.println(numberCalcLine);            
 		}
 		
 		int jschl_answer = 0;
@@ -127,7 +127,7 @@ public class ScenelogParser extends GenericParser {
 
 	private boolean isAntiDDOS(Document doc) {
 		Elements res = doc.getElementsByClass("cf-browser-verification");
-		System.out.println("DDOS protection: "+(res.size()==0 ? false : true));
+		log.info("DDOS protection: "+(res.size()==0 ? false : true));
 		return res.size()==0 ? false : true;
 	}
 
@@ -244,14 +244,18 @@ public class ScenelogParser extends GenericParser {
 //				System.out.println(text);
 				currTrack.setTrackName(text);
 				tracks.add(currTrack);
-				log.info("ID_RELEASE="+release.getId()+"\t TRACK:  "+numTr+"."+currTrack);
+				log.info("[SCENELOG] \t TRACK:  "+numTr+". "+currTrack);
 				numTr++;
 
 			}
 			
 			if(release.getTracks().isEmpty()) {
 				release.setTracks(tracks);
+			} else {
+				// PRIORITA' ALLE TRACCE SCENELOG
+				release.setTracks(SymusicUtility.chooseTrack(tracks, release.getTracks()));
 			}
+			
 
 			Element releaseDownloads = doc.getElementsByClass(conf.RELEASE_DOWNLOAD).get(0);
 

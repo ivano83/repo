@@ -45,7 +45,8 @@ public class YoutubeParser extends GenericParser {
 					// pagina di inizio
 					urlConn = this.getUrlConnection(releaseName, tentativi);
 					log.info("Connessione in corso --> "+urlConn);
-					doc = Jsoup.connect(urlConn).timeout(TIMEOUT).get();
+					String userAgent = this.randomUserAgent();
+					doc = Jsoup.connect(urlConn).timeout(TIMEOUT).userAgent(userAgent).get();
 					
 					videoGroup = doc.getElementsByClass(conf.CLASS_VIDEO);
 					if(videoGroup.isEmpty()) {
@@ -66,7 +67,7 @@ public class YoutubeParser extends GenericParser {
 						title = videoTitle.text();
 						
 						String relName = this.formatQueryString(releaseName,tentativi);
-						boolean similarity = SymusicUtility.compareStringSimilarity(relName, title, LevelSimilarity.ALTISSIMO);
+						boolean similarity = SymusicUtility.compareStringSimilarity(relName, title, LevelSimilarity.ALTO);
 						if(!similarity) {
 							continue;
 						}
@@ -137,13 +138,15 @@ public class YoutubeParser extends GenericParser {
 	}
 
 	@Override
-	protected String applyFilterSearch(String result) {
-		return result;
+	protected String applyFilterSearch(String t) {
+		t = t.replace("-", " ").replace(",", " ").replace(" feat ", " ").replace(" ft ", " ")
+				.replace(".", " ").replace("  ", " ").replace(" and ", " ").replace(" ", "+");
+		return t;
 	}
 	
 	public static void main(String[] args) throws Exception {
 		YoutubeParser p = new YoutubeParser();
-		List<VideoModel> v = p.searchYoutubeVideos("Javi_Tracker_-_Tribute_To_EDM-(DR005)-WEB-2013-SOB");
+		List<VideoModel> v = p.searchYoutubeVideos("Crystal_Lake_Feat_Barbie_G_-_Darkness-(HUMF001)-WEB-2013-FMC");
 		System.out.println(v);
 	}
 

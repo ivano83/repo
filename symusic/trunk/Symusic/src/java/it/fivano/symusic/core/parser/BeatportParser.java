@@ -82,6 +82,7 @@ public class BeatportParser extends GenericParser {
 
 				if(tmp!=null) {
 					mappaSimilarity.put(tmp.getLevelSimilarity(), tmp);
+					log.warn("[BEATPORT] \tRelease candidata = "+tmp);
 				}
 					
 				
@@ -164,12 +165,12 @@ public class BeatportParser extends GenericParser {
 					currTrack.setBpm(tb[1].trim());
 					
 				} catch (Exception e1) {
-					log.warn("Errore nel recupero dei dati durata e bpm");
+					log.warn("[BEATPORT] Errore nel recupero dei dati durata e bpm");
 				}
 				
 				
 				listTrack.add(currTrack);
-				log.info("ID_RELEASE="+release.getId()+"\t TRACK:  "+numTr+"."+currTrack);
+				log.info("[BEATPORT] \t TRACK:  "+numTr+"."+currTrack);
 				
 				numTr++;
 			}
@@ -237,7 +238,7 @@ public class BeatportParser extends GenericParser {
 		Map<String,Integer> result = new HashMap<String, Integer>();
 		String trackGenre = null;
 		for(TrackModel track : release.getTracks()) {
-			trackGenre = track.getGenere();
+			trackGenre = track.getGenere().trim();
 			if(trackGenre!=null) {
 				Integer count = result.remove(trackGenre);
 				if(count == null) count = 1;
@@ -257,7 +258,7 @@ public class BeatportParser extends GenericParser {
 			}
 			
 			GenreModel g = new GenreModel();
-			g.setName(genre);
+			g.setName(genre.trim());
 			release.setGenre(g);
 		}
 	}
