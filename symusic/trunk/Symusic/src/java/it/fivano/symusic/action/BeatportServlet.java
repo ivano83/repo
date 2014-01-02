@@ -1,15 +1,13 @@
 package it.fivano.symusic.action;
 
-import it.fivano.symusic.SymusicUtility;
-import it.fivano.symusic.core.ReleaseScenelogService;
+import it.fivano.symusic.core.BeatportService;
+import it.fivano.symusic.core.ReleaseBeatportService;
 import it.fivano.symusic.model.ReleaseModel;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class ZeroDayMusicServlet
  */
 
-public class ScenelogServlet extends HttpServlet {
+public class BeatportServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private String urlPrecedente;
@@ -30,7 +28,7 @@ public class ScenelogServlet extends HttpServlet {
     /**
      * Default constructor. 
      */
-    public ScenelogServlet() {
+    public BeatportServlet() {
         // TODO Auto-generated constructor stub
     }
 
@@ -41,39 +39,27 @@ public class ScenelogServlet extends HttpServlet {
 		
 		try {
 			
-			
-
-			String[] genre = request.getParameterValues("genre");
-			List<String> genreList = null;
-			if(genre!=null) {
-				genreList = Arrays.asList(genre);
+			Map<String,String> genreMap = null;
+			if(request.getSession().getAttribute("genreMap")!=null) {
+				genreMap = (Map<String,String>) request.getSession().getAttribute("genreMap");
+			} else {
+				genreMap = new BeatportService().getGenreList();
+				request.getSession().setAttribute("genreMap", genreMap);
 			}
-			Date initDate = null;
-			Date endDate = null;
-			
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			String iDate = request.getParameter("initDate");
-			String eDate = request.getParameter("endDate");
-			
-			String excludeReleaseRip = request.getParameter("excludeRelaseRip");
-			boolean flagRip = (excludeReleaseRip!=null && excludeReleaseRip.equalsIgnoreCase("true"))?true:false;
-			
-			// se non presente le date sono inizializzate alla data corrente
-			initDate = (iDate==null || iDate.isEmpty())? sdf.parse(sdf.format(new Date())) : sdf.parse(iDate);
-			endDate = (eDate==null || eDate.isEmpty())? sdf.parse(sdf.format(new Date())) : sdf.parse(eDate);
 
-			urlPrecedente = request.getRequestURI()+"?genre="+genre+"&initDate="+sdf.format(SymusicUtility.sottraiData(initDate, 2))+"&endDate="+sdf.format(SymusicUtility.sottraiData(initDate, 1));
-			urlPrecedente += "&excludeRelaseRip="+flagRip;
-			urlSuccessivo = request.getRequestURI()+"?genre="+genre+"&initDate="+sdf.format(SymusicUtility.aggiungiData(endDate, 1))+"&endDate="+sdf.format(SymusicUtility.aggiungiData(endDate, 2));
-			urlSuccessivo += "&excludeRelaseRip="+flagRip;
+			String genre = request.getParameter("genre");
 			
-			request.setAttribute("urlPrecedente", urlPrecedente);
-			request.setAttribute("urlSuccessivo", urlSuccessivo);
+			if(genre==null) {
+				RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.jsp");
+				rd.forward(request, response);
+			}
+			
+			String urlGenre = genreMap.get(genre);
 			
 			List<ReleaseModel> listRelease = new ArrayList<ReleaseModel>();
-			ReleaseScenelogService scenelog = new ReleaseScenelogService(genreList);
+			ReleaseBeatportService beatport = new ReleaseBeatportService();
 			
-			listRelease = scenelog.parseScenelogRelease(initDate, endDate);
+			listRelease = beatport.parseBeatportRelease(urlGenre, genre);
 			
 			request.getSession().setAttribute("listRelease", listRelease);
 			

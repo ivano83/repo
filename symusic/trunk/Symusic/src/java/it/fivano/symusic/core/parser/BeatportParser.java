@@ -202,7 +202,7 @@ public class BeatportParser extends GenericParser {
 			log.info("Connessione in corso --> "+urlConn);
 			doc = Jsoup.connect(urlConn).timeout(TIMEOUT).get();
 			
-			Map<String,String> result = new HashMap<String, String>();
+			Map<String,String> result = new TreeMap<String, String>();
 			Elements genreGroup = doc.getElementsByClass(conf.GENRE_LIST).get(0).getElementsByTag("a");
 			
 			for(Element el : genreGroup) {
@@ -286,7 +286,7 @@ public class BeatportParser extends GenericParser {
 	private ReleaseModel popolaRelease(ReleaseModel release, BeatportParserModel beatportModel) throws ParseException {
 		release.setArtist(beatportModel.getArtist());
 		release.setSong(beatportModel.getTitle());
-		if(release.getNameWithUnderscore()==null) {
+		if(release.getNameWithUnderscore()==null && beatportModel.getReleaseName()!=null) {
 			release.setNameWithUnderscore(beatportModel.getReleaseName());
 			release.setName(beatportModel.getReleaseName().replace("_", " "));
 			

@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -75,9 +76,9 @@
 
 <div style="padding-bottom: 60px"></div>
 
-<h3>Ricerca Scenelog</h3>
-<form action="ScenelogServlet"> 
 
+<form action="ScenelogServlet"> 
+	<h3>Ricerca Scenelog</h3>
 	<table>
 
 		<tr>
@@ -122,7 +123,30 @@
 	
 </form>
 
+<div style="padding-bottom: 60px"></div>
+
+<form action="BeatportServlet"> 
+	<h3>Ricerca Beatport</h3>
+	<table>
+		<tr>
+			<td>
+				<div>Genere Release</div>
+			</td>
+			<td>
+				<select name="genre">
+				  <c:forEach items="${genreList}" var="gen">
+        			<option value="${gen}" ${gen == selectedGenre ? 'selected' : ''}>${gen}</option>
+    			  </c:forEach>
+				</select>
+			</td>
+		</tr>
+	</table>
+	<input type="submit" value="Ricerca">
+	
+</form>
 
 
+
+<div style="padding-bottom: 100px"></div>
 </body>
 </html>

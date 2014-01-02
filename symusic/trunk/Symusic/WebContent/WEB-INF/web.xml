@@ -27,6 +27,11 @@
 		<servlet-name>ScenelogServlet</servlet-name>
 		<servlet-class>it.fivano.symusic.action.ScenelogServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<display-name>BeatportServlet</display-name>
+		<servlet-name>BeatportServlet</servlet-name>
+		<servlet-class>it.fivano.symusic.action.BeatportServlet</servlet-class>
+	</servlet>
 	
 	<servlet-mapping>
 		<servlet-name>InitServlet</servlet-name>
@@ -47,6 +52,10 @@
 	<servlet-mapping>
 		<servlet-name>ScenelogServlet</servlet-name>
 		<url-pattern>/ScenelogServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>BeatportServlet</servlet-name>
+		<url-pattern>/BeatportServlet</url-pattern>
 	</servlet-mapping>
 
 	<welcome-file-list>

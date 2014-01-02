@@ -176,7 +176,9 @@ public class ScenelogParser extends GenericParser {
 			} while(tentativi<2 && !trovato);
 			
 			if(releaseItems==null) {
-				throw new ParseReleaseException("[SCENELOG] Nessun risultato ottenuto per la release = "+releaseName);
+				log.info("[SCENELOG] Nessun risultato ottenuto per la release = "+releaseName);
+				return null;
+//				throw new ParseReleaseException("[SCENELOG] Nessun risultato ottenuto per la release = "+releaseName);
 			}
 						
 			String releaseLinkGood = null;
@@ -275,8 +277,10 @@ public class ScenelogParser extends GenericParser {
 
 
 	private ReleaseModel popolaRelease(ReleaseModel release, ScenelogParserModel scenelogModel) throws ParseException {
-		release.setNameWithUnderscore(scenelogModel.getReleaseName());
-		release.setName(scenelogModel.getReleaseName().replace("_", " "));
+		if(scenelogModel.getReleaseName()!=null) {
+			release.setNameWithUnderscore(scenelogModel.getReleaseName());
+			release.setName(scenelogModel.getReleaseName().replace("_", " "));
+		}
 		release.setReleaseDate(SymusicUtility.getStandardDate(scenelogModel.getReleaseDate()));
 		
 		// AGGIUNGE ULTERIORI INFO DELLA RELEASE A PARTIRE DAL NOME

@@ -2,8 +2,8 @@ package it.fivano.symusic;
 
 import it.fivano.symusic.model.LinkModel;
 import it.fivano.symusic.model.ReleaseExtractionModel;
-import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.ReleaseExtractionModel.AreaExtraction;
+import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.TrackModel;
 
 import java.io.IOException;
@@ -19,7 +19,6 @@ import java.util.Random;
 
 import org.jsoup.nodes.Element;
 
-import com.wcohen.ss.JaroWinkler;
 import com.wcohen.ss.Level2MongeElkan;
 import com.wcohen.ss.MongeElkan;
 
@@ -107,8 +106,8 @@ public class SymusicUtility {
 	}
 	
 	public static double getStringSimilarity(String s1, String s2, LevelSimilarity levelSimil) {
-		s1 = s1.toLowerCase();
-		s2 = s2.toLowerCase();
+		s1 = s1.toLowerCase().replace("+", " ");
+		s2 = s2.toLowerCase().replace("+", " ");
 		
 		double soglia = 0.85;
 		if(LevelSimilarity.ALTO.toString().equals(levelSimil.toString())) {

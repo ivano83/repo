@@ -38,6 +38,7 @@ public class InitServlet extends HttpServlet {
 				Map<String,String> res = new BeatportService().getGenreList();
 				genreList = res.keySet();
 				request.getSession().setAttribute("genreList", genreList);
+				request.getSession().setAttribute("genreMap", res);
 			}
 			
 			RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.jsp");
