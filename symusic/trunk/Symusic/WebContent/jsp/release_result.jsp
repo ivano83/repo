@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -30,14 +31,17 @@
 </head>
 <body>
 
-<h2>Risultati release</h2>
+<h2>Risultati: ${fn:length(listRelease)} release trovate</h2>
 
 <table class="rel_table">	
 	<c:forEach items="${listRelease}" var="item">
 		<tr>
 			<td width="30%">
 				<div>Data: ${item.releaseDate}</div>
-				<div class="rel_name">${item.nameWithUnderscore}</div>
+				<c:choose>
+				  <c:when test="${empty item.links}"><div class="rel_name" style="background-color:#ffff77">${item.nameWithUnderscore}</div></c:when>
+				  <c:otherwise><div class="rel_name">${item.nameWithUnderscore}</div></c:otherwise>
+				</c:choose>
 				<div>Artista: <span class="artist_${item.id}">${item.artist}</span></div>
 				<div>Titolo release: <span class="title_${item.id}">${item.song}</span></div>
 				<div class="rating" data-average="${item.voteAverage}" data-id="${item.id}" data-value="${item.voteValue}" disable="${item.voted}"></div>

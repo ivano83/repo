@@ -2,6 +2,7 @@ package it.fivano.symusic.core;
 
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.backend.service.GenreService;
+import it.fivano.symusic.backend.service.LinkService;
 import it.fivano.symusic.backend.service.ReleaseExtractionService;
 import it.fivano.symusic.backend.service.ReleaseService;
 import it.fivano.symusic.backend.service.TrackService;
@@ -109,11 +110,16 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 					continue;
 				}
 				
+				enableScenelogService = true;
+				enableYoutubeService = true;
+				enableBeatportService = true;
+				ReleaseExtractionModel extr = new ReleaseExtractionModel();
+				release.setReleaseExtraction(extr);
+				
 				// CONTROLLA SE LA RELEASE E' GIA' PRESENTE
 				boolean isRecuperato = false;
 				ReleaseService relServ = new ReleaseService();
 				ReleaseModel relDb = relServ.getReleaseFull(sc.getReleaseName());
-				ReleaseExtractionModel extr = null;
 				if(relDb!=null) {
 					log.info(sc.getReleaseName()+" e' gia' presente nel database con id = "+relDb.getId());
 					
@@ -128,10 +134,7 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 					isRecuperato = true;
 					release = relDb; // SOSTITUISCE I DATI FINO AD ORA ESTRATTI CON QUELLI DEL DB
 				}
-				else {
-					extr = new ReleaseExtractionModel();
-					release.setReleaseExtraction(extr);
-				}
+				
 				
 				if(enableBeatportService)
 					beatportRes = beatport.searchRelease(sc.getReleaseName());
@@ -145,8 +148,6 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 						BeatportParserModel beatportCandidate = beatportRes.get(0);
 						// SCARICA IL DETTAGLIO BEATPORT
 						release = beatport.parseReleaseDetails(beatportCandidate, release);
-						
-						SymusicUtility.updateReleaseExtraction(extr,true,AreaExtraction.BEATPORT);
 					}
 					
 					// SE NON E' UN GENERE INTERESSATO, NON VIENE SCARICATO IL DETTAGLIO SCENELOG
@@ -155,57 +156,38 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 						extractDetails = false;
 					}
 					
+					YoutubeParser youtube = new YoutubeParser();
 					if(extractDetails) {
 						
 						// DETTAGLIO SCENELOG
 						if(enableScenelogService) {
 							release = scenelog.parseReleaseDetails(sc, release);
-							
-							SymusicUtility.updateReleaseExtraction(extr,true,AreaExtraction.SCENELOG);
+
 						}
 						
 						// YOUTUBE VIDEO
-						YoutubeParser youtube = new YoutubeParser();
 						if(enableYoutubeService) {
 							List<VideoModel> youtubeVideos = youtube.searchYoutubeVideos(release.getName());
 							release.setVideos(youtubeVideos);
 							
-							SymusicUtility.updateReleaseExtraction(extr,true,AreaExtraction.YOUTUBE);
+							if(release.getVideos().isEmpty()) 
+								SymusicUtility.updateReleaseExtraction(extr,false,AreaExtraction.YOUTUBE);
+							else
+								SymusicUtility.updateReleaseExtraction(extr,true,AreaExtraction.YOUTUBE);
 						}
-						
-						// AGGIUNGE I LINK DI RICERCA MANUALE (DIRETTAMENTE SU GOOGLE E YOUTUBE)
-						GoogleService google = new GoogleService();
-						google.addManualSearchLink(release);
-						youtube.addManualSearchLink(release); // link a youtube per la ricerca manuale
 						
 						listRelease.add(release);
 						
+						// AGGIORNAMENTI DEI DATI SUL DB
+						this.saveOrUpdateRelease(release, isRecuperato);
 
-						if(!isRecuperato) {
-							// SALVA O RECUPERA IL GENERE
-							if(release.getGenre()!=null)
-								release.setGenre(new GenreService().saveGenre(release.getGenre()));
-														
-							ReleaseModel r = relServ.saveRelease(release);
-							release.setId(r.getId());
-							log.info(release+" e' stata salvata sul database con id = "+r.getId());
-						}
-						if(enableYoutubeService) {
-							VideoService vidServ = new VideoService();
-							vidServ.saveVideos(release.getVideos(), release.getId());
-						} if(enableScenelogService) {
-							TrackService traServ = new TrackService();
-							traServ.saveTracks(release.getTracks(), release.getId());
-						}
-						
-						// AGGIORNA/SALVA I FLAG DI ESTRAZIONE
-						extr.setIdRelease(release.getId());
-						new ReleaseExtractionService().saveReleaseExtraction(extr);
-						log.info("Salvataggio del release extraction con idRelease="+release.getId());
-						
-						
 					}
-
+					
+					// AGGIUNGE I LINK DI RICERCA MANUALE (DIRETTAMENTE SU GOOGLE E YOUTUBE)
+					GoogleService google = new GoogleService();
+					google.addManualSearchLink(release);
+					youtube.addManualSearchLink(release); // link a youtube per la ricerca manuale
+					
 				}
 			}
 			
@@ -225,9 +207,7 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 		return listRelease;
 		
 	}
-	
-	
-	
+
 	private void checkProcessPage(List<ScenelogParserModel> resScenelog, ScenelogInfo info) {
 		Date max = null;
 		Date min = null;

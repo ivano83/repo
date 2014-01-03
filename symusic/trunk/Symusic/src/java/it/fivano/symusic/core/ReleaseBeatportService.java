@@ -55,6 +55,12 @@ public class ReleaseBeatportService extends ReleaseSiteService {
 					GenreModel genreMod = new GenreModel();
 					genreMod.setName(genre);
 					release.setGenre(genreMod);
+					
+					enableScenelogService = true;
+					enableYoutubeService = true;
+					enableBeatportService = true;
+					ReleaseExtractionModel extr = new ReleaseExtractionModel();
+					release.setReleaseExtraction(extr);
 										
 					// PRENDE I DETTAGLI DA BEATPORT
 					release = beatport.parseReleaseDetails(currBeatport, release);
@@ -75,7 +81,6 @@ public class ReleaseBeatportService extends ReleaseSiteService {
 					if(sc!=null) {
 						relDb = relServ.getReleaseFull(sc.getReleaseName());
 					}
-					ReleaseExtractionModel extr = null;
 					if(relDb!=null) {
 						log.info(sc.getReleaseName()+" e' gia' presente nel database con id = "+relDb.getId());
 						
@@ -91,22 +96,14 @@ public class ReleaseBeatportService extends ReleaseSiteService {
 						release = relDb; // SOSTITUISCE I DATI FINO AD ORA ESTRATTI CON QUELLI DEL DB
 						releaseTrovata = true;
 					}
-					else {
-						enableScenelogService = true;
-						enableYoutubeService = true;
-						enableBeatportService = true;
-						extr = new ReleaseExtractionModel();
-						release.setReleaseExtraction(extr);
-						SymusicUtility.updateReleaseExtraction(extr,true,AreaExtraction.BEATPORT);
-						
-					}
+					
 					
 					// RECUPERA IL DETTAGLIO DELLA RELEASE DA SCENELOG
 					if(sc!=null && enableScenelogService) {
 						release = scenelog.parseReleaseDetails(sc, release);
 						pseudoRelName = release.getName();
 						System.out.println("release trovata: "+release.getNameWithUnderscore());
-						SymusicUtility.updateReleaseExtraction(extr,true,AreaExtraction.SCENELOG);
+//						SymusicUtility.updateReleaseExtraction(extr,true,AreaExtraction.SCENELOG);
 						releaseTrovata = true;
 					}
 					
@@ -114,7 +111,11 @@ public class ReleaseBeatportService extends ReleaseSiteService {
 					if(enableYoutubeService) {
 						release.setVideos(youtube.searchYoutubeVideos(pseudoRelName));
 						System.out.println(release.getVideos());
-						SymusicUtility.updateReleaseExtraction(extr,true,AreaExtraction.YOUTUBE);
+						if(release.getVideos().isEmpty()) 
+							SymusicUtility.updateReleaseExtraction(extr,false,AreaExtraction.YOUTUBE);
+						else
+							SymusicUtility.updateReleaseExtraction(extr,true,AreaExtraction.YOUTUBE);
+						
 					}
 					
 					// FIX SE LA RELEASE NON E' STATA TROVATA
@@ -125,40 +126,22 @@ public class ReleaseBeatportService extends ReleaseSiteService {
 						release.setNameWithUnderscore(pseudoRelName);
 					}
 					
+					
+					listRelease.add(release);
+					
+					if(releaseTrovata) {
+						// AGGIORNAMENTI DEI DATI SUL DB
+						this.saveOrUpdateRelease(release, isRecuperato);
+					}
+					else {
+						log.info(release+" completa non e' stata trovata, non verra' salvata sul db");
+					}
+					
 					// AGGIUNGE I LINK DI RICERCA MANUALE (DIRETTAMENTE SU GOOGLE E YOUTUBE)
 					GoogleService google = new GoogleService();
 					google.addManualSearchLink(release);
 					youtube.addManualSearchLink(release); // link a youtube per la ricerca manuale
 					
-					listRelease.add(release);
-					
-					if(releaseTrovata) {
-						if(!isRecuperato) {
-							// SALVA O RECUPERA IL GENERE
-							if(release.getGenre()!=null)
-								release.setGenre(new GenreService().saveGenre(release.getGenre()));
-														
-							ReleaseModel r = relServ.saveRelease(release);
-							release.setId(r.getId());
-							log.info(release+" e' stata salvata sul database con id = "+r.getId());
-						}
-						if(enableYoutubeService) {
-							VideoService vidServ = new VideoService();
-							vidServ.saveVideos(release.getVideos(), release.getId());
-						} if(enableScenelogService) {
-							TrackService traServ = new TrackService();
-							traServ.saveTracks(release.getTracks(), release.getId());
-						}
-						
-						// AGGIORNA/SALVA I FLAG DI ESTRAZIONE
-						extr.setIdRelease(release.getId());
-						new ReleaseExtractionService().saveReleaseExtraction(extr);
-						log.info("Salvataggio del release extraction con idRelease="+release.getId());
-						
-					}
-					else {
-						log.info(release+" completa non e' stata trovata, non verra' salvata sul db");
-					}
 				}
 				
 				/**

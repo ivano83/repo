@@ -1,9 +1,17 @@
 package it.fivano.symusic.core;
 
+import it.fivano.symusic.backend.service.GenreService;
+import it.fivano.symusic.backend.service.LinkService;
+import it.fivano.symusic.backend.service.ReleaseExtractionService;
+import it.fivano.symusic.backend.service.ReleaseService;
+import it.fivano.symusic.backend.service.TrackService;
+import it.fivano.symusic.backend.service.VideoService;
 import it.fivano.symusic.core.thread.ReleaseProcessModule;
 import it.fivano.symusic.core.thread.ReleaseThreadObject;
 import it.fivano.symusic.core.thread.SupportObject;
+import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.exception.ParseReleaseException;
+import it.fivano.symusic.model.ReleaseExtractionModel;
 import it.fivano.symusic.model.ReleaseModel;
 
 import java.util.ArrayList;
@@ -59,6 +67,36 @@ public abstract class ReleaseSiteService extends BaseService {
 				return true;
 		}
 		return false;
+	}
+	
+	protected void saveOrUpdateRelease(ReleaseModel release, boolean isRecuperato) throws BackEndException {
+		
+		if(!isRecuperato) {
+			// SALVA O RECUPERA IL GENERE
+			if(release.getGenre()!=null)
+				release.setGenre(new GenreService().saveGenre(release.getGenre()));
+			
+			ReleaseService relServ = new ReleaseService();
+			ReleaseModel r = relServ.saveRelease(release);
+			release.setId(r.getId());
+			log.info(release+" e' stata salvata sul database con id = "+r.getId());
+		}
+		if(enableYoutubeService) {
+			VideoService vidServ = new VideoService();
+			vidServ.saveVideos(release.getVideos(), release.getId());
+		} if(enableScenelogService) {
+			TrackService traServ = new TrackService();
+			traServ.saveTracks(release.getTracks(), release.getId());
+		}
+		LinkService linkServ = new LinkService();
+		linkServ.saveLinks(release.getLinks(), release.getId());
+		
+		// AGGIORNA/SALVA I FLAG DI ESTRAZIONE
+		ReleaseExtractionModel extr = release.getReleaseExtraction();
+		extr.setIdRelease(release.getId());
+		new ReleaseExtractionService().saveReleaseExtraction(extr);
+		log.info("Salvataggio del release extraction con idRelease="+release.getId());
+		
 	}
 	
 	@Override

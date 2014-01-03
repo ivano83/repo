@@ -10,6 +10,7 @@ import it.fivano.symusic.core.parser.model.ScenelogParserModel;
 import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.TrackModel;
+import it.fivano.symusic.model.ReleaseExtractionModel.AreaExtraction;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -152,7 +153,8 @@ public class ScenelogParser extends GenericParser {
 				try {
 				
 					// pagina di inizio
-					String urlConn = conf.URL+conf.URL_ACTION+"?"+conf.PARAMS.replace("{0}", releaseName);
+					String releaseNameSearch = this.createSearchString(releaseName);
+					String urlConn = conf.URL+conf.URL_ACTION+"?"+conf.PARAMS.replace("{0}", releaseNameSearch);
 					log.info("Connessione in corso --> "+urlConn);
 					doc = Jsoup.connect(urlConn).timeout((tentativi+1)*TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
 					
@@ -211,6 +213,7 @@ public class ScenelogParser extends GenericParser {
 						
 	}
 	
+	
 	public ReleaseModel parseReleaseDetails(ScenelogParserModel scenelogModel, ReleaseModel release) throws ParseReleaseException {
 		
 		Document doc = null;
@@ -265,10 +268,13 @@ public class ScenelogParser extends GenericParser {
 			for(Element dl : downloads) {
 				release.addLink(this.popolateLink(dl));
 			}
+			
+			SymusicUtility.updateReleaseExtraction(release.getReleaseExtraction(),true,AreaExtraction.SCENELOG);
 
 		} catch(Exception e) {
 			log.error("Errore nel parsing", e);
-			throw new ParseReleaseException("Errore nel parsing",e);
+			SymusicUtility.updateReleaseExtraction(release.getReleaseExtraction(),false,AreaExtraction.SCENELOG);
+//			throw new ParseReleaseException("Errore nel parsing",e);
 		}
 		
 		return release;
@@ -336,9 +342,18 @@ public class ScenelogParser extends GenericParser {
 
 	}
 	
+	private String createSearchString(String releaseName) {
+		if(releaseName.contains("_"))
+			return releaseName;
+		else
+			return this.applyFilterSearch(releaseName);
+	}
+	
 	@Override
-	protected String applyFilterSearch(String result) {
-		return result;
+	protected String applyFilterSearch(String t) {
+		t = t.replaceAll("[-,!?&']", " ").replace(" feat ", " ").replace(" ft ", " ")
+				.replace("  ", " ").replace(" and ", " ").replace(" ", "+");
+		return t;
 	}
 	
 	public static void main(String[] args) throws IOException, ParseReleaseException {

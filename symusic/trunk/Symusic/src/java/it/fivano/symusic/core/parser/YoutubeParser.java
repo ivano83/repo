@@ -29,11 +29,11 @@ public class YoutubeParser extends GenericParser {
 	
 	public List<VideoModel> searchYoutubeVideos(String releaseName) throws ParseReleaseException {
 		
+		List<VideoModel> result = new ArrayList<VideoModel>();
 		try {
 			int tentativi = 0;
 			boolean trovato = false;
-			
-			List<VideoModel> result = new ArrayList<VideoModel>();
+
 			releaseName = this.getReleaseNameWithoutUnderscore(releaseName);
 			
 			Elements videoGroup = null;
@@ -109,13 +109,14 @@ public class YoutubeParser extends GenericParser {
 //				throw new ParseReleaseException("Nessun risultato ottenuto per la release = "+releaseName);
 			
 			
-			return result;
 			
 		} catch(Exception e) {
 			log.error("Errore nel parsing", e);
-			throw new ParseReleaseException("Errore nel parsing",e);
+//			throw new ParseReleaseException("Errore nel parsing",e);
 		}
 
+		return result;
+		
 	}
 	
 	public void addManualSearchLink(ReleaseModel release) {
@@ -139,15 +140,16 @@ public class YoutubeParser extends GenericParser {
 
 	@Override
 	protected String applyFilterSearch(String t) {
-		t = t.replace("-", " ").replace(",", " ").replace(" feat ", " ").replace(" ft ", " ")
-				.replace(".", " ").replace("  ", " ").replace(" and ", " ").replace(" ", "+");
+		t = t.replaceAll("[-,.!?&']", " ").replace(" feat ", " ").replace(" ft ", " ")
+				.replace("  ", " ").replace(" and ", " ").replace(" ", "+");
 		return t;
 	}
 	
 	public static void main(String[] args) throws Exception {
 		YoutubeParser p = new YoutubeParser();
-		List<VideoModel> v = p.searchYoutubeVideos("Crystal_Lake_Feat_Barbie_G_-_Darkness-(HUMF001)-WEB-2013-FMC");
-		System.out.println(v);
+//		List<VideoModel> v = p.searchYoutubeVideos("Crystal_Lake_Feat_Barbie_G_-_Darkness-(HUMF001)-WEB-2013-FMC");
+//		System.out.println(v);
+		System.out.println(p.applyFilterSearch("i-fewf.ww feat j, cf wdk!!ckd wcv?"));
 	}
 
 }

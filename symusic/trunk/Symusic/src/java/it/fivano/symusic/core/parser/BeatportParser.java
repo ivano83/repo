@@ -10,6 +10,7 @@ import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.GenreModel;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.TrackModel;
+import it.fivano.symusic.model.ReleaseExtractionModel.AreaExtraction;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -183,10 +184,13 @@ public class BeatportParser extends GenericParser {
 			// prova a recuperare il genere dalle tracce, se e' stato recuperato da beatport
 			if(release.getGenre()==null)
 				this.popolaGenre(release);
+			
+			SymusicUtility.updateReleaseExtraction(release.getReleaseExtraction(),true,AreaExtraction.BEATPORT);
 
 		} catch(Exception e) {
 			log.error("Errore nel parsing", e);
-			throw new ParseReleaseException("Errore nel parsing",e);
+			SymusicUtility.updateReleaseExtraction(release.getReleaseExtraction(),false,AreaExtraction.BEATPORT);
+//			throw new ParseReleaseException("Errore nel parsing",e);
 		}
 		
 		return release;
