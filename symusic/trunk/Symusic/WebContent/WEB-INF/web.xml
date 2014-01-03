@@ -18,6 +18,11 @@
 		<servlet-class>it.fivano.symusic.action.RatingServlet</servlet-class>
 	</servlet>
 	<servlet>
+		<display-name>FlagReleaseServlet</display-name>
+		<servlet-name>FlagReleaseServlet</servlet-name>
+		<servlet-class>it.fivano.symusic.action.FlagReleaseServlet</servlet-class>
+	</servlet>
+	<servlet>
 		<display-name>ReleaseDeleteServlet</display-name>
 		<servlet-name>ReleaseDeleteServlet</servlet-name>
 		<servlet-class>it.fivano.symusic.action.ReleaseDeleteServlet</servlet-class>
@@ -44,6 +49,10 @@
 	<servlet-mapping>
 		<servlet-name>RatingServlet</servlet-name>
 		<url-pattern>/RatingServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>FlagReleaseServlet</servlet-name>
+		<url-pattern>/FlagReleaseServlet</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ReleaseDeleteServlet</servlet-name>

@@ -1,8 +1,11 @@
 package it.fivano.symusic.action;
 
 import it.fivano.symusic.SymusicUtility;
+import it.fivano.symusic.backend.service.ReleaseOptionService;
+import it.fivano.symusic.backend.service.UserService;
 import it.fivano.symusic.core.ReleaseScenelogService;
 import it.fivano.symusic.model.ReleaseModel;
+import it.fivano.symusic.model.UserModel;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -30,7 +33,7 @@ public class ScenelogServlet extends HttpServlet {
     /**
      * Default constructor. 
      */
-    public ScenelogServlet() {
+    public ScenelogServlet(Long idUser) {
         // TODO Auto-generated constructor stub
     }
 
@@ -40,8 +43,11 @@ public class ScenelogServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		try {
-			
-			
+			UserModel user = null;
+			if(request.getSession().getAttribute("user")==null)
+				user = (UserModel) request.getSession().getAttribute("user");
+			else
+				user = new UserService().getUser("ivano");
 
 			String[] genre = request.getParameterValues("genre");
 			List<String> genreList = null;
@@ -71,7 +77,7 @@ public class ScenelogServlet extends HttpServlet {
 			request.setAttribute("urlSuccessivo", urlSuccessivo);
 			
 			List<ReleaseModel> listRelease = new ArrayList<ReleaseModel>();
-			ReleaseScenelogService scenelog = new ReleaseScenelogService(genreList);
+			ReleaseScenelogService scenelog = new ReleaseScenelogService(genreList, user.getId());
 			
 			listRelease = scenelog.parseScenelogRelease(initDate, endDate);
 			

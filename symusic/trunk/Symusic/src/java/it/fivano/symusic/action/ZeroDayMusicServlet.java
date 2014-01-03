@@ -1,9 +1,11 @@
 package it.fivano.symusic.action;
 
 import it.fivano.symusic.SymusicUtility;
+import it.fivano.symusic.backend.service.UserService;
 import it.fivano.symusic.core.Release0DayMp3Service;
 import it.fivano.symusic.core.Release0DayMusicService;
 import it.fivano.symusic.model.ReleaseModel;
+import it.fivano.symusic.model.UserModel;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -41,6 +43,14 @@ public class ZeroDayMusicServlet extends HttpServlet {
 		
 		try {
 			
+
+			UserModel user = null;
+			if(request.getSession().getAttribute("user")==null)
+				user = (UserModel) request.getSession().getAttribute("user");
+			else
+				user = new UserService().getUser("ivano");
+
+			
 			String site = request.getParameter("site");
 			String genre = request.getParameter("genre");
 			Date initDate = null;
@@ -69,12 +79,12 @@ public class ZeroDayMusicServlet extends HttpServlet {
 			
 			List<ReleaseModel> listRelease = new ArrayList<ReleaseModel>();
 			if(site.equals("1")) {
-				Release0DayMusicService zeroDay = new Release0DayMusicService();
+				Release0DayMusicService zeroDay = new Release0DayMusicService(user.getId());
 				zeroDay.setEnableBeatportService(flagBeatport);
 				zeroDay.setExcludeRipRelease(flagRip);
 				listRelease = zeroDay.parse0DayMusicRelease(genre, initDate, endDate);
 			} else if(site.equals("2")) {
-				Release0DayMp3Service zeroDay = new Release0DayMp3Service();
+				Release0DayMp3Service zeroDay = new Release0DayMp3Service(user.getId());
 				zeroDay.setEnableBeatportService(flagBeatport);
 				zeroDay.setExcludeRipRelease(flagRip);
 				listRelease = zeroDay.parse0DayMp3Release(genre, initDate, endDate);

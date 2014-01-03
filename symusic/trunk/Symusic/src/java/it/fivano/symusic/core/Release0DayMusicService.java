@@ -29,8 +29,9 @@ public class Release0DayMusicService extends ReleaseSiteService {
 	private boolean enableScenelogService;
 	private boolean enableYoutubeService;
 	
-	public Release0DayMusicService() throws IOException {
+	public Release0DayMusicService(Long idUser) throws IOException {
 		super();
+		this.idUser = idUser;
 		conf = new ZeroDayMusicConf();
 		enableBeatportService = true;
 		enableScenelogService = true;
@@ -69,6 +70,7 @@ public class Release0DayMusicService extends ReleaseSiteService {
 			supp.setEnableBeatportService(enableBeatportService);
 			supp.setEnableScenelogService(enableScenelogService);
 			supp.setEnableYoutubeService(enableYoutubeService);
+			supp.setIdUser(idUser);
 			
 			listRelease = this.arricchimentoRelease(listRelease, supp);
 			
@@ -209,7 +211,7 @@ public class Release0DayMusicService extends ReleaseSiteService {
 		Date da = sdf.parse("20130802");
 		Date a = sdf.parse("20130803");
 		
-		Release0DayMusicService s = new Release0DayMusicService();
+		Release0DayMusicService s = new Release0DayMusicService(1L);
 //		List<ReleaseModel> res = s.parse0DayMusicRelease("trance",da,a);
 //		for(ReleaseModel r : res)
 //			System.out.println(r);

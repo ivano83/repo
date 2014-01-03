@@ -29,17 +29,17 @@
 <!-- 	<table tableName="release_track" schema="symusic"> -->
 <!-- 		<generatedKey column="id_release_track" sqlStatement="MySql" identity="true" /> -->
 <!-- 	</table> -->
-<!-- 	<table tableName="user" schema="symusic"> -->
-<!-- 		<generatedKey column="id_user" sqlStatement="MySql" identity="true" /> -->
-<!-- 	</table> -->
+	<table tableName="user" schema="symusic">
+		<generatedKey column="id_user" sqlStatement="MySql" identity="true" />
+	</table>
 <!-- 	<table tableName="user_genre_preference" schema="symusic"> -->
 <!-- 	</table> -->
 <!-- 	<table tableName="user_preference" schema="symusic"> -->
 <!-- 		<generatedKey column="id_user_preference" sqlStatement="MySql" identity="true" /> -->
 <!-- 	</table> -->
-	<table tableName="release_extraction" schema="symusic" catalog="symusic" >
+<!-- 	<table tableName="release_extraction" schema="symusic" catalog="symusic" ></table> -->
+<!-- 	<table tableName="release_user_option" schema="symusic" catalog="symusic" ></table> -->
 		
-	</table>
-	
+
   </context>
 </generatorConfiguration>

@@ -20,6 +20,7 @@ import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.model.GenreModel;
 import it.fivano.symusic.model.LinkModel;
 import it.fivano.symusic.model.ReleaseExtractionModel;
+import it.fivano.symusic.model.ReleaseFlagModel;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.TrackModel;
 import it.fivano.symusic.model.VideoModel;
@@ -82,7 +83,7 @@ public class ReleaseService extends RootService {
 		}
 	}
 
-	public ReleaseModel getReleaseFull(String name) throws BackEndException {
+	public ReleaseModel getReleaseFull(String name, Long idUser) throws BackEndException {
 		
 		List<Release> res = new ArrayList<Release>();
 		
@@ -124,6 +125,9 @@ public class ReleaseService extends RootService {
 				
 				ReleaseExtractionModel extr = new ReleaseExtractionService().getReleaseExtraction(idRel);
 				relRes.setReleaseExtraction(extr);
+				
+				ReleaseFlagModel flagRel = new ReleaseOptionService().getReleaseOption(idRel, idUser);
+				relRes.setReleaseFlag(flagRel);
 				
 				return relRes;
 			}

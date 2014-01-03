@@ -46,9 +46,10 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 	
 
 	
-	public ReleaseScenelogService() throws IOException {
+	public ReleaseScenelogService(Long idUser) throws IOException {
 		super();
 		conf = new ScenelogConf();
+		this.idUser = idUser;
 		enableBeatportService = true;
 		enableScenelogService = true;
 		enableYoutubeService = true;
@@ -56,8 +57,8 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 		this.setLogger(getClass());
 	}
 	
-	public ReleaseScenelogService(List<String> genreFilter) throws IOException {
-		this();
+	public ReleaseScenelogService(List<String> genreFilter, Long idUser) throws IOException {
+		this(idUser);
 		this.genreFilter = genreFilter;
 	}
 	
@@ -119,7 +120,7 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 				// CONTROLLA SE LA RELEASE E' GIA' PRESENTE
 				boolean isRecuperato = false;
 				ReleaseService relServ = new ReleaseService();
-				ReleaseModel relDb = relServ.getReleaseFull(sc.getReleaseName());
+				ReleaseModel relDb = relServ.getReleaseFull(sc.getReleaseName(), idUser);
 				if(relDb!=null) {
 					log.info(sc.getReleaseName()+" e' gia' presente nel database con id = "+relDb.getId());
 					
@@ -491,7 +492,7 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 		Date da = sdf.parse("20130802");
 		Date a = sdf.parse("20130803");
 		
-		ReleaseScenelogService s = new ReleaseScenelogService();
+		ReleaseScenelogService s = new ReleaseScenelogService(1L);
 		s.parseScenelogRelease(da, a);
 //		List<ReleaseModel> res = s.parse0DayMusicRelease("trance",da,a);
 //		for(ReleaseModel r : res)

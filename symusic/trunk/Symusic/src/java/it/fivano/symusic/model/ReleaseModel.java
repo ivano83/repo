@@ -16,6 +16,7 @@ public class ReleaseModel {
 	private String recordLabel;
 	private GenreModel genre;
 	private ReleaseExtractionModel releaseExtraction;
+	private ReleaseFlagModel releaseFlag;
 	
 	private Integer voteValue;
 	private Double voteAverage;
@@ -186,6 +187,16 @@ public class ReleaseModel {
 			return this.name.equalsIgnoreCase(rel.getName());
 		}
 		return super.equals(obj);
+	}
+
+
+	public ReleaseFlagModel getReleaseFlag() {
+		return releaseFlag;
+	}
+
+
+	public void setReleaseFlag(ReleaseFlagModel releaseFlag) {
+		this.releaseFlag = releaseFlag;
 	}
 
 }

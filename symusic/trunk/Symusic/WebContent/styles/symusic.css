@@ -6,7 +6,7 @@
 
 .rel_table td {
 	border: 1px solid;
-	padding: 5px;
+	padding: 3px;
 }
 
 .rel_name {
@@ -16,7 +16,7 @@
 
 .rel_tracks {
 	font-family: cursive;
-	font-size: 11px;
+	font-size: 10px;
 }
 
 .rel_video {
@@ -45,6 +45,26 @@
 	left: 65%;
     position: relative;
 }
+
+.table_track {
+	border-collapse: collapse;
+    width: 100%;
+    border: 1px solid;
+    font-family: cursive;
+    font-size: 10px;
+}
+
+.table_track_head {
+	font-family: cursive;
+	font-size: 11px;
+	background-color:#bbddff;
+	border: 1px solid;
+}
+
+.table_track_head TD {
+	background-color:#bbddff;
+}
+
 
 /** CALENDARIO */
 

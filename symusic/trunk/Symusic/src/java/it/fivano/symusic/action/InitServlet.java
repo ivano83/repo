@@ -1,9 +1,11 @@
 package it.fivano.symusic.action;
 
 import it.fivano.symusic.SymusicUtility;
+import it.fivano.symusic.backend.service.UserService;
 import it.fivano.symusic.core.BeatportService;
 import it.fivano.symusic.core.ReleaseScenelogService;
 import it.fivano.symusic.model.ReleaseModel;
+import it.fivano.symusic.model.UserModel;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -40,6 +42,12 @@ public class InitServlet extends HttpServlet {
 				request.getSession().setAttribute("genreList", genreList);
 				request.getSession().setAttribute("genreMap", res);
 			}
+			
+			UserModel user = new UserService().getUser("ivano");
+			if(user==null)
+				System.out.println("utente sconosciuto!");
+			
+			request.getSession().setAttribute("user", user);
 			
 			RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.jsp");
 			rd.forward(request, response);

@@ -24,6 +24,8 @@ public abstract class ReleaseSiteService extends BaseService {
 	protected boolean enableYoutubeService;
 	protected boolean excludeRipRelease;
 	
+	protected Long idUser;
+	
 	protected List<ReleaseModel> arricchimentoRelease(List<ReleaseModel> releases, SupportObject supp) throws ParseReleaseException {
 		
 		// INIT OGGETTO THREAD

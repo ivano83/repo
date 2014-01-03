@@ -28,7 +28,8 @@ public class ReleaseBeatportService extends ReleaseSiteService {
 	
 	private List<ReleaseModel> listRelease;
 	
-	public ReleaseBeatportService() throws IOException {
+	public ReleaseBeatportService(Long idUser) throws IOException {
+		this.idUser = idUser;
 		enableBeatportService = true;
 		enableScenelogService = true;
 		enableYoutubeService = true;
@@ -79,7 +80,7 @@ public class ReleaseBeatportService extends ReleaseSiteService {
 					ReleaseService relServ = new ReleaseService();
 					ReleaseModel relDb = null;
 					if(sc!=null) {
-						relDb = relServ.getReleaseFull(sc.getReleaseName());
+						relDb = relServ.getReleaseFull(sc.getReleaseName(), idUser);
 					}
 					if(relDb!=null) {
 						log.info(sc.getReleaseName()+" e' gia' presente nel database con id = "+relDb.getId());
@@ -316,7 +317,7 @@ public class ReleaseBeatportService extends ReleaseSiteService {
 	}
 	
 	public static void main(String[] args) throws IOException, ParseReleaseException, BackEndException {
-		ReleaseBeatportService s = new ReleaseBeatportService();
+		ReleaseBeatportService s = new ReleaseBeatportService(1L);
 		ReleaseModel r = new ReleaseModel();
 		r.setName("Modana Feat. Tay Edwards-Dance The Night Away-WEB-2013-UKHx");
 		r.setNameWithUnderscore("Modana_Feat._Tay_Edwards-Dance_The_Night_Away-WEB-2013-UKHx");

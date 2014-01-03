@@ -10,12 +10,16 @@ import it.fivano.symusic.backend.model.Release;
 import it.fivano.symusic.backend.model.ReleaseExtraction;
 import it.fivano.symusic.backend.model.ReleaseLink;
 import it.fivano.symusic.backend.model.ReleaseTrack;
+import it.fivano.symusic.backend.model.ReleaseUserOption;
 import it.fivano.symusic.backend.model.ReleaseVideo;
+import it.fivano.symusic.backend.model.User;
 import it.fivano.symusic.model.GenreModel;
 import it.fivano.symusic.model.LinkModel;
 import it.fivano.symusic.model.ReleaseExtractionModel;
+import it.fivano.symusic.model.ReleaseFlagModel;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.TrackModel;
+import it.fivano.symusic.model.UserModel;
 import it.fivano.symusic.model.VideoModel;
 
 public class TransformerUtility {
@@ -296,4 +300,42 @@ public class TransformerUtility {
 		res.setScenelogDate(relExtr.getScenelogDateExtraction());
 		return res;
 	}
+
+	public static UserModel transformUserToModel(User user) {
+		if(user==null)
+			return null;
+		
+		UserModel res = new UserModel();
+		res.setId(user.getIdUser());
+		res.setUserName(user.getUserName());
+		
+		return res;
+	}
+
+	public static ReleaseFlagModel transformReleaseUserOptionToModel(ReleaseUserOption input) {
+		if(input==null)
+			return null;
+		
+		ReleaseFlagModel res = new ReleaseFlagModel();
+		res.setDownloaded(input.getReleaseDownloaded());
+		res.setPreview(input.getReleasePreview());
+		
+		return res;
+	}
+
+	public static ReleaseUserOption transformReleaseUserOption(ReleaseFlagModel input, Long idRelease, Long idUser) {
+		
+		if(input==null)
+			return null;
+		
+		ReleaseUserOption res = new ReleaseUserOption();
+		res.setIdRelease(idRelease);
+		res.setIdUser(idUser);
+		res.setReleaseDownloaded(input.isDownloaded());
+		res.setReleasePreview(input.isPreview());
+		
+		return res;
+	}
+
+
 }

@@ -8,6 +8,8 @@ public class SupportObject {
 	private boolean enableScenelogService;
 	private boolean enableYoutubeService;
 	
+	private Long idUser;
+	
 	public boolean isEnableBeatportService() {
 		return enableBeatportService;
 	}
@@ -25,6 +27,12 @@ public class SupportObject {
 	}
 	public void setEnableYoutubeService(boolean enableYoutubeService) {
 		this.enableYoutubeService = enableYoutubeService;
+	}
+	public Long getIdUser() {
+		return idUser;
+	}
+	public void setIdUser(Long idUser) {
+		this.idUser = idUser;
 	}
 	
 }

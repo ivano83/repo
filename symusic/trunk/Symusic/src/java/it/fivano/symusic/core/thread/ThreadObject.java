@@ -13,6 +13,7 @@ public class ThreadObject {
 	private AtomicInteger numActiveThreads;
 	private int maxThreads;
 	protected Object monitor;
+	protected Long idUser;
 	
 	protected static final long THREAD_TIMEOUT = 60000;
 	

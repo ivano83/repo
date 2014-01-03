@@ -30,8 +30,9 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 	
 
 	
-	public Release0DayMp3Service() throws IOException {
+	public Release0DayMp3Service(Long idUser) throws IOException {
 		super();
+		this.idUser = idUser;
 		conf = new ZeroDayMp3Conf();
 		enableBeatportService = true;
 		enableScenelogService = true;
@@ -71,6 +72,7 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 			supp.setEnableBeatportService(enableBeatportService);
 			supp.setEnableScenelogService(enableScenelogService);
 			supp.setEnableYoutubeService(enableYoutubeService);
+			supp.setIdUser(idUser);
 			
 			listRelease = this.arricchimentoRelease(listRelease, supp);
 			
@@ -93,7 +95,8 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 
 		// CONNESSIONE ALLA PAGINA
 		log.info("Connessione in corso --> "+urlConn);
-		Document doc = Jsoup.connect(urlConn).timeout(TIMEOUT).get();
+		String userAgent = this.randomUserAgent();
+		Document doc = Jsoup.connect(urlConn).timeout(TIMEOUT).userAgent(userAgent).get();
 
 		// SALVA LA URL DELLA PROSSIMA PAGINA (SE NECESSARIA)
 		info.changePage(); // AGGIORNA IL NUMERO PAGINA
@@ -242,7 +245,7 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 		Date da = sdf.parse("20130802");
 		Date a = sdf.parse("20130803");
 		
-		Release0DayMp3Service s = new Release0DayMp3Service();
+		Release0DayMp3Service s = new Release0DayMp3Service(1L);
 //		List<ReleaseModel> res = s.parse0DayMusicRelease("trance",da,a);
 //		for(ReleaseModel r : res)
 //			System.out.println(r);

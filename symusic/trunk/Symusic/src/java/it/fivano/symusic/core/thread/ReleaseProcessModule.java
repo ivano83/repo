@@ -54,7 +54,7 @@ public class ReleaseProcessModule extends Thread {
 			// CONTROLLA SE LA RELEASE E' GIA' PRESENTE
 			boolean isRecuperato = false;
 			ReleaseService relServ = new ReleaseService();
-			ReleaseModel relDb = relServ.getReleaseFull(release.getNameWithUnderscore());
+			ReleaseModel relDb = relServ.getReleaseFull(release.getNameWithUnderscore(), threadObject.getSupport().getIdUser());
 			if(relDb!=null) {
 				log.info(release+" e' gia' presente nel database con id = "+relDb.getId());
 				

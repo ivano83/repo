@@ -39,5 +39,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<mapper resource="it/fivano/symusic/backend/map/UserGenrePreferenceMapper.xml" />
 		<mapper resource="it/fivano/symusic/backend/map/UserMapper.xml" />
 		<mapper resource="it/fivano/symusic/backend/map/UserPreferenceMapper.xml" />
+		<mapper resource="it/fivano/symusic/backend/map/ReleaseUserOptionMapper.xml" />
 	</mappers>
 </configuration>

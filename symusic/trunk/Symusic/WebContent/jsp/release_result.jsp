@@ -25,6 +25,12 @@
              $('.artist_'+idBox).html('');
              $('.title_'+idBox).html('');
      });
+	 
+	}
+	function releaseOption(idRel,option) {
+			 $.get('FlagReleaseServlet',{idRelease:idRel,optionType:option},function(responseText) { 
+	             $('.row_'+idRel).style.backgroundColor="#EEE8AA";
+	     });
 	}
 	</script>
 	<title>SYMUSIC - Risultati ricerca</title>
@@ -35,7 +41,7 @@
 
 <table class="rel_table">	
 	<c:forEach items="${listRelease}" var="item">
-		<tr>
+		<tr class="row_${item.id}">
 			<td width="30%">
 				<div>Data: ${item.releaseDate}</div>
 				<c:choose>
@@ -53,22 +59,32 @@
 				</c:choose>
 				</span>
 				<div class="delrel" data-id="${item.id}">
-				<span class="rel_link del_${item.id}"><a href="#" onclick="javascript:delrel(${item.id})">Resetta dati</a></span></div>
+					<span class="rel_link del_${item.id}"><a href="#" onclick="javascript:delrel(${item.id})">Resetta dati</a></span>
+				</div>
 			</td>
 			<td>
-				<ol class="rel_track_all_${item.id}">
+			
+				<table class="table_track rel_track_all_${item.id}">
+					<tr class="table_track_head">
+						<td><strong>Track Name</strong></td>
+						<td><strong>Time</strong></td>
+						<td><strong>BPM</strong></td>
+						<td><strong>Genere</strong></td>
+					</tr>
 					<c:forEach items="${item.tracks}" var="track">
-						<li class="rel_tracks rel_track_${item.id}"><span>${track.trackName}</span>
-						<span>${track.time}</span>
-						<span>${track.bpm}</span>
-						<span>${track.genere}</span></li>
+					<tr class="rel_tracks rel_track_${item.id}">
+						<td><span>${track.trackNumber}.&nbsp;${track.trackName}</span></td>
+						<td><span>${track.time}</span></td>
+						<td><span>${track.bpm}</span></td>
+						<td><span>${track.genere}</span></td>
+					</tr>
 					</c:forEach>
-				</ol>
+				</table>
 			</td>
 			<td>
 				<div>VIDEO</div>
 				<c:forEach items="${item.videos}" var="video">
-					<div class="rel_video rel_video_${item.id}"><a href="${video.link}" target="_blank">${video.name}</a></div>
+					<div class="rel_video rel_video_${item.id}"><a href="${video.link}" target="_blank" onclick="javascript:releaseOption(${item.id},1)">${video.name}</a></div>
 				</c:forEach>
 				<div>DOWNLOAD</div>
 				<c:forEach items="${item.links}" var="link">

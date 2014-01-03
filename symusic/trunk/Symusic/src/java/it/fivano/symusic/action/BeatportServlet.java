@@ -1,8 +1,10 @@
 package it.fivano.symusic.action;
 
+import it.fivano.symusic.backend.service.UserService;
 import it.fivano.symusic.core.BeatportService;
 import it.fivano.symusic.core.ReleaseBeatportService;
 import it.fivano.symusic.model.ReleaseModel;
+import it.fivano.symusic.model.UserModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,6 +41,13 @@ public class BeatportServlet extends HttpServlet {
 		
 		try {
 			
+			UserModel user = null;
+			if(request.getSession().getAttribute("user")==null)
+				user = (UserModel) request.getSession().getAttribute("user");
+			else
+				user = new UserService().getUser("ivano");
+
+			
 			Map<String,String> genreMap = null;
 			if(request.getSession().getAttribute("genreMap")!=null) {
 				genreMap = (Map<String,String>) request.getSession().getAttribute("genreMap");
@@ -57,7 +66,7 @@ public class BeatportServlet extends HttpServlet {
 			String urlGenre = genreMap.get(genre);
 			
 			List<ReleaseModel> listRelease = new ArrayList<ReleaseModel>();
-			ReleaseBeatportService beatport = new ReleaseBeatportService();
+			ReleaseBeatportService beatport = new ReleaseBeatportService(user.getId());
 			
 			listRelease = beatport.parseBeatportRelease(urlGenre, genre);
 			
