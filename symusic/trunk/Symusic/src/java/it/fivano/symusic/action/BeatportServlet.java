@@ -42,7 +42,7 @@ public class BeatportServlet extends HttpServlet {
 		try {
 			
 			UserModel user = null;
-			if(request.getSession().getAttribute("user")==null)
+			if(request.getSession().getAttribute("user")!=null)
 				user = (UserModel) request.getSession().getAttribute("user");
 			else
 				user = new UserService().getUser("ivano");

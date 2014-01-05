@@ -9,8 +9,10 @@ import it.fivano.symusic.backend.service.VideoService;
 import it.fivano.symusic.core.parser.BeatportParser;
 import it.fivano.symusic.core.parser.ScenelogParser;
 import it.fivano.symusic.core.parser.YoutubeParser;
+import it.fivano.symusic.core.parser.ZeroDayMp3Parser;
 import it.fivano.symusic.core.parser.model.BeatportParserModel;
 import it.fivano.symusic.core.parser.model.ScenelogParserModel;
+import it.fivano.symusic.core.parser.model.ZeroDayMp3ParserModel;
 import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.GenreModel;
@@ -44,6 +46,7 @@ public class ReleaseBeatportService extends ReleaseSiteService {
 				YoutubeParser youtube = new YoutubeParser();
 				ScenelogParser scenelog = new ScenelogParser();
 				BeatportParser beatport = new BeatportParser();
+				ZeroDayMp3Parser zeroDay = new ZeroDayMp3Parser();
 				List<BeatportParserModel> parserModel = beatport.searchNewReleases(urlGenrePage);
 				
 				ReleaseModel release = null;
@@ -106,6 +109,11 @@ public class ReleaseBeatportService extends ReleaseSiteService {
 						System.out.println("release trovata: "+release.getNameWithUnderscore());
 //						SymusicUtility.updateReleaseExtraction(extr,true,AreaExtraction.SCENELOG);
 						releaseTrovata = true;
+						
+						List<ZeroDayMp3ParserModel> zeroRes = zeroDay.searchRelease(release.getNameWithUnderscore());
+						if(!zeroRes.isEmpty()) {
+							release = zeroDay.parseReleaseDetails(zeroRes.get(0), release);
+						}
 					}
 					
 					// RECUPERA I VIDEO DA YOUTUBE

@@ -129,12 +129,12 @@
          
           var i, el;
           var listLinks = document.getElementsByName('link_copy_class');
-          alert('listLinks '+listLinks.length);
+//           alert('listLinks '+listLinks.length);
           for(i = 0; i < listLinks.length; ++i) {
         	  el = document.getElementById(listLinks[i].id);
         	  
         	  if(args.text == el.getAttribute('href')) {
-        		  alert(args.text+' == '+el.getAttribute('href'));
+//         		  alert(args.text+' == '+el.getAttribute('href'));
         		  releaseOption(el.getAttribute('rel-id'),2,'SCARICATO','#EEE8AA');
               };
           };

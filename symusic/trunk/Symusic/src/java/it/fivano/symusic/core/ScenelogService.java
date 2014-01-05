@@ -47,7 +47,11 @@ public class ScenelogService extends BaseService {
 					// pagina di inizio
 					String urlConn = this.getUrlConnection(release, tentativi);
 					log.info("Connessione in corso --> "+urlConn);
-					doc = Jsoup.connect(urlConn).timeout((tentativi+1)*TIMEOUT).userAgent(userAgent).get();
+					doc = Jsoup.connect(urlConn).timeout((tentativi+1)*TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
+					
+					if(this.isAntiDDOS(doc)) {
+						doc = this.bypassAntiDDOS(doc, conf.URL, urlConn);
+					}
 					
 					releaseItems = doc.getElementsByClass(conf.CLASS_RELEASE_ITEM);
 					

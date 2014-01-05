@@ -1,13 +1,17 @@
 package it.fivano.symusic.core.parser.model;
 
+import it.fivano.symusic.model.GenreModel;
+import it.fivano.symusic.model.LinkModel;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ScenelogParserModel {
+public class ZeroDayMp3ParserModel {
 	
 	private String releaseName;
-	private String urlReleaseDetails;
 	private Date releaseDate;
+	private GenreModel releaseGenre;
+	private LinkModel releaseLink;
 	
 	private boolean radioRip;
 	private boolean dateInRange;
@@ -19,12 +23,7 @@ public class ScenelogParserModel {
 	public void setReleaseName(String releaseName) {
 		this.releaseName = releaseName;
 	}
-	public String getUrlReleaseDetails() {
-		return urlReleaseDetails;
-	}
-	public void setUrlReleaseDetails(String urlReleaseDetails) {
-		this.urlReleaseDetails = urlReleaseDetails;
-	}
+
 	public Date getReleaseDate() {
 		return releaseDate;
 	}
@@ -51,5 +50,19 @@ public class ScenelogParserModel {
 		final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		return releaseName+" ["+sdf.format(releaseDate)+"] "+((radioRip)?"[isRadioRip] ":"")+((dateInRange)?"[dataInRange] ":"");
 	}
+
+	public LinkModel getReleaseLink() {
+		return releaseLink;
+	}
+	public void setReleaseLink(LinkModel releaseLink) {
+		this.releaseLink = releaseLink;
+	}
+	public GenreModel getReleaseGenre() {
+		return releaseGenre;
+	}
+	public void setReleaseGenre(GenreModel releaseGenre) {
+		this.releaseGenre = releaseGenre;
+	}
+
 
 }

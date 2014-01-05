@@ -14,8 +14,15 @@ import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.ReleaseExtractionModel;
 import it.fivano.symusic.model.ReleaseModel;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.DataNode;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public abstract class ReleaseSiteService extends BaseService {
 
@@ -101,6 +108,7 @@ public abstract class ReleaseSiteService extends BaseService {
 		
 	}
 	
+
 	@Override
 	protected abstract String applyFilterSearch(String result);
 	

@@ -10,7 +10,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.DataNode;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public abstract class GenericParser {
 	
@@ -108,6 +112,55 @@ public abstract class GenericParser {
 		boolean result = (dateInDate.compareTo(da)>=0) && (dateInDate.compareTo(a)<=0);
 		return result;
 	}
+	
+	protected Document bypassAntiDDOS(Document doc, String baseUrl, String urlToRedirect) throws IOException {
+		String jschl_vc = doc.getElementsByAttributeValue("name", "jschl_vc").get(0).attr("value");
+//		System.out.println(jschl_vc);
+		Elements scriptElements = doc.getElementsByTag("script");
+		String numberCalcLine = null;
+		for (Element element :scriptElements ){                
+			for (DataNode node : element.dataNodes()) {
+				String text = node.getWholeData();
+				String[] lines = text.split("\n");
+				for(String scriptLine : lines) {
+					if(scriptLine.trim().startsWith("a.value = ")) {
+						numberCalcLine = scriptLine.replace(";", "").replace("a.value = ", "").trim();
+						break;
+					}
+				}
+
+			}
+//			System.out.println(numberCalcLine);            
+		}
+		
+		int jschl_answer = 0;
+		if(numberCalcLine!=null) {
+			String[] addizioni = numberCalcLine.split("\\+");
+			int i1,i2,i3;
+			i1 = Integer.parseInt(addizioni[0]);
+			String[] moltipl = addizioni[1].split("\\*");
+			i2 = Integer.parseInt(moltipl[0]);
+			i3 = Integer.parseInt(moltipl[1]);
+			
+			jschl_answer = ((i2*i3)+i1)+11;
+		}
+		
+		if(!baseUrl.endsWith("/"))
+			baseUrl = baseUrl + "/";
+		String urlPage = baseUrl+"cdn-cgi/l/chk_jschl";
+		String userAgent = this.randomUserAgent();
+		doc = Jsoup.connect(urlPage).header("Referer", urlToRedirect).timeout(TIMEOUT).userAgent(userAgent).data("jschl_vc", jschl_vc).data("jschl_answer", jschl_answer+"").ignoreHttpErrors(true).get();
+		
+		
+		return doc;
+	}
+
+	protected boolean isAntiDDOS(Document doc) {
+		Elements res = doc.getElementsByClass("cf-browser-verification");
+		log.info("DDOS protection: "+(res.size()==0 ? false : true));
+		return res.size()==0 ? false : true;
+	}
+
 	
 	protected abstract String applyFilterSearch(String result);
 
