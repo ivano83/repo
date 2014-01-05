@@ -3,6 +3,7 @@
 	<script type="text/javascript" src="js/tcal.js"></script>
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/jRating.jquery.js"></script>
+	<script type="text/javascript" src="js/ZeroClipboard.js"></script>
 	<link rel="stylesheet" href="./styles/symusic.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="./styles/jRating.jquery.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="./styles/jdel.jquery.css" type="text/css" media="screen" />

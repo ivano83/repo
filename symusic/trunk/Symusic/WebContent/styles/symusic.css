@@ -65,6 +65,16 @@
 	background-color:#bbddff;
 }
 
+.rel_status {
+	font-family: cursive;
+	font-size: 12px;
+	background-color: #BBDDFF;
+    border: 2px solid;
+    margin: 5px 0;
+    text-align: center;
+    width: 150px;
+}
+
 
 /** CALENDARIO */
 

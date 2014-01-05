@@ -14,8 +14,8 @@
 		});
 	  });
 	</script>
-	
-	<script type="text/javascript">
+
+<script type="text/javascript">
 	function delrel(idBox) {
 		 $.get('ReleaseDeleteServlet',{id:idBox},function(responseText) { 
              $('.del_'+idBox).html('<div>I dati della release sono stati eliminati!</div>');
@@ -27,12 +27,15 @@
      });
 	 
 	}
-	function releaseOption(idRel,option) {
-			 $.get('FlagReleaseServlet',{idRelease:idRel,optionType:option},function(responseText) { 
+	function releaseOption(idRel,option,optionName,color) {
+			 $.get('FlagReleaseServlet',{idRelease:idRel,optionType:option,optionName:optionName,color:color},function(responseText) { 
+	             $('.status_'+idRel).html('<span>'+optionName+'</span>');
 	             $('.row_'+idRel).style.backgroundColor="#EEE8AA";
 	     });
 	}
+
 	</script>
+
 	<title>SYMUSIC - Risultati ricerca</title>
 </head>
 <body>
@@ -61,6 +64,19 @@
 				<div class="delrel" data-id="${item.id}">
 					<span class="rel_link del_${item.id}"><a href="#" onclick="javascript:delrel(${item.id})">Resetta dati</a></span>
 				</div>
+				<div class="rel_status status_${item.id}">
+				<c:choose>
+					<c:when test="${item.releaseFlag.downloaded}">
+						<span>SCARICATO</span>
+					</c:when>
+					<c:when test="${item.releaseFlag.preview}">
+						<span>VISIONATO</span>
+					</c:when>
+					<c:otherwise>
+						<span>NON VISIONATO</span>
+					</c:otherwise>
+				</c:choose>
+				</div>
 			</td>
 			<td>
 			
@@ -84,11 +100,11 @@
 			<td>
 				<div>VIDEO</div>
 				<c:forEach items="${item.videos}" var="video">
-					<div class="rel_video rel_video_${item.id}"><a href="${video.link}" target="_blank" onclick="javascript:releaseOption(${item.id},1)">${video.name}</a></div>
+					<div class="rel_video rel_video_${item.id}"><a href="${video.link}" target="_blank" onclick="javascript:releaseOption(${item.id},1,'VISIONATO','#EEE8AA')">${video.name}</a></div>
 				</c:forEach>
 				<div>DOWNLOAD</div>
-				<c:forEach items="${item.links}" var="link">
-					<div class="rel_link rel_link_${item.id}"><a href="${link.link}" target="_blank">${link.name}</a></div>
+				<c:forEach items="${item.links}" var="link" varStatus="status">
+					<div class="rel_link rel_link_${item.id}"><a name="link_copy_class" rel-id="${item.id}" id="link_copy_${item.id}_${status.count}" href="${link.link}" target="_blank" onclick="javascript:releaseOption(${item.id},2,'SCARICATO','#EEE8AA'); return false;" data-clipboard-text="${link.link}">${link.name}</a><span id="link_copy_${item.id}" style="display: none">${link.link}</span></div>
 				</c:forEach>
 			</td>
 		</tr>
@@ -102,7 +118,29 @@
 <span class="rel_precedenti"><a href="${urlPrecedente}">PRECEDENTI RELEASE</a></span>
 </p>
 
-</body>
+    <script type="text/javascript">
+      var clip = new ZeroClipboard( );
+      var listLinks = document.getElementsByName('link_copy_class');
+      var i;
+      for(i = 0; i < listLinks.length; ++i) {
+    	  clip.glue(document.getElementById(listLinks[i].id));
+      }
+      clip.on( 'complete', function(client, args) {
+         
+          var i, el;
+          var listLinks = document.getElementsByName('link_copy_class');
+          alert('listLinks '+listLinks.length);
+          for(i = 0; i < listLinks.length; ++i) {
+        	  el = document.getElementById(listLinks[i].id);
+        	  
+        	  if(args.text == el.getAttribute('href')) {
+        		  alert(args.text+' == '+el.getAttribute('href'));
+        		  releaseOption(el.getAttribute('rel-id'),2,'SCARICATO','#EEE8AA');
+              };
+          };
+          
+        } );
+    </script>
 <head>
 	<meta http-equiv="Pragma" content="no-cache">
 </head>

@@ -331,8 +331,8 @@ public class TransformerUtility {
 		ReleaseUserOption res = new ReleaseUserOption();
 		res.setIdRelease(idRelease);
 		res.setIdUser(idUser);
-		res.setReleaseDownloaded(input.isDownloaded());
-		res.setReleasePreview(input.isPreview());
+		res.setReleaseDownloaded(input.getDownloaded());
+		res.setReleasePreview(input.getPreview());
 		
 		return res;
 	}

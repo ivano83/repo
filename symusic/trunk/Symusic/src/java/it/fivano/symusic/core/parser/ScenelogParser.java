@@ -58,7 +58,7 @@ public class ScenelogParser extends GenericParser {
 			Document doc = Jsoup.connect(urlPage).timeout(TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
 			
 			if(this.isAntiDDOS(doc)) {
-				doc = this.bypassAntiDDOS(doc);
+				doc = this.bypassAntiDDOS(doc, urlPage);
 			}
 
 			Elements releaseGroup = doc.getElementsByClass(conf.CLASS_RELEASE_LIST_ITEM);
@@ -86,7 +86,7 @@ public class ScenelogParser extends GenericParser {
 	}
 
 	
-	private Document bypassAntiDDOS(Document doc) throws IOException {
+	private Document bypassAntiDDOS(Document doc, String urlToRedirect) throws IOException {
 		String jschl_vc = doc.getElementsByAttributeValue("name", "jschl_vc").get(0).attr("value");
 //		System.out.println(jschl_vc);
 		Elements scriptElements = doc.getElementsByTag("script");
@@ -120,7 +120,7 @@ public class ScenelogParser extends GenericParser {
 		
 		String urlPage = conf.URL+"cdn-cgi/l/chk_jschl";
 		String userAgent = this.randomUserAgent();
-		doc = Jsoup.connect(urlPage).timeout(TIMEOUT).userAgent(userAgent).data("jschl_vc", jschl_vc).data("jschl_answer", jschl_answer+"").ignoreHttpErrors(true).get();
+		doc = Jsoup.connect(urlPage).header("Referer", urlToRedirect).timeout(TIMEOUT).userAgent(userAgent).data("jschl_vc", jschl_vc).data("jschl_answer", jschl_answer+"").ignoreHttpErrors(true).get();
 		
 		
 		return doc;
@@ -159,7 +159,7 @@ public class ScenelogParser extends GenericParser {
 					doc = Jsoup.connect(urlConn).timeout((tentativi+1)*TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
 					
 					if(this.isAntiDDOS(doc)) {
-						doc = this.bypassAntiDDOS(doc);
+						doc = this.bypassAntiDDOS(doc, urlConn);
 					}
 					
 					releaseItems = doc.getElementsByClass(conf.CLASS_RELEASE_ITEM);
@@ -233,7 +233,7 @@ public class ScenelogParser extends GenericParser {
 			doc = Jsoup.connect(scenelogModel.getUrlReleaseDetails()).userAgent(userAgent).ignoreHttpErrors(true).get();
 			
 			if(this.isAntiDDOS(doc)) {
-				doc = this.bypassAntiDDOS(doc);
+				doc = this.bypassAntiDDOS(doc, scenelogModel.getUrlReleaseDetails());
 			}
 
 			TrackModel currTrack = null;

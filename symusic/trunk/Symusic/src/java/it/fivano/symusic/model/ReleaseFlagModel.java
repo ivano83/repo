@@ -5,13 +5,13 @@ public class ReleaseFlagModel {
 	private Boolean downloaded;
 	private Boolean preview;
 	
-	public Boolean isDownloaded() {
+	public Boolean getDownloaded() {
 		return downloaded;
 	}
 	public void setDownloaded(Boolean downloaded) {
 		this.downloaded = downloaded;
 	}
-	public Boolean isPreview() {
+	public Boolean getPreview() {
 		return preview;
 	}
 	public void setPreview(Boolean preview) {
