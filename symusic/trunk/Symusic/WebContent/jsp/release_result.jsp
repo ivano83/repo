@@ -29,8 +29,14 @@
 	}
 	function releaseOption(idRel,option,optionName,color) {
 			 $.get('FlagReleaseServlet',{idRelease:idRel,optionType:option,optionName:optionName,color:color},function(responseText) { 
+			if(option==2) {
 	             $('.status_'+idRel).html('<span>'+optionName+'</span>');
-	             $('.row_'+idRel).style.backgroundColor="#EEE8AA";
+	             $('.status_'+idRel).removeClass("rel_status").addClass("rel_status_download");
+			}
+			if(option==1) {
+				 $('.status_'+idRel).html('<span>'+optionName+'</span>');
+				 $('.status_'+idRel).removeClass("rel_status").addClass("rel_status_preview");
+			}
 	     });
 	}
 
@@ -64,19 +70,24 @@
 				<div class="delrel" data-id="${item.id}">
 					<span class="rel_link del_${item.id}"><a href="#" onclick="javascript:delrel(${item.id})">Resetta dati</a></span>
 				</div>
-				<div class="rel_status status_${item.id}">
+				
 				<c:choose>
 					<c:when test="${item.releaseFlag.downloaded}">
+					<div class="rel_status_download status_${item.id}">
 						<span>SCARICATO</span>
+					</div>
 					</c:when>
 					<c:when test="${item.releaseFlag.preview}">
+					<div class="rel_status_preview status_${item.id}">
 						<span>VISIONATO</span>
+					</div>
 					</c:when>
 					<c:otherwise>
+					<div class="rel_status status_${item.id}">
 						<span>NON VISIONATO</span>
+					</div>
 					</c:otherwise>
 				</c:choose>
-				</div>
 			</td>
 			<td>
 			
@@ -104,7 +115,7 @@
 				</c:forEach>
 				<div>DOWNLOAD</div>
 				<c:forEach items="${item.links}" var="link" varStatus="status">
-					<div class="rel_link rel_link_${item.id}"><a name="link_copy_class" rel-id="${item.id}" id="link_copy_${item.id}_${status.count}" href="${link.link}" target="_blank" onclick="javascript:releaseOption(${item.id},2,'SCARICATO','#EEE8AA'); return false;" data-clipboard-text="${link.link}">${link.name}</a><span id="link_copy_${item.id}" style="display: none">${link.link}</span></div>
+					<div class="rel_link rel_link_${item.id}"><a name="link_copy_class" rel-id="${item.id}" id="link_copy_${item.id}_${status.count}" href="${link.link}" target="_blank" data-clipboard-text="${link.link}">${link.name}</a></div>
 				</c:forEach>
 			</td>
 		</tr>
@@ -123,7 +134,9 @@
       var listLinks = document.getElementsByName('link_copy_class');
       var i;
       for(i = 0; i < listLinks.length; ++i) {
-    	  clip.glue(document.getElementById(listLinks[i].id));
+          if(document.getElementById(listLinks[i].id).getAttribute('href').indexOf('www.google.it') < 0) {
+    	  	clip.glue(document.getElementById(listLinks[i].id));
+          }
       }
       clip.on( 'complete', function(client, args) {
          
@@ -135,7 +148,7 @@
         	  
         	  if(args.text == el.getAttribute('href')) {
 //         		  alert(args.text+' == '+el.getAttribute('href'));
-        		  releaseOption(el.getAttribute('rel-id'),2,'SCARICATO','#EEE8AA');
+        		  releaseOption(el.getAttribute('rel-id'),2,'SCARICATO','#33FF66');
               };
           };
           

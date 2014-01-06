@@ -75,6 +75,24 @@
     width: 150px;
 }
 
+.rel_status_download {
+	font-family: cursive;
+	font-size: 12px;
+	background-color: #33FF66;
+	border: 2px solid;
+    margin: 5px 0;
+    text-align: center;
+    width: 150px;
+}
+.rel_status_preview {
+	font-family: cursive;
+	font-size: 12px;
+	background-color: #CCFF66;
+	border: 2px solid;
+    margin: 5px 0;
+    text-align: center;
+    width: 150px;
+}
 
 /** CALENDARIO */
 
