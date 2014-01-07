@@ -109,7 +109,11 @@ public class ReleaseBeatportService extends ReleaseSiteService {
 						System.out.println("release trovata: "+release.getNameWithUnderscore());
 //						SymusicUtility.updateReleaseExtraction(extr,true,AreaExtraction.SCENELOG);
 						releaseTrovata = true;
-						
+
+					}
+					
+					if(!releaseTrovata) {
+						// PROVA CON 0DAYMP3
 						List<ZeroDayMp3ParserModel> zeroRes = zeroDay.searchRelease(release.getNameWithUnderscore());
 						if(!zeroRes.isEmpty()) {
 							release = zeroDay.parseReleaseDetails(zeroRes.get(0), release);

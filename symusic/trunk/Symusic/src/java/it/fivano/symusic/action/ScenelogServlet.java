@@ -33,7 +33,7 @@ public class ScenelogServlet extends HttpServlet {
     /**
      * Default constructor. 
      */
-    public ScenelogServlet(Long idUser) {
+    public ScenelogServlet() {
         // TODO Auto-generated constructor stub
     }
 
