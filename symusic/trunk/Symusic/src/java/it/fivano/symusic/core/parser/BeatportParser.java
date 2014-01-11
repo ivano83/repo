@@ -179,7 +179,7 @@ public class BeatportParser extends GenericParser {
 //			System.out.println("\tSCENELOG_TRACK: "+release.getTracks().size()+" "+release.getTracks());
 //			System.out.println("\tBEATPORT_TRACK: "+listTrack.size()+" "+listTrack);
 
-			release.setTracks(SymusicUtility.chooseTrack(release.getTracks(), listTrack));
+			release.setTracks(SymusicUtility.chooseTrack(release.getTracks(), listTrack, false));
 			
 			// prova a recuperare il genere dalle tracce, se e' stato recuperato da beatport
 			if(release.getGenre()==null)
@@ -315,15 +315,18 @@ public class BeatportParser extends GenericParser {
 			}
 		}
 		if(!result.isEmpty()) {
+			
 			String genre = null;
 			Integer count = 0;
 			Set<String> keyset = result.keySet();
+			log.info("[BEATPORT] Lista Generi: "+keyset);
 			for(String currGenre : keyset) {
 				if(result.get(currGenre)>count) {
 					count = result.get(currGenre);
 					genre = currGenre;
 				}
 			}
+			log.info("[BEATPORT] Genere candidato: "+genre+" per la release "+release);
 			
 			GenreModel g = new GenreModel();
 			g.setName(genre.trim());

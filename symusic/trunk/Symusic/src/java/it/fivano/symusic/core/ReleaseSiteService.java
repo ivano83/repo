@@ -85,10 +85,15 @@ public abstract class ReleaseSiteService extends BaseService {
 			if(release.getGenre()!=null)
 				release.setGenre(new GenreService().saveGenre(release.getGenre()));
 			
+			release.getReleaseFlag().setNewRelease(true);
+			
 			ReleaseService relServ = new ReleaseService();
 			ReleaseModel r = relServ.saveRelease(release);
 			release.setId(r.getId());
 			log.info(release+" e' stata salvata sul database con id = "+r.getId());
+		}
+		else {
+			
 		}
 		if(enableYoutubeService) {
 			VideoService vidServ = new VideoService();

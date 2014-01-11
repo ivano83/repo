@@ -99,7 +99,7 @@ public class ReleaseModel {
 	
 	 @Override
 	public String toString() {
-		return name + " ["+releaseDate+"]";
+		return this.getName() + ((releaseDate!=null)?" ["+releaseDate+"]":"");
 	}
 	public List<TrackModel> getTracks() {
 		if(this.tracks==null)
@@ -191,6 +191,8 @@ public class ReleaseModel {
 
 
 	public ReleaseFlagModel getReleaseFlag() {
+		if(releaseFlag==null)
+			releaseFlag = new ReleaseFlagModel();
 		return releaseFlag;
 	}
 

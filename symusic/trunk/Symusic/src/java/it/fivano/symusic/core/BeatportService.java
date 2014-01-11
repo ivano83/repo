@@ -160,12 +160,12 @@ public class BeatportService extends BaseService {
 				TrackService lserv = new TrackService();
 				if(release.getTracks()!=null && release.getTracks().isEmpty()){
 					// scelta tra quelle gia' presenti e quelle recuperate
-					release.setTracks(SymusicUtility.chooseTrack(release.getTracks(), listTrack));
+					release.setTracks(SymusicUtility.chooseTrack(release.getTracks(), listTrack, false));
 					lserv.saveTracks(release.getTracks(), release.getId());
 				}
 				else {
 					// scelta tra quelle gia' presenti e quelle recuperate
-					release.setTracks(SymusicUtility.chooseTrack(release.getTracks(), listTrack));
+					release.setTracks(SymusicUtility.chooseTrack(release.getTracks(), listTrack, true));
 					lserv.updateTracks(release.getTracks(), release.getId());
 					log.info("Aggiornamento track:  ID_RELEASE="+release.getId()+"\t TRACK:  "+numTr+"."+currTrack);
 					

@@ -123,7 +123,7 @@ public class ScenelogParser extends GenericParser {
 				
 					trovato = true;
 				} catch (Exception e1) {
-					log.error(e1.getMessage(),e1);
+					log.error("[SCENELOG] Nessun risultato ottenuto per la release = "+releaseName+"  --> "+e1.getMessage());
 					userAgent = this.randomUserAgent(); // proviamo un nuovo user agent
 					tentativi++;
 				}
@@ -211,7 +211,7 @@ public class ScenelogParser extends GenericParser {
 				release.setTracks(tracks);
 			} else {
 				// PRIORITA' ALLE TRACCE SCENELOG
-				release.setTracks(SymusicUtility.chooseTrack(tracks, release.getTracks()));
+				release.setTracks(SymusicUtility.chooseTrack(tracks, release.getTracks(), true));
 			}
 			
 

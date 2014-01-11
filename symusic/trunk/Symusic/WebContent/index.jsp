@@ -110,11 +110,12 @@
 				<div>Generi ricercati</div>
 			</td>
 			<td>
-				<select name="genre" multiple="multiple">
-					<option value="dance" selected="selected">Dance</option>
-					<option value="trance">Trance</option>
-					<option value="house">House</option>
-					<option value="electro house">Electro House</option>
+				<select name="genre" multiple="multiple" size="5" >
+					<option value="Hard Dance" selected="selected">Hard Dance</option>
+					<option value="Trance">Trance</option>
+					<option value="Progressive House">Progressive House</option>
+					<option value="House">House</option>
+					<option value="Electro House">Electro House</option>
 				</select>
 			</td>
 		</tr>

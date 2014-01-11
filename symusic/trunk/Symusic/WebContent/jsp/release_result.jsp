@@ -73,21 +73,22 @@
 				
 				<c:choose>
 					<c:when test="${item.releaseFlag.downloaded}">
-					<div class="rel_status_download status_${item.id}">
+					<div class="rel_status_download status_${item.id}" style="display:inline">
 						<span>SCARICATO</span>
 					</div>
 					</c:when>
 					<c:when test="${item.releaseFlag.preview}">
-					<div class="rel_status_preview status_${item.id}">
+					<div class="rel_status_preview status_${item.id}" style="display:inline">
 						<span>VISIONATO</span>
 					</div>
 					</c:when>
 					<c:otherwise>
-					<div class="rel_status status_${item.id}">
+					<div class="rel_status status_${item.id}" style="display:inline">
 						<span>NON VISIONATO</span>
 					</div>
 					</c:otherwise>
 				</c:choose>
+				<c:if test="${item.releaseFlag.newRelease}"><span><img alt="NEW RELEASE" src="img/new.jpg"/></span></c:if>
 			</td>
 			<td>
 			

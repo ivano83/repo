@@ -192,12 +192,17 @@ public class SymusicUtility {
 		return currLink;
 	}
 	
-	public static List<TrackModel> chooseTrack(List<TrackModel> tracks1, List<TrackModel> tracks2) {
+	public static List<TrackModel> chooseTrack(List<TrackModel> tracks1, List<TrackModel> tracks2, boolean primaListaPreferita) {
 		if(!tracks1.isEmpty() && !tracks2.isEmpty()) {
 			if(tracks1.size()!=tracks2.size())
 				return tracks1;
-			else
-				return tracks2;
+			else {
+				if(primaListaPreferita)
+					return tracks1;
+				else
+					return tracks2;
+			}
+				
 		}
 		
 		if(tracks1.isEmpty() && !tracks2.isEmpty()) 
