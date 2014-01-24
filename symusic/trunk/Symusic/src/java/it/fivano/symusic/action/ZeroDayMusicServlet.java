@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class ZeroDayMusicServlet
  */
 
-public class ZeroDayMusicServlet extends HttpServlet {
+public class ZeroDayMusicServlet extends BaseAction {
 	private static final long serialVersionUID = 1L;
 	
 	private String urlPrecedente;
@@ -33,7 +33,7 @@ public class ZeroDayMusicServlet extends HttpServlet {
      * Default constructor. 
      */
     public ZeroDayMusicServlet() {
-        // TODO Auto-generated constructor stub
+    	this.setLogger(getClass());
     }
 
 	/**

@@ -10,13 +10,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class RatingServlet  extends HttpServlet {
+public class RatingServlet  extends BaseAction {
 	private static final long serialVersionUID = 1L;
 	
 	private String id;
 	
 	public RatingServlet() {
-        // TODO Auto-generated constructor stub
+		this.setLogger(getClass());
     }
 	
 	@Override

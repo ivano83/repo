@@ -168,6 +168,8 @@ public class ReleaseModel {
 
 
 	public ReleaseExtractionModel getReleaseExtraction() {
+		if(releaseExtraction==null)
+			releaseExtraction = new ReleaseExtractionModel();
 		return releaseExtraction;
 	}
 

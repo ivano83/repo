@@ -31,7 +31,7 @@
 			 $.get('FlagReleaseServlet',{idRelease:idRel,optionType:option,optionName:optionName,color:color},function(responseText) { 
 			if(option==2) {
 	             $('.status_'+idRel).html('<span>'+optionName+'</span>');
-	             $('.status_'+idRel).removeClass("rel_status").addClass("rel_status_download");
+	             $('.status_'+idRel).removeClass("rel_status").removeClass("rel_status_preview").addClass("rel_status_download");
 			}
 			if(option==1) {
 				 $('.status_'+idRel).html('<span>'+optionName+'</span>');
@@ -88,7 +88,7 @@
 					</div>
 					</c:otherwise>
 				</c:choose>
-				<c:if test="${item.releaseFlag.newRelease}"><span><img alt="NEW RELEASE" src="img/new.jpg"/></span></c:if>
+				<c:if test="${item.releaseFlag.newRelease}"><span class="new_icon"><img alt="NEW RELEASE" src="img/new.jpg"  width="40px" /></span></c:if>
 			</td>
 			<td>
 			

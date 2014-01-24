@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class FlagReleaseServlet  extends HttpServlet {
+public class FlagReleaseServlet  extends BaseAction {
 	private static final long serialVersionUID = 1L;
 	
 	private String idRelease;
@@ -23,7 +23,7 @@ public class FlagReleaseServlet  extends HttpServlet {
 	private String optionValue;
 	
 	public FlagReleaseServlet() {
-        // TODO Auto-generated constructor stub
+        this.setLogger(getClass());
     }
 	
 	@Override
@@ -47,16 +47,17 @@ public class FlagReleaseServlet  extends HttpServlet {
 				// preview
 				flag.setPreview(true);
 				optServ.saveOrUpdateReleaseOption(flag, idRelease, user.getId());
+				log.info("Flag 'VISIONATO' per la release con id = "+idRelease);
 			} else if(optionType!=null && optionType.equals("2")) {
 				// preview
 				flag.setDownloaded(true);
 				optServ.saveOrUpdateReleaseOption(flag, idRelease, user.getId());
+				log.info("Flag 'SCARICATO' per la release con id = "+idRelease);
 			}
 		} catch (BackEndException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 
 		response.setContentType("text/plain");  
 		response.setCharacterEncoding("UTF-8"); 

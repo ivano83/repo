@@ -12,13 +12,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ReleaseDeleteServlet  extends HttpServlet {
+public class ReleaseDeleteServlet  extends BaseAction {
 	private static final long serialVersionUID = 1L;
 	
 	private String id;
 	
 	public ReleaseDeleteServlet() {
-        // TODO Auto-generated constructor stub
+		this.setLogger(getClass());
     }
 	
 	@Override

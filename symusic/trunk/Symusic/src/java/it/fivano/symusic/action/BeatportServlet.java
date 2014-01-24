@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class ZeroDayMusicServlet
  */
 
-public class BeatportServlet extends HttpServlet {
+public class BeatportServlet extends BaseAction {
 	private static final long serialVersionUID = 1L;
 	
 	private String urlPrecedente;
@@ -31,7 +31,7 @@ public class BeatportServlet extends HttpServlet {
      * Default constructor. 
      */
     public BeatportServlet() {
-        // TODO Auto-generated constructor stub
+    	this.setLogger(getClass());
     }
 
 	/**

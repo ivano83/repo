@@ -94,6 +94,12 @@
     width: 150px;
 }
 
+.new_icon {
+	padding-left:10px; 
+	top:10px; 
+	position:relative;
+}
+
 /** CALENDARIO */
 
 /* input box in default state */ 

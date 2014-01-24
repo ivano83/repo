@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class ZeroDayMusicServlet
  */
 
-public class ScenelogServlet extends HttpServlet {
+public class ScenelogServlet extends BaseAction {
 	private static final long serialVersionUID = 1L;
 	
 	private String urlPrecedente;
@@ -34,7 +34,7 @@ public class ScenelogServlet extends HttpServlet {
      * Default constructor. 
      */
     public ScenelogServlet() {
-        // TODO Auto-generated constructor stub
+    	this.setLogger(getClass());
     }
 
 	/**
