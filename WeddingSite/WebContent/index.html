@@ -29,12 +29,12 @@ Released: 4.3.13
     </div>
     <div class="clearfloat"></div>
     
-     <div style="display: none">
+     <div id="loginfailed" style="display:none">
     	<div class="sliderSlogan"><h2>Attenzione! Accesso non autorizzato.</h2></div>
-    	<center><a href="#loginmodal" class="flatbtn" id="modaltrigger">Modal Login</a></center>
+    	<center><input type="button" name="loginbtn" id="modaltrigger" class="flatbtn-blu hidemodal" value="Login" ></center>
 	</div>
 	<div id="loginmodal" style="display: block;">
-		<h1>Accedi</h1>
+		<h1 style="text-align: center;">Accedi</h1>
 		<form id="loginform" name="loginform" method="post" action="index.html">
 			<label for="username">Username:</label> <input type="text" name="username" id="username" class="txtfield" tabindex="1">
 			<label for="password">Password:</label> <input type="password" name="password" id="password" class="txtfield" tabindex="2">
@@ -47,11 +47,19 @@ Released: 4.3.13
 <script type="text/javascript">
 $(function(){
   $('#loginform').submit(function(e){
-	alert('click');
+	$('#loginmodal').css('display','none');
+	$('#loginfailed').css('display','block');
     return false;
   });
+
+  $('#modaltrigger').click(function(e){
+	$('#loginmodal').css('display','block');
+	$('#loginfailed').css('display','none');
+    return false;
+  });
+
   
-  $('#modaltrigger').leanModal({ top: 110, overlay: 0.45, closeButton: ".hidemodal" });
+  $('#modaltriggers').leanModal({ top: 110, overlay: 0.45, closeButton: ".hidemodal" });
 });
 </script>
 <footer id="includedFooter">
