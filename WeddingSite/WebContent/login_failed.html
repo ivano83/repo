@@ -29,39 +29,13 @@ Released: 4.3.13
     </div>
     <div class="clearfloat"></div>
     
-     <div id="loginfailed" style="display:none">
+     <div id="loginfailed" style="display:block">
     	<div class="sliderSlogan"><h2>Attenzione! Accesso non autorizzato.</h2></div>
-    	<center><input type="button" name="loginbtn" id="modaltrigger" class="flatbtn-blu hidemodal" value="Login" ></center>
-	</div>
-	<div id="loginmodal" style="display: block;">
-		<h1 style="text-align: center;">Accedi</h1>
-		<form id="loginform" name="loginform" method="post" action="Login.php">
-			<label for="username">Username:</label> <input type="text" name="username" id="username" class="txtfield" tabindex="1">
-			<label for="password">Password:</label> <input type="password" name="password" id="password" class="txtfield" tabindex="2">
-			<div class="center">
-			<input type="submit" name="loginbtn" id="loginbtn" class="flatbtn-blu hidemodal" value="Login" tabindex="3">
-			</div>
+    	<form id="loginform" name="loginform" method="post" action="index.html">
+    	<center><input type="button" formaction="index.html" name="loginbtn" id="modaltrigger" class="flatbtn-blu hidemodal" value="Login" ></center>
 		</form>
 	</div>
 </div>
-<script type="text/javascript">
-$(function(){
-  $('#loginforma').submit(function(e){
-	$('#loginmodal').css('display','none');
-	$('#loginfailed').css('display','block');
-    return false;
-  });
-
-  $('#modaltrigger').click(function(e){
-	$('#loginmodal').css('display','block');
-	$('#loginfailed').css('display','none');
-    return false;
-  });
-
-  
-  $('#modaltriggers').leanModal({ top: 110, overlay: 0.45, closeButton: ".hidemodal" });
-});
-</script>
 <footer id="includedFooter">
 </footer>
 
