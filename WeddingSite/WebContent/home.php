@@ -8,6 +8,7 @@ Template number: 16
 Version: 1.0
 Released: 4.3.13
 -->
+
 <html>
 <head>
 <meta charset="utf-8">
@@ -18,6 +19,9 @@ Released: 4.3.13
 <link href='http://fonts.googleapis.com/css?family=Karla' rel='stylesheet' type='text/css'>
 <link href="css/styles.css" rel="stylesheet" type="text/css">
 </head>
+<?php
+include('lock.php');
+?>
 <body>
 <div class="wrapper">
 	<header>

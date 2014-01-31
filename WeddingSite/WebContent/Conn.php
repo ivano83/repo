@@ -1,8 +1,10 @@
 <?php
 //connect to database 
-$connection = new mysqli("localhost","root","passw0rd.1","test"); 
-if(mysqli_connect_errno()){
-    printf("Connection failed: %s\n",mysqli_connect_error());   
-    exit(); 
-}
+$mysql_hostname = "localhost";
+$mysql_user = "root";
+$mysql_password = "passw0rd.1";
+$mysql_database = "test";
+$bd = mysql_connect($mysql_hostname, $mysql_user, $mysql_password)
+or die("Connection failed");
+mysql_select_db($mysql_database, $bd) or die("MySql operation failed");
 ?> 
