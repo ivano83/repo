@@ -18,22 +18,10 @@ Released: 4.3.13
 <link href='http://fonts.googleapis.com/css?family=Karla' rel='stylesheet' type='text/css'>
 <link href="css/styles.css" rel="stylesheet" type="text/css">
 </head>
-<body>
+<body onload="javascript:evidenziaMenu('m_cerimonia');">
 <div class="wrapper">
 	<header>
-    	<div class="logoContainer">
-            <div class="logo"><a href="">Portfolio</a></div>
-            <div class="slogan">a responsive template</div>
-        </div>
-        <nav>
-            <ul id="navlist">
-                <li><a href="index.html">Home</a></li>
-                <li id="active"><a href="blog.html">Blog</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="portfolio.html">Portfolio</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </nav>
+    	<?php  include('common/header.php'); ?>
         <div class="clearfloat"></div>
         <div class="pageTitle">
         	<h3>Blog</h3>
@@ -96,34 +84,7 @@ Released: 4.3.13
     <div class="clearfloat"></div>
 </div>
 <footer>
-	<div class="footerTop">
-    	<div class="about">
-        	<h3>About</h3>
-            <div class="picBorder leftPic"><img src="images/aboutPic.jpg" alt="about"></div>
-            <p>
-            	Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.<br><br>
-                It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release<br><br>
-                <a href="about.html">Read More</a> 
-            </p>
-            <div class="clearfloat"></div>
-        </div>
-        <div class="tweetsUpdates">
-        	<h3>Tweets Updates</h3>
-            <ul>
-            	<li>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s<br><a href="">Tweet Link</a></li>
-                <li>When an unknown printer took a galley of type and scrambled it to make a type<br><a href="">Tweet Link</a></li>
-                <li>Specimen book. It has survived not only five centuries, but also the leap into<br><a href="">Tweet Link</a></li>
-            </ul>
-        </div>
-        <div class="clearfloat"></div>
-    </div>
-    <div class="footerBottom">
-        <p>
-            Copyright &copy; Your Company Name. All rights reserved. Designed by <a href="http://www.cssing.org" title="Free Css Templates">Free Css Templates</a>, Validation 
-            <a class="footerLink" href="http://validator.w3.org/check/referer" title="This page validates as HTML5"><abbr title="HyperText Markup Language">HTML5</abbr></a> | 
-            <a class="footerLink" href="http://jigsaw.w3.org/css-validator/check/referer" title="This page validates as CSS"><abbr title="Cascading Style Sheets">CSS3</abbr></a>
-        </p>
-    </div>
+<?php  include('common/footer.php'); ?>
 </footer>
 </body>
 </html>

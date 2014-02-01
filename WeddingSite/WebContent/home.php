@@ -1,32 +1,12 @@
 <!doctype html>
-<!--
-Designed by: http://www.cssing.org
-Released for free under a Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-Name: Portfolio
-Description:  A two-columns, responsive design template.
-Template number: 16
-Version: 1.0
-Released: 4.3.13
--->
-
 <html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio</title>
-<link href='http://fonts.googleapis.com/css?family=Yesteryear' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Salsa' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Karla' rel='stylesheet' type='text/css'>
-<link href="css/styles.css" rel="stylesheet" type="text/css">
+<head> 
+<?php  include('common/head.php'); ?>
 </head>
-<?php
-include('lock.php');
-?>
-<body>
+<body onload="javascript:evidenziaMenu('m_home');">
 <div class="wrapper">
 	<header>
-		<div id="includedHeader">
-		</div>
+		<?php  include('common/header.php'); ?>
         <div class="clearfloat"></div>
         <div id="slideshow">
         	<ul class="slides">
@@ -133,17 +113,9 @@ include('lock.php');
     </div>
     <div class="clearfloat"></div>
 </div>
-<footer id="includedFooter">
+<footer>
+<?php  include('common/footer.php'); ?>
 </footer>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script src="js/script.js"></script>
-<script src="js/jquery.js"></script>
-<!--<script src="js/autoadvance.js"></script>-->
-<script> 
-    $(function(){
-      $("#includedHeader").load("common/header.html"); 
-      $("#includedFooter").load("common/footer.html"); 
-    });
-</script> 
 </body>
 </html>

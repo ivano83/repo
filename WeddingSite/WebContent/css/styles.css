@@ -39,6 +39,10 @@ a:hover, a:active, a:focus {
 	text-shadow: 0px 0px, 1px 2px #ffffff;
 	text-decoration:none;
 }
+.logoutContainer {
+		float: right;
+		padding: 20px 0;
+}
 .slogan {
 	font-style:italic;
 	padding:42px 0 0 0;
@@ -77,7 +81,6 @@ p {
 }
 .wrapper {
 	width:960px;
-	height:400px;
 	margin:0 auto;
 	padding-bottom:50px;
 }
@@ -393,7 +396,7 @@ ul#navlist {
 	text-decoration: none;
 
 }
-#navlist #active a {
+#navlist .active a {
 	color: #d5d3d9;
 	text-shadow:none;
 	background-color: #040707;
@@ -638,6 +641,43 @@ img {
   background-color: #519dde;
 }
 .flatbtn-blu:active {
+  -webkit-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow:inset 0 1px 5px rgba(0, 0, 0, 0.1);
+  box-shadow:inset 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.flatbtn-logout { 
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: inline-block;
+  outline: 0;
+  border: 0;
+  color: #edf4f9;
+  text-decoration: none;
+  background-color: #4f94cf;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  font-size: 14px;
+  font-weight: bold;
+  padding: 4px 20px;
+  line-height: normal;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  text-transform: uppercase;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.3);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+.flatbtn-logout:hover {
+  color: #fff;
+  background-color: #519dde;
+}
+.flatbtn-logout:active {
   -webkit-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
   -moz-box-shadow:inset 0 1px 5px rgba(0, 0, 0, 0.1);
   box-shadow:inset 0 1px 5px rgba(0, 0, 0, 0.1);
