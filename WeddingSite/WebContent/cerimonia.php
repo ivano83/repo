@@ -10,13 +10,7 @@ Released: 4.3.13
 -->
 <html>
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio</title>
-<link href='http://fonts.googleapis.com/css?family=Yesteryear' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Salsa' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Karla' rel='stylesheet' type='text/css'>
-<link href="css/styles.css" rel="stylesheet" type="text/css">
+<?php  include('common/head.php'); ?>
 </head>
 <body onload="javascript:evidenziaMenu('m_cerimonia');">
 <div class="wrapper">
@@ -25,6 +19,19 @@ Released: 4.3.13
         <div class="clearfloat"></div>
         <div class="pageTitle">
         	<h3>Blog</h3>
+        </div>
+        <div class="clearfloat"></div>
+        <div id="slideshow">
+        	<ul class="slides">
+                <li><img src="images/castello/castello_1.jpg" width="960" height="440" alt="castello 1" /></li>
+                <li><img src="images/castello/castello_2.jpg" width="960" height="440" alt="castello 2" /></li>
+                <li><img src="images/castello/castello_3.jpg" width="960" height="440" alt="castello 3" /></li>
+                <li><img src="images/castello/castello_4.jpg" width="960" height="440" alt="castello 4" /></li>
+                <li><img src="images/castello/rito_civile_1.jpg" width="960" height="440" alt="castello 5" /></li>
+                <li><img src="images/castello/rito_civile_2.jpg" width="960" height="440" alt="castello 6" /></li>
+            </ul>
+        	<span class="arrow previous"></span>
+            <span class="arrow next"></span>
         </div>
     </header>
     <div class="welcome">
@@ -86,5 +93,6 @@ Released: 4.3.13
 <footer>
 <?php  include('common/footer.php'); ?>
 </footer>
+<script src="js/script.js"></script>
 </body>
 </html>

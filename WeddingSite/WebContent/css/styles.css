@@ -311,14 +311,14 @@ footer h3, .pageTitle h3 {
 /*********************************Begin slider****************************************/
 /**************************/
 #slideshow{
-	height:444px;
+	height:440px;
 	margin:15px auto 0;
 	position:relative;
 	width:960px;
 	box-shadow:0 0 5px #111;
 }
 #slideshow ul{
-	height:444px;
+	height:440px;
 	list-style:none outside none;
 	overflow:hidden;
 	position:absolute;

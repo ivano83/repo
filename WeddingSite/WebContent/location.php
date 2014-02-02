@@ -1,22 +1,7 @@
 <!doctype html>
-<!--
-Designed by: http://www.cssing.org
-Released for free under a Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-Name: Portfolio
-Description:  A two-columns, responsive design template.
-Template number: 16
-Version: 1.0
-Released: 4.3.13
--->
 <html>
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio</title>
-<link href='http://fonts.googleapis.com/css?family=Yesteryear' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Salsa' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Karla' rel='stylesheet' type='text/css'>
-<link href="css/styles.css" rel="stylesheet" type="text/css">
+<?php  include('common/head.php'); ?>
 </head>
 <body onload="javascript:evidenziaMenu('m_location');">
 <div class="wrapper">
@@ -25,6 +10,18 @@ Released: 4.3.13
         <div class="clearfloat"></div>
         <div class="pageTitle">
         	<h3>About</h3>
+        </div>
+        <div class="clearfloat"></div>
+        <div id="slideshow">
+        	<ul class="slides">
+                <li><img src="images/castello/castello_4.jpg" width="960" height="440" alt="castello 1" /></li>
+                <li><img src="images/castello/risto_1.jpg" width="960" height="440" alt="ristorante 1" /></li>
+                <li><img src="images/castello/risto_2.jpg" width="960" height="440" alt="ristorante 2" /></li>
+                <li><img src="images/castello/risto_4.jpg" width="960" height="440" alt="ristorante 3" /></li>
+                <li><img src="images/castello/risto_6.jpg" width="960" height="440" alt="ristorante 4" /></li>
+            </ul>
+        	<span class="arrow previous"></span>
+            <span class="arrow next"></span>
         </div>
     </header>
     <div class="welcome about">
@@ -46,5 +43,6 @@ Released: 4.3.13
 <footer>
 <?php  include('common/footer.php'); ?>
 </footer>
+<script src="js/script.js"></script>
 </body>
 </html>
