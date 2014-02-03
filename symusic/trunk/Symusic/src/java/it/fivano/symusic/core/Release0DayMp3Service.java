@@ -2,18 +2,30 @@ package it.fivano.symusic.core;
 
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.backend.service.GenreService;
+import it.fivano.symusic.backend.service.ReleaseService;
 import it.fivano.symusic.conf.ZeroDayMp3Conf;
+import it.fivano.symusic.core.parser.BeatportParser;
+import it.fivano.symusic.core.parser.ScenelogParser;
+import it.fivano.symusic.core.parser.YoutubeParser;
+import it.fivano.symusic.core.parser.ZeroDayMp3Parser;
+import it.fivano.symusic.core.parser.model.BeatportParserModel;
+import it.fivano.symusic.core.parser.model.ScenelogParserModel;
+import it.fivano.symusic.core.parser.model.ZeroDayMp3ParserModel;
 import it.fivano.symusic.core.thread.SupportObject;
 import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.GenreModel;
+import it.fivano.symusic.model.ReleaseExtractionModel;
 import it.fivano.symusic.model.ReleaseModel;
+import it.fivano.symusic.model.VideoModel;
+import it.fivano.symusic.model.ReleaseExtractionModel.AreaExtraction;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.jsoup.Jsoup;
@@ -55,33 +67,155 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 			// OGGETTO PER GESTIRE IL CARICAMENTO DELLE PAGINE SUCCESSIVE DEL SITO
 			ScenelogInfo info = new ScenelogInfo();
 			info.setProcessNextPage(true);
+			info.setA(a);
+			info.setDa(da);
 			
 			// PROCESSA LE RELEASE DELLA PRIMA PAGINA
-			this.parse0DayMp3(urlConn, da, a, info);
+			ZeroDayMp3Parser zero = new ZeroDayMp3Parser();
+			List<ZeroDayMp3ParserModel> resZero = zero.parseFullPage(urlConn, da, a);
+			this.checkProcessPage(resZero, info);
 			
 			// SE C'È DA RECUPERARE ALTRE RELEASE, CAMBIA PAGINA
 			while(info.isProcessNextPage()) {
 				
+				// SALVA LA URL DELLA PROSSIMA PAGINA (SE NECESSARIA)
+				info.changePage(); // AGGIORNA IL NUMERO PAGINA
+				info.setNextPage(this.extractNextPage(info));
+						
 				log.info("Andiamo alla pagina successiva...");
 				// PROCESSA LE RELEASE DELLE PAGINE SUCCESSIVE
-				this.parse0DayMp3(info.getNextPage(), da, a, info);
+				List<ZeroDayMp3ParserModel> resZeroTmp = zero.parseFullPage(info.getNextPage(), da, a);
+				this.checkProcessPage(resZeroTmp, info);
+				resZero.addAll(resZeroTmp);
 				
 			}
 			
+			// per ogni release scenelog recupera i dati da beatport
+			BeatportParser beatport = new BeatportParser();
+			List<BeatportParserModel> beatportRes = null;
+			for(ZeroDayMp3ParserModel sc : resZero) {
+
+				ReleaseModel release = new ReleaseModel();
+
+				release.setNameWithUnderscore(sc.getReleaseName());
+				if(excludeRipRelease && this.isRadioRipRelease(release)) {
+					continue;
+				}
+
+				enableScenelogService = true;
+				enableYoutubeService = true;
+//				enableBeatportService = true;
+				ReleaseExtractionModel extr = new ReleaseExtractionModel();
+				release.setReleaseExtraction(extr);
+
+				// CONTROLLA SE LA RELEASE E' GIA' PRESENTE
+				boolean isRecuperato = false;
+				ReleaseService relServ = new ReleaseService();
+				ReleaseModel relDb = relServ.getReleaseFull(sc.getReleaseName(), idUser);
+				if(relDb!=null) {
+					log.info(sc.getReleaseName()+" e' gia' presente nel database con id = "+relDb.getId());
+
+					// controlla sul db se le varie estrazioni hanno avuto successo
+					extr = relDb.getReleaseExtraction();
+
+					if(extr!=null ){
+						enableScenelogService = !extr.getScenelog();
+						enableYoutubeService = !extr.getYoutube();
+						enableBeatportService = !extr.getBeatport();
+					}
+					isRecuperato = true;
+					release = relDb; // SOSTITUISCE I DATI FINO AD ORA ESTRATTI CON QUELLI DEL DB
+				}
+
+				release = zero.parseReleaseDetails(sc, release);
+
+				if(enableBeatportService)
+					beatportRes = beatport.searchRelease(sc.getReleaseName());
+				else
+					beatportRes = new ArrayList<BeatportParserModel>();
+
+				if(!beatportRes.isEmpty() && enableBeatportService) {
+					BeatportParserModel beatportCandidate = beatportRes.get(0);
+					// SCARICA IL DETTAGLIO BEATPORT
+					release = beatport.parseReleaseDetails(beatportCandidate, release);
+				}
+
+				// DETTAGLIO SCENELOG
+				if(enableScenelogService) {
+					ScenelogParser scenelog = new ScenelogParser();
+					ScenelogParserModel releaseScenelog = scenelog.searchRelease(sc.getReleaseName());
+					release = scenelog.parseReleaseDetails(releaseScenelog, release);
+				}
+
+				// YOUTUBE VIDEO
+				YoutubeParser youtube = new YoutubeParser();
+				if(enableYoutubeService) {
+					List<VideoModel> youtubeVideos = youtube.searchYoutubeVideos(release.getName());
+					release.setVideos(youtubeVideos);
+
+					if(release.getVideos().isEmpty()) 
+						SymusicUtility.updateReleaseExtraction(extr,false,AreaExtraction.YOUTUBE);
+					else
+						SymusicUtility.updateReleaseExtraction(extr,true,AreaExtraction.YOUTUBE);
+				}
+
+				listRelease.add(release);
+
+				// AGGIORNAMENTI DEI DATI SUL DB
+				this.saveOrUpdateRelease(release, isRecuperato);
+
+
+				// AGGIUNGE I LINK DI RICERCA MANUALE (DIRETTAMENTE SU GOOGLE E YOUTUBE)
+				GoogleService google = new GoogleService();
+				google.addManualSearchLink(release);
+				youtube.addManualSearchLink(release); // link a youtube per la ricerca manuale
+
+			}
+
+
 			// INIT OGGETTO DI SUPPORTO UNICO PER TUTTI I THREAD
 			SupportObject supp = new SupportObject();
 			supp.setEnableBeatportService(enableBeatportService);
 			supp.setEnableScenelogService(enableScenelogService);
 			supp.setEnableYoutubeService(enableYoutubeService);
-			supp.setIdUser(idUser);
-			
-			listRelease = this.arricchimentoRelease(listRelease, supp);
-			
+
 		} catch (Exception e) {
 			throw new ParseReleaseException("Errore nel parsing delle pagine",e);
 		} 
 
 		return listRelease;
+		
+	}
+	
+	private void checkProcessPage(List<ZeroDayMp3ParserModel> resScenelog, ScenelogInfo info) {
+		Date max = null;
+		Date min = null;
+		if(!resScenelog.isEmpty()) {
+			Iterator<ZeroDayMp3ParserModel> it = resScenelog.iterator();
+			while(it.hasNext()) {
+				ZeroDayMp3ParserModel sc = it.next();
+
+				if(max == null) max = sc.getReleaseDate();
+				if(min == null) min = sc.getReleaseDate();
+				
+				if(sc.getReleaseDate().after(max)) {
+					max = sc.getReleaseDate();
+				}
+				if(sc.getReleaseDate().before(min)) {
+					min = sc.getReleaseDate();
+				}
+				
+				if(!sc.isDateInRange()) {
+					it.remove();
+				}
+			}
+			
+			// la pagina ha superato il range scelto
+			if(min.before(info.getDa())) {
+				info.setProcessNextPage(false);
+			}
+				
+		}
 		
 	}
 	

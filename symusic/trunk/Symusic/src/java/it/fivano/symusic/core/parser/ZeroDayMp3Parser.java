@@ -54,7 +54,7 @@ public class ZeroDayMp3Parser extends GenericParser {
 				doc = this.bypassAntiDDOS(doc, conf.URL, urlPage);
 			}
 
-			Elements releaseGroup = doc.getElementsByAttributeValue("id",conf.ID_CONTENT);
+			Elements releaseGroup = doc.getElementsByClass(conf.ID_CONTENT);
 			if(releaseGroup.size()>0) {
 				ZeroDayMp3ParserModel release = null;
 				log.info("####################################");
@@ -190,51 +190,43 @@ public class ZeroDayMp3Parser extends GenericParser {
 
 	private ZeroDayMp3ParserModel popolaZeroDayMp3Release(Element tmp) throws ParseException {
 		
-		ZeroDayMp3ParserModel release = null;
-		
-		Elements components = tmp.getElementsByTag("td");
-		if(components.size()>=4) {
-			// OK CI SONO TUTTI I PEZZI
-			release = new ZeroDayMp3ParserModel();
-			
-			// IN QUARTA POSIZIONE C'E' LA DATA RELEASE
-			Element dateComp = components.get(3);
-			String date = this.genericFilter(dateComp.text());
-			String dateIn = this.getStandardDateFormat(date);
-			Date dateInDate = SymusicUtility.getStandardDate(dateIn);
-			
-			// RANGE DATA, SOLO LE RELEASE COMPRESE DA - A
-			if(dataDa!=null && dataA!=null) {
-				release.setDateInRange(this.downloadReleaseDay(dateInDate, dataDa, dataA));
-			}
+		ZeroDayMp3ParserModel release = new ZeroDayMp3ParserModel();
 
-			// IN PRIMA POSIZIONE C'È IL NOME RELEASE E IL LINK
-			Element relComp = components.get(0);
-			// RELEASE NAME
-			String releaseName = relComp.getElementsByTag("a").get(0).attr("title");
-			releaseName = releaseName.replace("Permalink to ","");
-			release.setReleaseName(releaseName);
-			
-			// CONTROLLA SE E' UN RADIO/SAT RIP
-			release.setRadioRip(this.isRadioRipRelease(releaseName));
+		// IN QUARTA POSIZIONE C'E' LA DATA RELEASE
+		Element dateComp = tmp.getElementsByClass(conf.RELEASE_DATE).get(0);
+		String date = dateComp.text();
+		String dateIn = this.getStandardDateFormat(date);
+		Date dateInDate = SymusicUtility.getStandardDate(dateIn);
 
-			// IN TERZA POSIZIONE C'È IL GENERE
-			Element genreComp = components.get(2);
-			String genre = this.genericFilter(genreComp.text());
-			GenreModel genreModel = new GenreModel();
-			genreModel.setName(genre);
-			release.setReleaseGenre(genreModel);
-			
-			// DATE RELEASE
-			release.setReleaseDate(dateInDate);
-			
-			// LINK
-			release.setReleaseLink(SymusicUtility.popolateLink(relComp.getElementsByTag("a").get(0)));
-			
-		
-			log.info("|"+release+"| acquisita");
+		// RANGE DATA, SOLO LE RELEASE COMPRESE DA - A
+		if(dataDa!=null && dataA!=null) {
+			release.setDateInRange(this.downloadReleaseDay(dateInDate, dataDa, dataA));
 		}
-		
+
+		// IN PRIMA POSIZIONE C'È IL NOME RELEASE E IL LINK
+		Element relComp = tmp.getElementsByClass(conf.RELEASE_LINK).get(0);
+		// RELEASE NAME
+		String releaseName = tmp.getElementsByClass(conf.RELEASE_NAME).get(0).text();
+//		releaseName = releaseName.replace("Permalink to ","");
+		release.setReleaseName(releaseName);
+		// LINK
+		release.setReleaseLink(SymusicUtility.popolateLink(relComp));
+
+		// CONTROLLA SE E' UN RADIO/SAT RIP
+		release.setRadioRip(this.isRadioRipRelease(releaseName));
+
+		// IN TERZA POSIZIONE C'È IL GENERE
+		Element genreComp = tmp.getElementsByClass(conf.RELEASE_GENRE).get(0);
+		String genre = this.genericFilter(genreComp.text());
+		GenreModel genreModel = new GenreModel();
+		genreModel.setName(genre);
+		release.setReleaseGenre(genreModel);
+
+		// DATE RELEASE
+		release.setReleaseDate(dateInDate);
+
+		log.info("|"+release+"| acquisita");
+
 		return release;
 	}
 		

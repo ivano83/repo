@@ -55,7 +55,6 @@ public class FlagReleaseServlet  extends BaseAction {
 				log.info("Flag 'SCARICATO' per la release con id = "+idRelease);
 			}
 		} catch (BackEndException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
