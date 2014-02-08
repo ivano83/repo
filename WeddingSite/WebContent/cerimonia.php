@@ -23,12 +23,12 @@ Released: 4.3.13
         <div class="clearfloat"></div>
         <div id="slideshow">
         	<ul class="slides">
-                <li><img src="images/castello/castello_1.jpg" width="960" height="440" alt="castello 1" /></li>
-                <li><img src="images/castello/castello_2.jpg" width="960" height="440" alt="castello 2" /></li>
-                <li><img src="images/castello/castello_3.jpg" width="960" height="440" alt="castello 3" /></li>
-                <li><img src="images/castello/castello_4.jpg" width="960" height="440" alt="castello 4" /></li>
-                <li><img src="images/castello/rito_civile_1.jpg" width="960" height="440" alt="castello 5" /></li>
-                <li><img src="images/castello/rito_civile_2.jpg" width="960" height="440" alt="castello 6" /></li>
+                <li><img src="images/castello/castello_1.jpg" width="960" height="340" alt="castello 1" /></li>
+                <li><img src="images/castello/castello_2.jpg" width="960" height="340" alt="castello 2" /></li>
+                <li><img src="images/castello/castello_3.jpg" width="960" height="340" alt="castello 3" /></li>
+                <li><img src="images/castello/castello_4.jpg" width="960" height="340" alt="castello 4" /></li>
+                <li><img src="images/castello/rito_civile_1.jpg" width="960" height="340" alt="castello 5" /></li>
+                <li><img src="images/castello/rito_civile_2.jpg" width="960" height="340" alt="castello 6" /></li>
             </ul>
         	<span class="arrow previous"></span>
             <span class="arrow next"></span>

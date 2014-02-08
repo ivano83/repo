@@ -85,8 +85,8 @@ p {
 	padding-bottom:50px;
 }
 .pageTitle {
-	background:#040707;
-	padding:7px;
+	background: url(../images/blue-bg.png);
+	padding:5px 20px 0;
 }
 .homeTitle {
 	display:none;
@@ -311,14 +311,14 @@ footer h3, .pageTitle h3 {
 /*********************************Begin slider****************************************/
 /**************************/
 #slideshow{
-	height:440px;
+	height:340px;
 	margin:15px auto 0;
 	position:relative;
 	width:960px;
 	box-shadow:0 0 5px #111;
 }
 #slideshow ul{
-	height:440px;
+	height:340px;
 	list-style:none outside none;
 	overflow:hidden;
 	position:absolute;
@@ -392,17 +392,25 @@ ul#navlist {
 #navlist a:hover {
 	color: #d5d3d9;
 	text-shadow:none;
-	background-color: #040707;
+	background: url(../images/blue-bg.png);
 	text-decoration: none;
-
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	opacity:0.8;
 }
 #navlist .active a {
 	color: #d5d3d9;
 	text-shadow:none;
-	background-color: #040707;
+	background: url(../images/blue-bg.png);
 	text-decoration: none;
 	font-weight:bold;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
 }
+
 /**************************/
 /*********************************End main menu****************************************/
 /**************************/
@@ -655,7 +663,8 @@ img {
   border: 0;
   color: #edf4f9;
   text-decoration: none;
-  background-color: #4f94cf;
+  
+  background: url(../images/blue-bg.png);
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   font-size: 14px;
   font-weight: bold;
@@ -676,6 +685,7 @@ img {
 .flatbtn-logout:hover {
   color: #fff;
   background-color: #519dde;
+  opacity: 0.9;
 }
 .flatbtn-logout:active {
   -webkit-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
