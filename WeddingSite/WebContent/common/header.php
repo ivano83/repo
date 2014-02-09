@@ -4,32 +4,7 @@ include('lock.php');
     	<div class="logoContainer">
             <div class="logo"><a href="">Ivano & Cristina</a></div>
             <div class="slogan">Il matrimonio</div>
-            <script type="application/javascript">
-
-var myCountdownTest = new Countdown({
-								 	year	: 2014,
-									month	: 09, 
-									day		: 11,
-									hour	: 18,
-									minute	: 30,
-									width	: 300, 
-									height	: 40,
-									numbers		: 	{
-										font 	: "Arial",
-										color	: "#FFFFFF",
-										bkgd	: "#365D8B",
-										rounded	: 0.15,				// percentage of size 
-										shadow	: {
-													x : 0,			// x offset (in pixels)
-													y : 3,			// y offset (in pixels)
-													s : 4,			// spread
-													c : "#000000",	// color
-													a : 0.4			// alpha	// <- no comma on last item!
-													}
-										} // <- no comma on last item!
-									});
-
-</script>
+            <div id="countdown"></div>
         </div>
         
         <div class="logoutContainer">
@@ -58,4 +33,31 @@ var myCountdownTest = new Countdown({
 				}
 			}
         </script>
-        
+        <script type="application/javascript">
+			var myCountdownTest = new Countdown({
+								 	year	: 2014,
+									month	: 09, 
+									day		: 11,
+									hour	: 18,
+									minute	: 30,
+									width	: 250, 
+									height	: 40,
+									target   : "countdown",    // A reference to an html DIV id (e.g. DIV id="foo")
+									rangeHi  : "month", // The highest unit of time to display
+									style    : "flip", // flip boring whatever (only "flip" uses image/animation)
+									numbers		: 	{
+										font 	: "Arial",
+										color	: "#FFFFFF",
+										bkgd	: "#365D8B",
+										rounded	: 0.15,				// percentage of size 
+										shadow	: {
+													x : 0,			// x offset (in pixels)
+													y : 3,			// y offset (in pixels)
+													s : 4,			// spread
+													c : "#000000",	// color
+													a : 0.4			// alpha	// <- no comma on last item!
+													}
+										} // <- no comma on last item!
+									});
+
+			</script>

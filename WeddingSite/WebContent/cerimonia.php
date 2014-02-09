@@ -18,75 +18,28 @@ Released: 4.3.13
     	<?php  include('common/header.php'); ?>
         <div class="clearfloat"></div>
         <div class="pageTitle">
-        	<h3>Blog</h3>
+        	<h3>Cerimonia</h3>
         </div>
-        <div class="clearfloat"></div>
-        <div id="slideshow">
-        	<ul class="slides">
-                <li><img src="images/castello/castello_1.jpg" width="960" height="340" alt="castello 1" /></li>
-                <li><img src="images/castello/castello_2.jpg" width="960" height="340" alt="castello 2" /></li>
-                <li><img src="images/castello/castello_3.jpg" width="960" height="340" alt="castello 3" /></li>
-                <li><img src="images/castello/castello_4.jpg" width="960" height="340" alt="castello 4" /></li>
-                <li><img src="images/castello/rito_civile_1.jpg" width="960" height="340" alt="castello 5" /></li>
-                <li><img src="images/castello/rito_civile_2.jpg" width="960" height="340" alt="castello 6" /></li>
-            </ul>
-        	<span class="arrow previous"></span>
-            <span class="arrow next"></span>
-        </div>
+        
     </header>
-    <div class="welcome">
-        <div class="post">
-        	<div class="picBorder fixedPic"><img src="images/blogPic1.jpg" alt="about"></div>
-            <h2>It was popularised in the 1960s</h2>
-            <span>July - 25 - 2012 in <a href="#">Category 1</a>, <a href="#">Category 2</a></span>
-            <div class="horSeparator"></div>
-            <p class="postContent">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and </p>
-            <p class="button"><a href="">More</a></p>
-        </div>
-        <div class="post">
-        	<div class="picBorder fixedPic"><img src="images/blogPic2.jpg" alt="about"></div>
-            <h2>Also the leap into electronic</h2>
-            <span>July - 25 - 2012</span>
-            <div class="horSeparator"></div>
-            <p class="postContent">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and </p>
-            <p class="button"><a href="">More</a></p>
-        </div>
+    <div class="welcome about">
+    	<h2>Il Rito Civile</h2>
+    	<div class="picBorder leftPic"><img src="images/rito_civile.jpg" alt="about" style="height:280px; width:200px; max-height:280px; max-width:200px;"></div>
+        <p>Il nostro sarà un matrimonio alternativo, diverso dai matrimoni che vedete di solito, molti lo chiamano matrimonio "all'Americana", ma per noi rimane comunque la cerimonia che lega per sempre il nostro amore.
+        </p>
+        <p>Il rito si svolgerà presso "<a href="http://www.ilcastelloborghese.it/it/" target="_blank">Il Castello Borghese</a>" a Nettuno (Rm), nei giardini adiacenti al Castello, con il mare sullo sfondo.<br>
+        </p>
+        <p>Qualcuno potrà dire: come mai avete scelto un posto così lontano da dove abitate? La risposta è presto fatta... basta guardare le immagini di questa Location!
+        </p>
     </div>
     <div class="sidebar">
-    	<h2>Categories</h2>
-        <ul class="greyList">
-        	<li><a href="">Category 1</a></li>
-            <li><a href="">Category 2</a></li>
-            <li><a href="">Category 3</a></li>
-            <li><a href="">Category 4</a></li>
-            <li><a href="">Category 5</a></li>
-            <li><a href="">Category 6</a></li>
-            <li><a href="">Category 7</a></li>
-            <li><a href="">Category 8</a></li>
-        </ul>
-        <h2>Archives</h2>
-        <ul class="greyList">
-        	<li><a href="">May 2012</a></li>
-            <li><a href="">April 2012</a></li>
-            <li><a href="">March 2012</a></li>
-            <li><a href="">February 2011</a></li>
-            <li><a href="">December 2011</a></li>
-            <li><a href="">November 2011</a></li>
-            <li><a href="">September 2011</a></li>
-            <li><a href="">August 2011</a></li>
-        </ul>
-        <div class="clearfloat"></div>
-        <h2>Recent Posts</h2>
-        <ul class="greyList">
-        	<li><a href="">Lorem Ipsum</a></li>
-            <li><a href="">Has been the</a></li>
-            <li><a href="">Industry's standard</a></li>
-            <li><a href="">Dummy text ever since</a></li>
-            <li><a href="">The 1500s, when an</a></li>
-            <li><a href="">Unknown printer</a></li>
-            <li><a href="">Took a galley of type</a></li>
-            <li><a href="">And scrambled it to</a></li>
-        </ul>
+    	<h2>Il menù</h2>
+        <p>Il cibo sarà principalmente a base di pesce.<br>
+        Si partirà con un ricchissimo antipasto a buffet, con una estesa varietà di pietanze, dal mare ai monti (e non solo).<br>
+        Una volta terminato il buffet, tutti seduti ai tavoli in attesa dei due primi, del secondo e dei contorni.<br>
+        Seguirà frutta e dolci a buffet e il taglio della torta.<br>
+        </p>
+        <p>Se qualcuno ha delle intolleranze a qualche alimento, fatecelo sapere in tempo in modo da proporre un menù alternativo.</p>
     </div>
     <div class="clearfloat"></div>
 </div>

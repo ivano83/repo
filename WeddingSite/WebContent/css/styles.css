@@ -74,6 +74,7 @@ h3 {
 }
 p {
 	line-height:140%;
+	padding-bottom:20px;
 }
 .sliderSlogan {
 	text-align:center;
@@ -87,6 +88,7 @@ p {
 .pageTitle {
 	background: url(../images/blue-bg.png);
 	padding:5px 20px 0;
+	opacity: 0.8;
 }
 .homeTitle {
 	display:none;
@@ -289,8 +291,8 @@ footer h3, .pageTitle h3 {
 }
 .picBorder {
 	border:1px solid #b4b4b4;
-	background:#ffffff;
-	padding:5px;
+	background:#222222;
+	padding:4px;
 }
 .picBorderGallery {
 	border:1px solid #b4b4b4;
@@ -374,7 +376,7 @@ nav {
 }
 ul#navlist {
 	margin-left: 0;
-	padding-left: 0;
+	padding: 0 0 5px;
 	white-space: nowrap;
 }
 #navlist li {
@@ -408,7 +410,14 @@ ul#navlist {
 	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
-	border-radius: 3px;
+	border-top-left-radius:5px;
+	border-top-right-radius:5px;
+	opacity: 0.8;
+}
+
+#countdown {
+	padding: 20px 0 0;
+	
 }
 
 /**************************/
