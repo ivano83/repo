@@ -1,13 +1,4 @@
 <!doctype html>
-<!--
-Designed by: http://www.cssing.org
-Released for free under a Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-Name: Portfolio
-Description:  A two-columns, responsive design template.
-Template number: 16
-Version: 1.0
-Released: 4.3.13
--->
 <html>
 <head>
 <?php  include('common/head.php'); ?>
