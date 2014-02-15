@@ -85,14 +85,16 @@ public class SymusicUtility {
 		
 		String crew = nameSplit[size-1];
 		String year = nameSplit[size-2];
-		if(!year.matches("\\d\\d\\d\\d")) {
+		if(!year.matches("\\d\\d\\d\\d") && year.length()!=4) {
 			year = nameSplit[size-3];
 			crew = nameSplit[size-2] + "_" + nameSplit[size-1];
-			
+			if(year.length()!=4)
+				year = null; // meglio non salvare
 		}
-		if(year.matches("\\d\\d\\d\\d"))
+		if(year.matches("\\d\\d\\d\\d")) {
 			rel.setCrew(crew);
-		rel.setYear(year);
+			rel.setYear(year);
+		}
 		
 	}
 	

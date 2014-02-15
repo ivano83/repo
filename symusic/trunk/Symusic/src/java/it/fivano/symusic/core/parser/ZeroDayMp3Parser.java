@@ -237,7 +237,7 @@ public class ZeroDayMp3Parser extends GenericParser {
 					return text.substring(1);
 				}
 			}
-			return null;
+			return text;
 		}
 
 	private String getStandardDateFormat(String dateIn) throws ParseException {
