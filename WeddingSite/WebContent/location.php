@@ -26,7 +26,7 @@
     </header>
     <div class="welcome about">
         <h2>Il Castello Borghese</h2>
-        <p>Ebbene si! La cena si svolgerà sempre al Castello.</p>
+        <p>Ebbene si! La cena si svolgerà sempre presso "<a href="http://www.ilcastelloborghese.it/it/" target="_blank">Il Castello Borghese</a>".</p>
         <p>Nel cuore dei magnifici giardini, immerso nel verde, c'è il Salone delle Feste, che con i suoi 400 mq. di superficie e gli eleganti arredi, impreziositi da stoffe di raso in seta, può ospitare tranquillamente il nostro evento.<br>
         
         </p>

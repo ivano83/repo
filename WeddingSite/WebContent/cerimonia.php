@@ -33,6 +33,17 @@
         <p>Se qualcuno ha delle intolleranze a qualche alimento, fatecelo sapere in tempo in modo da proporre un menù alternativo.</p>
     </div>
     <div class="clearfloat"></div>
+        <div id="slideshow">
+        	<ul class="slides">
+                <li><img src="images/castello/rito_civile_1.jpg" width="960" height="340" alt="rito 1" /></li>
+                <li><img src="images/castello/rito_civile_3.jpg" width="960" height="340" alt="rito 3" /></li>
+                <li><img src="images/castello/castello_2.jpg" width="960" height="340" alt="castello 2" /></li>
+                <li><img src="images/castello/castello_3.jpg" width="960" height="340" alt="castello 3" /></li>
+                <li><img src="images/castello/castello_1.jpg" width="960" height="340" alt="castello 1" /></li>
+            </ul>
+        	<span class="arrow previous"></span>
+            <span class="arrow next"></span>
+        </div>
 </div>
 <footer>
 <?php  include('common/footer.php'); ?>
