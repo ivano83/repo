@@ -200,7 +200,7 @@ footer h3, .pageTitle h3 {
 	overflow: auto;
 	width:366px;
 	height: 400px;
-	background: none repeat scroll 0 0 rgba(0, 0, 0, 0.07);
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0.05);
 	text-align: left;
 }
 .latestNews, .sidebar, .contactForm {
@@ -291,7 +291,7 @@ footer h3, .pageTitle h3 {
 	text-align: center;
 }
 .footerBottom p {
-	padding:30px 0;
+	padding:10px 0;
 }
 .footerBottom a {
 	color:#4d89d1;

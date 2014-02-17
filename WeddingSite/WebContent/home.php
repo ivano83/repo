@@ -32,10 +32,18 @@
     	<h2>Ultime News</h2>
     	<div class="latestNews_inner">
         <ul>
-        	<li>
-            	<span>17/02/2014</span>
-                <p>Il sito è finalmente online!</p>
-            </li>
+       		<?php 
+       		include("conn.php");
+       		
+       		$html = "";
+       		$sql="SELECT news,date FROM wedding.news order by date desc";
+       		$result=mysql_query($sql);
+       		while($r=mysql_fetch_array($result)){
+				$html .= '<li><span>' . $r['date'] . '</span>';
+				$html .= '<p>' . $r['news'] . '</p></li>';
+			}
+			echo $html;
+        	?>
             
             <li>
             	<span>05/02/2014</span>

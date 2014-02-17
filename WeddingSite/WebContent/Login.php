@@ -5,10 +5,13 @@ session_start();
 if($_SERVER["REQUEST_METHOD"] == "POST")
 {
 	// username and password sent from Form
+	$name=addslashes($_POST['name']);
 	$myusername=addslashes($_POST['username']);
 	$mypassword=addslashes($_POST['password']);
+	$mypassword=sha1($_POST['password']);
+	$ip=$_SERVER['REMOTE_ADDR'];
 
-	$sql="SELECT iduser,user FROM test.user WHERE user='$myusername' and password='$mypassword'";
+	$sql="SELECT iduser,user FROM wedding.user WHERE user='$myusername' and password='$mypassword'";
 	$result=mysql_query($sql);
 	$row=mysql_fetch_array($result);
 	$iduser=$row['iduser'];
@@ -18,54 +21,25 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	if($count==1)
 	{
 		$_SESSION['login_user']=$myusername;
-
+		
+		$sql="INSERT INTO wedding.user_log (name, login_success, login_date, ip_address)  VALUES ('$name', 1, NOW(), '$ip')";
+		$result=mysql_query($sql);
+		if(! $result )
+		{
+			die('Could not enter data: ' . mysql_error());
+		}
 		header("location: home.php");
 	}
 	else
 	{
+		$sql="INSERT INTO wedding.user_log (name, login_success, login_date, ip_address)  VALUES ('$name', 0, NOW(), '$ip')";
+		$result=mysql_query($sql);
+		if(! $result )
+		{
+			die('Could not enter data: ' . mysql_error());
+		}
 		header("Location:login_failed.html");
 	}
 }
 ?>
 
-
-
-
-
-
-$username=$_POST['username'];
-$password=$_POST['password'];
-//$password=sha1($_POST['password']); my passwords are hashed in the database using the sha1
-$checklogin="SELECT iduser,user FROM test.user WHERE user=? AND password=?";
-$query = $connection->prepare($checklogin);
-if( ! $eintrag = $connection->prepare( $checklogin ) ) {
-  echo 'Error: ' . $connection->error;
-  return false; // throw exception, die(), exit, whatever...
-} 
-
-$query->bind_param("ss",$username,$password);
-$query->execute() or die($connection->error);
-$result = $query->bind_result($username, $password);
-$count = $result->num_rows;
-echo 'count=' . $count;
-if($count==1){
-	while($row=$result->fetch_assoc)	{
-		
-		session_regenerate_id();
-		$_SESSION['sess_user_id'] = $row['iduser'];
-		$_SESSION['sess_username']=$row['user'];
-		echo $row['user'];
-		session_write_close();
-	}
-	/* close connection */
-	$mysqli->close();
-	
-	//header("Location:home.php");
-}
-else {
-	/* close connection */
-	$mysqli->close();
-	
-	header("Location:login_failed.html");
-}
- ?>
