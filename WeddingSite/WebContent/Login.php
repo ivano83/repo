@@ -1,5 +1,5 @@
 <?php 
-include("conn.php");
+include("Conn.php");
 
 session_start();
 if($_SERVER["REQUEST_METHOD"] == "POST")
@@ -11,7 +11,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	$mypassword=sha1($_POST['password']);
 	$ip=$_SERVER['REMOTE_ADDR'];
 
-	$sql="SELECT iduser,user FROM wedding.user WHERE user='$myusername' and password='$mypassword'";
+	$sql="SELECT iduser,user FROM user WHERE user='$myusername' and password='$mypassword'";
 	$result=mysql_query($sql);
 	$row=mysql_fetch_array($result);
 	$iduser=$row['iduser'];
@@ -22,7 +22,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	{
 		$_SESSION['login_user']=$myusername;
 		
-		$sql="INSERT INTO wedding.user_log (name, login_success, login_date, ip_address)  VALUES ('$name', 1, NOW(), '$ip')";
+		$sql="INSERT INTO user_log (name, login_success, login_date, ip_address)  VALUES ('$name', 1, NOW(), '$ip')";
 		$result=mysql_query($sql);
 		if(! $result )
 		{
@@ -32,7 +32,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	}
 	else
 	{
-		$sql="INSERT INTO wedding.user_log (name, login_success, login_date, ip_address)  VALUES ('$name', 0, NOW(), '$ip')";
+		$sql="INSERT INTO user_log (name, login_success, login_date, ip_address)  VALUES ('$name', 0, NOW(), '$ip')";
 		$result=mysql_query($sql);
 		if(! $result )
 		{

@@ -24,7 +24,7 @@
         </p>
         <p>
         	Abbiamo creato questo sito per farvi avere alcune informazioni utili sull'evento.<br>
-        	Scorrendo tra le varie sezioni potete trovare tutte le informazioni riguardanti la celebrazione del matrimonio, la location e tutto il programma della giornata, nonchè curiosità sul nostro viaggio di nozze.
+        	Scorrendo tra le varie sezioni potete trovare tutte le informazioni riguardanti la celebrazione del matrimonio, la location e tutto il programma della giornata, nonchè curiosità sui preparativi e sul viaggio di nozze.
         </p>
         <div class="clearfloat"></div>
     </div>
@@ -33,10 +33,10 @@
     	<div class="latestNews_inner">
         <ul>
        		<?php 
-       		include("conn.php");
+       		include("Conn.php");
        		
        		$html = "";
-       		$sql="SELECT news,date FROM wedding.news order by date desc";
+       		$sql="SELECT news,date FROM news order by date desc";
        		$result=mysql_query($sql);
        		while($r=mysql_fetch_array($result)){
 				$html .= '<li><span>' . $r['date'] . '</span>';
