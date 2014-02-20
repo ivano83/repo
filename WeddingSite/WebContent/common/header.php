@@ -8,6 +8,7 @@ include('lock.php');
         </div>
         
         <div class="logoutContainer">
+        	<span>Benvenuto <b><?php echo $_SESSION['login_user'] ?> </b></span>
         	<form id="loginform" name="loginform" method="post" action="logout.php">
     		<center><input type="submit" name="loginbtn" class="flatbtn-logout hidemodal" value="Logout" ></center>
 			</form>

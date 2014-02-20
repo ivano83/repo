@@ -20,7 +20,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	// If result matched $myusername and $mypassword, table row must be 1 row
 	if($count==1)
 	{
-		$_SESSION['login_user']=$myusername;
+		$_SESSION['login_user']=$name;
 		
 		$sql="INSERT INTO user_log (name, login_success, login_date, ip_address)  VALUES ('$name', 1, NOW(), '$ip')";
 		$result=mysql_query($sql);
@@ -38,7 +38,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 		{
 			die('Could not enter data: ' . mysql_error());
 		}
-		header("Location:login_failed.html");
+		header("Location:login_failed.php");
 	}
 }
 ?>

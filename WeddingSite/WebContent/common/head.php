@@ -4,6 +4,9 @@
 <link href='http://fonts.googleapis.com/css?family=Yesteryear' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Salsa' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Karla' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Seaweed+Script' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Qwigley' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Mrs+Saint+Delafield' rel='stylesheet' type='text/css'>
 <link href="css/styles.css" rel="stylesheet" type="text/css">
 <script src="js/jquery.js"></script>
 <script src="js/countdown.js" type="text/javascript"></script>
