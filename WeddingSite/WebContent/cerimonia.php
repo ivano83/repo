@@ -24,13 +24,11 @@
         </p>
     </div>
     <div class="sidebar">
-    	<h2>Il menù</h2>
-        <p>Il cibo sarà principalmente a base di pesce.<br>
-        Si partirà con un ricchissimo antipasto a buffet, con una estesa varietà di pietanze, dal mare ai monti (e non solo).<br>
-        Una volta terminato il buffet, tutti seduti ai tavoli in attesa dei due primi, del secondo e dei contorni.<br>
-        Seguirà frutta e dolci a buffet e il taglio della torta.<br>
+    	<h2>Si parte</h2>
+        <p>Contro ogni tradizione, lo sposo, la sposa e la loro "paggetta" partiranno insieme dalla loro dimora.<br>
+        Una Roll Royce d'epoca bianca ci aspetta con autista sotto casa, pronta per portarci direttamente al castello di Nettuno.<br>
         </p>
-        <p>Se qualcuno ha delle intolleranze a qualche alimento, fatecelo sapere in tempo in modo da proporre un menù alternativo.</p>
+        <div class="picBorder" style="opacity:0.8; background:none;border:none;"><img src="images/roll_royce.png" alt="about" style="height:180px; width:320px; max-height:180px; max-width:320px; margin-left: 17px;"></div>
     </div>
     <div class="clearfloat"></div>
         <div id="slideshow">
