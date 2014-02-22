@@ -26,7 +26,7 @@
     <div class="sidebar">
     	<h2>Si parte</h2>
         <p>Contro ogni tradizione, lo sposo, la sposa e la loro "paggetta" partiranno insieme dalla loro dimora.<br>
-        Una Roll Royce d'epoca bianca ci aspetta con autista sotto casa, pronta per portarci direttamente al castello di Nettuno.<br>
+        Una Roll Royce d'epoca bianca con autista ci aspetterà sotto casa, pronta per portarci direttamente al castello di Nettuno.<br>
         </p>
         <div class="picBorder" style="opacity:0.8; background:none;border:none;"><img src="images/roll_royce.png" alt="about" style="height:180px; width:320px; max-height:180px; max-width:320px; margin-left: 17px;"></div>
     </div>
