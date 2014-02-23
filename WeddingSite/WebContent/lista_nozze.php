@@ -13,59 +13,37 @@
     	<?php  include('common/header.php'); ?>
         <div class="clearfloat"></div>
         <div class="pageTitle">
-        	<h3>Portfolio</h3>
+        	<h3>Lista Nozze</h3>
         </div>
     </header>
-    <div class="portfolio">
-    	<p>
-        	Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release
-        </p>
-        <ul>
-        	<li><a href="images/portfolioPreview/p1.jpg" title="Image Title 1" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb1.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p2.jpg" title="Image Title 2" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb2.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p3.jpg" title="Image Title 3" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb3.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p4.jpg" title="Image Title 4" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb4.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p5.jpg" title="Image Title 5" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb5.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p6.jpg" title="Image Title 6" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb6.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p7.jpg" title="Image Title 7" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb7.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p8.jpg" title="Image Title 8" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb8.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p9.jpg" title="Image Title 9" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb9.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p10.jpg" title="Image Title 10" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb10.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p11.jpg" title="Image Title 11" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb11.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p12.jpg" title="Image Title 12" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb12.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p13.jpg" title="Image Title 13" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb13.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p14.jpg" title="Image Title 14" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb14.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p15.jpg" title="Image Title 15" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb15.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p16.jpg" title="Image Title 16" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb16.jpg" class="picBorder" alt="portfolio"></a></li>
-        </ul>
-    </div>  
-    <div class="portfolio2">
-    	<p>
-        	Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release
-        </p>
-        <ul>
-        	<li><img src="images/portfolioThumbs/thumb1.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb2.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb3.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb4.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb5.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb6.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb7.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb8.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb9.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb10.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb11.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb12.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb13.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb14.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb15.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb16.jpg" class="picBorder" alt="portfolio"></li>
-        </ul>
-    </div>    
+    <div class="welcome about">
+    	<h2>La lista nozze</h2>
+    	<p>Iniziamo il discorso lista nozze sottolineando una frase che può risultare scontata, ma che di per se è sincera:</p>
+		<h4>il vostro regalo più grande sarà la vostra presenza.</h4><br>
+		<p>Come forse sapete noi già viviamo insieme, abbiamo una bimba e una casa tutta nostra.</p>
+		<div class="picBorder leftPic"><img src="images/fedi_matrimonio.jpg" alt="lista nozze" style="height:180px; width:130px; max-height:180px; max-width:130px;"></div>
+        <p>Non è molto facile scegliere gli oggetti da mettere nella lista nozze, soprattutto sapendo che l'essenziale ce l'abbiamo già. <br>
+		D'altro canto, sappiamo che fare un regalo spesso è un impresa, e che una lista nozze fa risparmiare molte "spremiture di meningi".</p>
+        <p>Allora ci siamo detti: "ma è davvero necessario fare questa benedetta lista nozze?" <br>
+        Insomma, tagliando corto... abbiamo deciso che non ci sarà una lista nozze! Quindi iniziate a spremervi le meningi!!! <img src="images/skype-emoticon.png" alt=":P" style="height:22px; width:22px; max-height:22px; max-width:22px; vertical-align: bottom;"></p>
+        
+        <p>Se siete in alto mare su cosa regalare per il nostro ricevimento, potete sempre contribuire alla realizzazione del nostro <a href="viaggio.php" >viaggio di nozze.</a></p>
+    </div>
+    <div class="sidebar">
+    	
+    </div>
+    <div class="sidebar">
+    	<h2>Coordinate</h2>
+        <p>La scelta del regalo ovviamente spetta solo a voi, ma se volete partecipare alla realizzazione del nostro viaggio, non possiamo che esserne felici.</p>
+        <p>Di seguito lasciamo le nostre coordinate bancarie, nel caso vogliate effettuare un bonifico, ma ovviamente potete utilizzare lo strumento che più vi piace (vedi la cara vecchia busta chiusa).</p>
+        <p>IT XXXXXXXXXXXXXX</p>
+        <p>Ultima cosa: ricordatevi di scrivere nella causale i vostri nome (o nome della famiglia) in modo da riconoscere chi ci ha donato una parte della nostra vacanza.</p>
+    </div>
     <div class="clearfloat"></div>
 </div>
 <footer>
 <?php  include('common/footer.php'); ?>
 </footer>
+<script src="js/script.js"></script>
 </body>
 </html>

@@ -24,7 +24,7 @@
         </p>
     </div>
     <div class="sidebar">
-    	<h2>Si parte</h2>
+    	<h2>Si parte!</h2>
         <p>Contro ogni tradizione, lo sposo, la sposa e la loro "paggetta" partiranno insieme dalla loro dimora.<br>
         Una Roll Royce d'epoca bianca con autista ci aspetterà sotto casa, pronta per portarci direttamente al castello di Nettuno.<br>
         </p>
