@@ -30,14 +30,14 @@
         <p>Se siete in alto mare su cosa regalare per il nostro ricevimento, potete sempre contribuire alla realizzazione del nostro <a href="viaggio.php" >viaggio di nozze.</a></p>
     </div>
     <div class="sidebar">
-    	
+    	<div class="picBorder leftPic"><img src="images/lista_nozze_1.jpg" alt="lista nozze" style="height:200px; width:355px; max-height:200px; max-width:355px;"></div>
     </div>
     <div class="sidebar">
     	<h2>Coordinate</h2>
         <p>La scelta del regalo ovviamente spetta solo a voi, ma se volete partecipare alla realizzazione del nostro viaggio, non possiamo che esserne felici.</p>
         <p>Di seguito lasciamo le nostre coordinate bancarie, nel caso vogliate effettuare un bonifico, ma ovviamente potete utilizzare lo strumento che più vi piace (vedi la cara vecchia busta chiusa).</p>
         <p>IT XXXXXXXXXXXXXX</p>
-        <p>Ultima cosa: ricordatevi di scrivere nella causale i vostri nome (o nome della famiglia) in modo da riconoscere chi ci ha donato una parte della nostra vacanza.</p>
+        <p>Ultima cosa: ricordatevi di scrivere nella causale i vostri nomi (o nome della famiglia) in modo da riconoscere chi ci ha donato una parte della nostra vacanza.</p>
     </div>
     <div class="clearfloat"></div>
 </div>
