@@ -5,17 +5,16 @@
 <?php  include('common/head.php'); ?>
 </head>
 <body>
-<div class="wrapper">
-	<div class="logoContainer">
-        <div class="logo"><a href="">Ivano & Cristina</a></div>
-        <div class="slogan">Il matrimonio</div>
+<div class="wrapper" style="width:460px;">
+	<div class="logoContainer" style="text-align: center;">
+        <span class="logo"><a href=""><img class="image_title" alt="Ivano &amp; Cristina" src="images/header_title.png" height="60px" /></a></span>
     </div>
     <div class="clearfloat"></div>
     
-	<div id="loginmodal" style="display: block;">
+	<div id="loginmodal" >
 		<h1 style="text-align: center;">Accedi</h1>
 		<form id="loginform" name="loginform" method="post" action="Login.php">
-			<label for="name">Chi sei &nbsp;&nbsp;&nbsp;<a href="#" onclick="javascript:alert('Se ti va puoi scrivere il tuo nome (e cognome), in questo modo ho il piacere di sapere chi ha visitato il sito.');">?</a></label> <input type="text" name="name" id="username" class="txtfield" tabindex="1">
+			<label for="name">Chi sei &nbsp;&nbsp;&nbsp;<a href="#" onclick="javascript:alert('Se ti va puoi scrivere il tuo nome (e cognome), in questo modo ho il piacere di sapere chi ha visitato il sito.');">?</a></label> <input type="text" name="name" id="name" class="txtfield" tabindex="1">
 			<label for="password">Password:</label> <input type="password" name="password" id="password" class="txtfield" tabindex="2">
 			<input type="hidden" name="username" value="Visitatore"/>
 			<div class="center">

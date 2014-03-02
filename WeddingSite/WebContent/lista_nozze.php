@@ -19,7 +19,7 @@
     <div class="welcome about">
     	<h2>La lista nozze</h2>
     	<p>Iniziamo il discorso lista nozze sottolineando una frase che può risultare scontata, ma che di per se è sincera:</p>
-		<h4>il vostro regalo più grande sarà la vostra presenza.</h4><br>
+		<h4>il vostro regalo più grande sarà la vostra presenza!</h4><br>
 		<p>Come forse sapete noi già viviamo insieme, abbiamo una bimba e una casa tutta nostra.</p>
 		<div class="picBorder leftPic"><img src="images/fedi_matrimonio.jpg" alt="lista nozze" style="height:180px; width:130px; max-height:180px; max-width:130px;"></div>
         <p>Non è molto facile scegliere gli oggetti da mettere nella lista nozze, soprattutto sapendo che l'essenziale ce l'abbiamo già. <br>
@@ -27,7 +27,7 @@
         <p>Allora ci siamo detti: "ma è davvero necessario fare questa benedetta lista nozze?" <br>
         Insomma, tagliando corto... abbiamo deciso che non ci sarà una lista nozze! Quindi iniziate a spremervi le meningi!!! <img src="images/skype-emoticon.png" alt=":P" style="height:22px; width:22px; max-height:22px; max-width:22px; vertical-align: bottom;"></p>
         
-        <p>Se siete in alto mare su cosa regalare per il nostro ricevimento, potete sempre contribuire alla realizzazione del nostro <a href="viaggio.php" >viaggio di nozze.</a></p>
+        <p>Se siete in alto mare su cosa regalare, potete sempre contribuire alla realizzazione del nostro <a href="viaggio.php" >viaggio di nozze.</a></p>
     </div>
     <div class="sidebar">
     	<div class="picBorder leftPic"><img src="images/lista_nozze_1.jpg" alt="lista nozze" style="height:200px; width:355px; max-height:200px; max-width:355px;"></div>

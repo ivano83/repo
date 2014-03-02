@@ -25,11 +25,11 @@ a:hover, a:active, a:focus {
 	text-decoration: none;
 }
 .logoContainer {
-	float:left;
-	width:410px;
+	/*float:left;
+	width:410px;*/
 }
 .logo {
-	float:left;
+	/*float:left;*/
 	padding-right:10px;
 }
 .logo a {
@@ -40,12 +40,14 @@ a:hover, a:active, a:focus {
 	text-decoration:none;
 }
 .logoutContainer {
-		float: right;
-		padding: 20px 0;
+	float: right;
+	padding: 20px 0;
+	text-align: right;
 }
 .slogan {
 	font-style:italic;
-	padding:42px 0 0 0;
+	padding:42px 0 0 10px;
+	position:absolute;
 }
 h1 {
 	font-size:30px;
@@ -96,8 +98,10 @@ p {
 footer {
 	background:#333333;
 	width: 100%;
-	position: absolute;
+	position: relative;
 	left: 0;
+	right: 0;
+	bottom: 0;
 }
 footer h3, .pageTitle h3 {
 	color:#d5d3d9;
@@ -118,6 +122,31 @@ footer h3, .pageTitle h3 {
 .footerTop a:hover {
 	color:#4d89d1;
 	text-decoration:underline;
+}
+.footerBottom {
+	background:#040707;	
+	color:#8b8b8b;
+	text-shadow: none;
+	text-align: center;
+	position:relative;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+.footerBottom p {
+	padding:10px 0;
+}
+.footerBottom a {
+	color:#4d89d1;
+	text-decoration:underline;
+}
+.footerBottom a:hover {
+	color:#4d89d1;
+	text-decoration:none;
+}
+#errori {
+	color: red;
+	padding: 15px;
 }
 .boxes {
 	background: none repeat scroll 0 0 rgba(0, 0, 0, 0.07);
@@ -157,6 +186,19 @@ footer h3, .pageTitle h3 {
 }
 .welcome {
 	padding-top:20px;
+}
+img {
+	max-width: 100%;
+	height: auto;
+	width: auto;
+}
+.img_custom {
+	max-width: 200px;
+    width: 200px;
+}
+.image_title {
+	max-height: 100px;
+    height: 100px;
 }
 .sidebar {
 	background: none repeat scroll 0 0 rgba(0, 0, 0, 0.07);
@@ -287,23 +329,7 @@ footer h3, .pageTitle h3 {
 	height:200px;
 	margin-bottom:20px;
 }
-.footerBottom {
-	background:#040707;	
-	color:#8b8b8b;
-	text-shadow: none;
-	text-align: center;
-}
-.footerBottom p {
-	padding:10px 0;
-}
-.footerBottom a {
-	color:#4d89d1;
-	text-decoration:underline;
-}
-.footerBottom a:hover {
-	color:#4d89d1;
-	text-decoration:none;
-}
+
 .picBorder {
 	border:1px solid #b4b4b4;
 	background:#222222;
@@ -387,7 +413,7 @@ footer h3, .pageTitle h3 {
 /**************************/
 nav {
 	float:right;
-	padding:40px 0 0 0;
+	padding:30px 0 0 0;
 }
 ul#navlist {
 	margin-left: 0;
@@ -431,7 +457,7 @@ ul#navlist {
 }
 
 #countdown {
-	padding: 20px 0 0;
+	padding: 10px 0 0;
 	
 }
 
@@ -570,15 +596,7 @@ ul#navlist {
 		padding:0;
 	}
 }
-img {
-	max-width: 100%;
-	height: auto;
-	width: auto;
-}
-.img_custom {
-	max-width: 200px;
-    width: 200px;
-}
+
 
 /**************************/
 /*********************************End Media Queries****************************************/
@@ -588,7 +606,6 @@ img {
 /*****login style*****/
 #loginmodal  {
 	width: 300px;
-	display:block;
 	padding: 15px 20px;
 	background: #f3f6fa;
 	-webkit-border-radius: 6px;
@@ -597,11 +614,13 @@ img {
 	-webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
 	-moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
 	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
-	margin: 0 300px;
+	position:relative;
+	left:15%;
+	margin-bottom: 200px;
 
 }
 
-#loginform { /* no default styles */ }
+#loginform { padding-top: 3px; }
 
 #loginform label { display: block; font-size: 1.1em; font-weight: bold; color: #7c8291; margin-bottom: 3px; }
 

@@ -1,22 +1,37 @@
 <!doctype html>
-<!--
-Designed by: http://www.cssing.org
-Released for free under a Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-Name: Portfolio
-Description:  A two-columns, responsive design template.
-Template number: 16
-Version: 1.0
-Released: 4.3.13
--->
 <html>
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio</title>
-<link href='http://fonts.googleapis.com/css?family=Yesteryear' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Salsa' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Karla' rel='stylesheet' type='text/css'>
-<link href="css/styles.css" rel="stylesheet" type="text/css">
+<?php  include('common/head.php'); ?>
+
+<script type="text/javascript">
+function validateMessageInsert() {
+	var form = document.sendMess;
+	var name = form.name.value;
+	var mail = form.email.value;
+	var message = form.message.value;
+	var errori = document.getElementById("errori");
+	var res = true;
+	if(name == "Nome:" || name.trim() == "") {
+		var elem = document.createElement("li");
+		elem.innerHTML = "Nome obbligatorio";
+		errori.appendChild(elem);
+		res = false;
+	}
+	if(mail == "E-mail:" || mail.trim() == "") {
+		var elem = document.createElement("li");
+		elem.innerHTML = "E-mail obbligatoria";
+		errori.appendChild(elem);
+		res = false;
+	}
+	if(message == "Messaggio:" || message.trim() == "") {
+		var elem = document.createElement("li");
+		elem.innerHTML = "Messaggio obbligatorio";
+		errori.appendChild(elem);
+		res = false;
+	}
+	return res;
+}
+</script>
 </head>
 <body onload="javascript:evidenziaMenu('m_contatti');">
 <div class="wrapper">
@@ -40,13 +55,16 @@ Released: 4.3.13
         </p>
     </div>
     <div class="contactForm">
-    	<h2>Contact Form</h2>
-        <form method="get" class="" action="http://www.free-responsive-templates.com">
-            <input type="text" id="name" name="name" value="Name:" class="inputContact" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;">
+    	<h2>Contattaci</h2>
+        <form method="post" name="sendMess" class="" action="Save_message.php">
+	        <div>
+	        	<ul id="errori" ></ul>
+	        </div>
+            <input type="text" id="name" name="name" value="Nome:" class="inputContact" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;">
             <input type="text" id="email" name="email" value="E-mail:" class="inputContact" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;">
-            <input type="text" id="phone" name="phone" value="Phone:" class="inputContact" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;">
-            <textarea name="" cols="" rows="" class="textareaContact" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;">Message:</textarea>
-            <p class="button"><a href="">Clear</a> <a href="">Send</a></p>
+            <textarea name="message" cols="" rows="" class="textareaContact" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;">Messaggio:</textarea>
+            <input type="reset" name="loginbtn" id="loginbtn" class="flatbtn-blu hidemodal" value="Pulisci" tabindex="2">
+            <input type="submit" name="loginbtn" id="loginbtn" class="flatbtn-blu hidemodal" value="Invia" tabindex="3" onclick="javascript: return validateMessageInsert();">
         </form>
     </div>
     <div class="clearfloat"></div>

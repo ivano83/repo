@@ -2,17 +2,17 @@
 include('lock.php');
 ?>
     	<div class="logoContainer">
-            <div class="logo"><a href="">Ivano & Cristina</a></div>
-            <div class="slogan">Il matrimonio</div>
-            <div id="countdown"></div>
+            <span><a href=""><img class="image_title" alt="Ivano &amp; Cristina" src="images/header_title.png" height="60px" /></a></span>
+            <span class="logoutContainer">
+	        	<span>Benvenuto <b><?php echo $_SESSION['login_user'] ?> </b></span>
+	        	<form id="loginform" name="loginform" method="post" action="logout.php">
+	    		<span><input type="submit" name="loginbtn" class="flatbtn-logout hidemodal" value="Logout" ></span>
+				</form>
+        	</span>
         </div>
-        
-        <div class="logoutContainer">
-        	<span>Benvenuto <b><?php echo $_SESSION['login_user'] ?> </b></span>
-        	<form id="loginform" name="loginform" method="post" action="logout.php">
-    		<center><input type="submit" name="loginbtn" class="flatbtn-logout hidemodal" value="Logout" ></center>
-			</form>
-        </div>
+        <div class="clearfloat"></div>
+        <div id="countdown"></div>
+        <div class="clearfloat"></div>
         <nav>
             <ul id="navlist">
                 <li class="m_home"><a href="home.php">Home</a></li>
