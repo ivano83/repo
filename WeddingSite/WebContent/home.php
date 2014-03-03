@@ -17,14 +17,14 @@
         <h1>Benvenuti</h1>
         <div class="picBorder leftPic"><img class="img_custom" src="images/ivano_cristina_home.jpg" alt="welcome" width="80"  ></div>
         <p>
-            11 Settembre 2014... a quanto pare Ë il giorno in cui <strong>ci sposiamo</strong>.<br>
+            11 Settembre 2014... a quanto pare √® il giorno in cui <strong>ci sposiamo</strong>!<br>
         </p>
         <p>
         	Finalmente abbiamo deciso di fare il grande passo, e vogliamo condividere la nostra gioia con voi.
         </p>
         <p>
         	Abbiamo creato questo sito per farvi avere alcune informazioni utili sull'evento.<br>
-        	Scorrendo tra le varie sezioni potete trovare tutte le informazioni riguardanti la celebrazione del matrimonio, la location e tutto il programma della giornata, nonchË curiosit‡ sui preparativi e sul viaggio di nozze.
+        	Scorrendo tra le varie sezioni potete trovare tutte le informazioni riguardanti la celebrazione del matrimonio, la location e tutto il programma della giornata, nonch√® curiosit√† sui preparativi e sul viaggio di nozze.
         </p>
         <div class="clearfloat"></div>
     </div>

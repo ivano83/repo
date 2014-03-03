@@ -43,6 +43,12 @@ function validateMessageInsert() {
         </div>
     </header>
     <div class="welcome contact">
+ <?php 
+	if(!empty($_GET['inv'])) {
+		echo "<script>alert('Grazie per averci scritto. Buon proseguimento!'); </script>";
+	}
+
+?>
         <h2>Contact Info</h2>
         <iframe class="map" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=1401+Southwest+15th+Street+Pompano+Beach,+FL+33069&amp;aq=&amp;sll=26.21114,-80.142404&amp;sspn=0.002041,0.004128&amp;t=h&amp;ie=UTF8&amp;hq=&amp;hnear=1401+SW+15th+St,+Pompano+Beach,+Florida+33069&amp;ll=26.211111,-80.142383&amp;spn=0.008163,0.016512&amp;z=14&amp;output=embed"></iframe><br /><small><a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=1401+Southwest+15th+Street+Pompano+Beach,+FL+33069&amp;aq=&amp;sll=26.21114,-80.142404&amp;sspn=0.002041,0.004128&amp;t=h&amp;ie=UTF8&amp;hq=&amp;hnear=1401+SW+15th+St,+Pompano+Beach,+Florida+33069&amp;ll=26.211111,-80.142383&amp;spn=0.008163,0.016512&amp;z=14" style="color:#0000FF;text-align:left">View Larger Map</a></small>
         <p>

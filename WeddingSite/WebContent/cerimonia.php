@@ -16,17 +16,17 @@
     <div class="welcome about">
     	<h2>Il Rito Civile</h2>
     	<div class="picBorder leftPic"><img src="images/rito_civile.jpg" alt="about" style="height:280px; width:200px; max-height:280px; max-width:200px;"></div>
-        <p>Il nostro sar‡ un matrimonio alternativo, diverso dai matrimoni che vedete di solito, molti lo chiamano matrimonio "all'Americana", ma per noi rimane comunque la cerimonia che lega per sempre il nostro amore.
+        <p>Il nostro sar√† un matrimonio alternativo, diverso dai matrimoni che vedete di solito, molti lo chiamano matrimonio "all'Americana", ma per noi rimane comunque la cerimonia che lega per sempre il nostro amore.
         </p>
-        <p>Il rito si svolger‡ presso "<a href="http://www.ilcastelloborghese.it/it/" target="_blank">Il Castello Borghese</a>" a Nettuno (Rm), nei giardini adiacenti al Castello, con il mare sullo sfondo.<br>
+        <p>Il rito si svolger√† presso "<a href="http://www.ilcastelloborghese.it/it/" target="_blank">Il Castello Borghese</a>" a Nettuno (Rm), nei giardini adiacenti al Castello, con il mare sullo sfondo.<br>
         </p>
-        <p>Qualcuno potr‡ dire: come mai avete scelto un posto cosÏ lontano da dove abitate? La risposta Ë presto fatta... basta guardare le immagini di questa Location!
+        <p>Qualcuno potr√† dire: come mai avete scelto un posto cos√¨ lontano da dove abitate? La risposta √® presto fatta... basta guardare le immagini di questa Location!
         </p>
     </div>
     <div class="sidebar">
     	<h2>Si parte!</h2>
         <p>Contro ogni tradizione, lo sposo, la sposa e la loro "paggetta" partiranno insieme dalla loro dimora.<br>
-        Una Roll Royce d'epoca bianca con autista ci aspetter‡ sotto casa, pronta per portarci direttamente al castello di Nettuno.<br>
+        Una Roll Royce d'epoca bianca con autista ci aspetter√† sotto casa, pronta per portarci direttamente al castello di Nettuno.<br>
         </p>
         <div class="picBorder" style="opacity:0.8; background:none;border:none;"><img src="images/roll_royce.png" alt="about" style="height:180px; width:320px; max-height:180px; max-width:320px; margin-left: 17px;"></div>
     </div>

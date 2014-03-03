@@ -19,7 +19,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	if(! $result ) {
 		die('Could not enter data: ' . mysql_error());
 	}
-	header("location: contatti.php");
+	header("location: contatti.php?inv=1");
 }
 ?>
 
