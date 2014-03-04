@@ -24,6 +24,9 @@ a:hover, a:active, a:focus {
 	color: #1859a8;
 	text-decoration: none;
 }
+.strong {
+	font-weight: bold;
+}
 .logoContainer {
 	/*float:left;
 	width:410px;*/

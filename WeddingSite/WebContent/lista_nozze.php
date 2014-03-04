@@ -36,7 +36,10 @@
     	<h2>Coordinate</h2>
         <p>La scelta del regalo ovviamente spetta solo a voi, ma se volete partecipare alla realizzazione del nostro viaggio, non possiamo che esserne felici.</p>
         <p>Di seguito lasciamo le nostre coordinate bancarie, nel caso vogliate effettuare un bonifico, ma ovviamente potete utilizzare lo strumento che più vi piace (vedi la cara vecchia busta chiusa).</p>
-        <p>IT XXXXXXXXXXXXXX</p>
+        <p><span class="strong">Intestatario:</span> Ivano Fiorini<br>
+        <span class="strong">IBAN:</span> IT XXXXXXXXXXXXXX000000<br>
+        <span class="strong">Causale:</span> Nozze Ivano e Cristina, regalo da parte di... [mettere i nomi o famiglia]<br>
+        </p>
         <p>Ultima cosa: ricordatevi di scrivere nella causale i vostri nomi (o nome della famiglia) in modo da riconoscere chi ci ha donato una parte della nostra vacanza.</p>
     </div>
     <div class="clearfloat"></div>

@@ -39,7 +39,7 @@ function validateMessageInsert() {
     	<?php  include('common/header.php'); ?>
         <div class="clearfloat"></div>
         <div class="pageTitle">
-        	<h3>Contact</h3>
+        	<h3>Contatti</h3>
         </div>
     </header>
     <div class="welcome contact">
@@ -47,22 +47,33 @@ function validateMessageInsert() {
 	if(!empty($_GET['inv'])) {
 		echo "<script>alert('Grazie per averci scritto. Buon proseguimento!'); </script>";
 	}
-
-?>
-        <h2>Contact Info</h2>
-        <iframe class="map" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=1401+Southwest+15th+Street+Pompano+Beach,+FL+33069&amp;aq=&amp;sll=26.21114,-80.142404&amp;sspn=0.002041,0.004128&amp;t=h&amp;ie=UTF8&amp;hq=&amp;hnear=1401+SW+15th+St,+Pompano+Beach,+Florida+33069&amp;ll=26.211111,-80.142383&amp;spn=0.008163,0.016512&amp;z=14&amp;output=embed"></iframe><br /><small><a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=1401+Southwest+15th+Street+Pompano+Beach,+FL+33069&amp;aq=&amp;sll=26.21114,-80.142404&amp;sspn=0.002041,0.004128&amp;t=h&amp;ie=UTF8&amp;hq=&amp;hnear=1401+SW+15th+St,+Pompano+Beach,+Florida+33069&amp;ll=26.211111,-80.142383&amp;spn=0.008163,0.016512&amp;z=14" style="color:#0000FF;text-align:left">View Larger Map</a></small>
+ ?>
+        <h2>Informazioni utili</h2>
         <p>
-        	1401 SW 15th St<br>Pompano Beach, FL 33069
+        	<span class="strong">Partenza: Casa degli Sposi</span><br>
+        	<span>Ore 17:00 circa</span><br>
+        	<span>Via Corrado del Greco, 90 - Roma</span>
         </p>
         <p>
-        	Telefone:             +1 500 923 3321<br>
-            FAX:                      +1 500 239 2211<br>
-            E-mail: mail@yourwebsite.com 
+        	<span class="strong">Destinazione: Il Castello Borghese</span><br>
+        	<span>Ore 18:15 circa</span><br>
+        	<span>Via dell'Olmata, 99 - Nettuno (Rm)</span>
+        </p>
+        <p>
+        	<span class="strong">Celebrazione del Rito</span><br>
+        	<span>Ore 18:30</span><br>
+        	<span>Via dell'Olmata, 99 - Nettuno (Rm)</span>
+        </p>
+        <p>
+        	<span class="strong">Rinfresco, Cena e Proseguimento di Serata</span><br>
+        	<span>Dalle ore 19:00 in poi</span><br>
+        	<span>Via dell'Olmata, 99 - Nettuno (Rm)</span>
         </p>
     </div>
     <div class="contactForm">
     	<h2>Contattaci</h2>
         <form method="post" name="sendMess" class="" action="Save_message.php">
+        	<div>Se volete chiederci qualcosa, confermare la vostra presenza, lasciare un commento o un semplice saluto... questa è la sezione giusta! </div>
 	        <div>
 	        	<ul id="errori" ></ul>
 	        </div>
