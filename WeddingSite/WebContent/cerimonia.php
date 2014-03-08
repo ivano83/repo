@@ -23,12 +23,12 @@
         <p>Qualcuno potrà dire: come mai avete scelto un posto così lontano da dove abitate? La risposta è presto fatta... basta guardare le immagini di questa Location!
         </p>
     </div>
-    <div class="sidebar">
+    <div class="sidebar" style="margin-top: 50px;">
     	<h2>Si parte!</h2>
         <p>Contro ogni tradizione, lo sposo, la sposa e la loro "paggetta" partiranno insieme dalla loro dimora.<br>
-        Una Roll Royce d'epoca bianca con autista ci aspetterà sotto casa, pronta per portarci direttamente al castello di Nettuno.<br>
+        Un'automobile d'epoca con autista ci aspetterà sotto casa, pronta per portarci direttamente al castello di Nettuno.<br>
         </p>
-        <div class="picBorder" style="opacity:0.8; background:none;border:none;"><img src="images/roll_royce.png" alt="about" style="height:180px; width:320px; max-height:180px; max-width:320px; margin-left: 17px;"></div>
+        <!--  <div class="picBorder" style="opacity:0.8; background:none;border:none; visibility:hidden;"><img src="images/roll_royce.png" alt="about" style="height:180px; width:320px; max-height:180px; max-width:320px; margin-left: 17px;"></div>-->
     </div>
     <div class="clearfloat"></div>
         <div id="slideshow">

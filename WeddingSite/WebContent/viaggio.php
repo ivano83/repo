@@ -13,56 +13,28 @@
     	<?php  include('common/header.php'); ?>
         <div class="clearfloat"></div>
         <div class="pageTitle">
-        	<h3>Portfolio</h3>
+        	<h3>Viaggio di Nozze</h3>
         </div>
     </header>
-    <div class="portfolio">
-    	<p>
-        	Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release
+    <div class="welcome about">
+    	<h2>Il Viaggio</h2>
+    	<p>Maldive? Caraibi? Bora Bora? Stati Uniti coast to coast? Crociera mediterranea?... niente di tutto questo!
         </p>
-        <ul>
-        	<li><a href="images/portfolioPreview/p1.jpg" title="Image Title 1" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb1.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p2.jpg" title="Image Title 2" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb2.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p3.jpg" title="Image Title 3" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb3.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p4.jpg" title="Image Title 4" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb4.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p5.jpg" title="Image Title 5" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb5.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p6.jpg" title="Image Title 6" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb6.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p7.jpg" title="Image Title 7" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb7.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p8.jpg" title="Image Title 8" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb8.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p9.jpg" title="Image Title 9" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb9.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p10.jpg" title="Image Title 10" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb10.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p11.jpg" title="Image Title 11" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb11.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p12.jpg" title="Image Title 12" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb12.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p13.jpg" title="Image Title 13" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb13.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p14.jpg" title="Image Title 14" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb14.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p15.jpg" title="Image Title 15" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb15.jpg" class="picBorder" alt="portfolio"></a></li>
-            <li><a href="images/portfolioPreview/p16.jpg" title="Image Title 16" rel="lightbox[roadtrip]"><img src="images/portfolioThumbs/thumb16.jpg" class="picBorder" alt="portfolio"></a></li>
-        </ul>
-    </div>  
-    <div class="portfolio2">
-    	<p>
-        	Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release
+        <p>Con Alice, organizzare uno di questi viaggi sarebbe stato più impegnativo che rilassante.<br>
+        Quindi abbiamo optato per una vacanza più "vicina" e più rilassante per tutti i membri della famiglia.
         </p>
-        <ul>
-        	<li><img src="images/portfolioThumbs/thumb1.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb2.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb3.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb4.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb5.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb6.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb7.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb8.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb9.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb10.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb11.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb12.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb13.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb14.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb15.jpg" class="picBorder" alt="portfolio"></li>
-            <li><img src="images/portfolioThumbs/thumb16.jpg" class="picBorder" alt="portfolio"></li>
-        </ul>
-    </div>    
+        <p>Da buoni pianificatori e programmatori, abbiamo deciso di organizzare completamente da soli il nostro viaggio, senza l'aiuto di agenzie (che, oltre a limitare la scelta, ci mangiano sopra).<br>
+        Dopo alcuni giorni di ricerca, finalmente troviamo il Villaggio che fa per noi: una suite con vista mare, piscine, centro benessere, aree per i bambini, vasta scelta di ristoranti, pacchetto speciale sposi e ovviamente tutti i servizi in versione "full".
+        </p>
+        <p>Ah... non abbiamo detto dove si trova questo villaggio Resort & SPA: <br>
+        vi diciamo solo che si trova in SARDEGNA!
+        </p>
+        <p>Ecco un piccolo assaggio di quello che ci aspetterà! <br><br><br>
+        </p>
+    </div>
     <div class="clearfloat"></div>
+     <div class="picBorder"><img src="images/resort-benessere.jpg" alt="SPA" style="height:330px; width:950px; max-height:330px; max-width:950px;"></div>
+    
 </div>
 <footer>
 <?php  include('common/footer.php'); ?>
