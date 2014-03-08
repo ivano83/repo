@@ -26,6 +26,10 @@ a:hover, a:active, a:focus {
 }
 .strong {
 	font-weight: bold;
+	color:red;
+}
+.italico {
+	font-style: italic;
 }
 .logoContainer {
 	/*float:left;

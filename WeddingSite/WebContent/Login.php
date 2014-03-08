@@ -8,7 +8,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	$name=addslashes($_POST['name']);
 	$myusername=addslashes($_POST['username']);
 	$mypassword=addslashes($_POST['password']);
-	$mypassword=sha1($_POST['password']);
+	$mypassword=sha1($mypassword);
 	$ip=$_SERVER['REMOTE_ADDR'];
 
 	$sql="SELECT iduser,user FROM user WHERE user='$myusername' and password='$mypassword'";
@@ -22,7 +22,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	{
 		$_SESSION['login_user']=$name;
 		
-		$sql="INSERT INTO user_log (name, login_success, login_date, ip_address)  VALUES ('$name', 1, NOW(), '$ip')";
+		$sql="INSERT INTO user_log (name, login_success, login_date, ip_address)  VALUES ('$name', 1, NOW(), '$ip'";
 		$result=mysql_query($sql);
 		if(! $result )
 		{
@@ -32,7 +32,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	}
 	else
 	{
-		$sql="INSERT INTO user_log (name, login_success, login_date, ip_address)  VALUES ('$name', 0, NOW(), '$ip')";
+		
+			if(empty($_SESSION['last_request_count'])){
+				$_SESSION['last_request_count'] = 1;
+			}elseif($_SESSION['last_request_count'] < 5){
+				$_SESSION['last_request_count'] = $_SESSION['last_request_count'] + 1;
+			}elseif($_SESSION['last_request_count'] >= 5){
+				$_SESSION['last_request_count'] = 1;
+				header("Location:login_ddos.php");
+				exit;
+			}
+
+ 		
+ 		$passChiaro = $_POST['password'];
+		$sql="INSERT INTO user_log (name, login_success, login_date, ip_address, digit_password)  VALUES ('$name', 0, NOW(), '$ip', '$passChiaro')";
 		$result=mysql_query($sql);
 		if(! $result )
 		{

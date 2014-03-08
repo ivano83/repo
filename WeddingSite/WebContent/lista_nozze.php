@@ -13,7 +13,7 @@
     	<?php  include('common/header.php'); ?>
         <div class="clearfloat"></div>
         <div class="pageTitle">
-        	<h3>Lista Nozze</h3>
+        	<h3>Lista Nozze... in Viaggio</h3>
         </div>
     </header>
     <div class="welcome about">
@@ -27,7 +27,7 @@
         <p>Allora ci siamo detti: "ma è davvero necessario fare questa benedetta lista nozze?" <br>
         Insomma, tagliando corto... abbiamo deciso che non ci sarà una lista nozze! Quindi iniziate a spremervi le meningi!!! <img src="images/skype-emoticon.png" alt=":P" style="height:22px; width:22px; max-height:22px; max-width:22px; vertical-align: bottom;"></p>
         
-        <p>Se siete in alto mare su cosa regalare, potete sempre contribuire alla realizzazione del nostro <a href="viaggio.php" >viaggio di nozze.</a></p>
+        <p>Se siete in alto mare su cosa regalare, potete sempre contribuire alla realizzazione del nostro <a href="viaggio.php" >viaggio di nozze</a>.</p>
     </div>
     <div class="sidebar">
     	<div class="picBorder leftPic"><img src="images/lista_nozze_1.jpg" alt="lista nozze" style="height:200px; width:355px; max-height:200px; max-width:355px;"></div>
@@ -36,9 +36,9 @@
     	<h2>Coordinate</h2>
         <p>La scelta del regalo ovviamente spetta solo a voi, ma se volete partecipare alla realizzazione del nostro viaggio, non possiamo che esserne felici.</p>
         <p>Di seguito lasciamo le nostre coordinate bancarie, nel caso vogliate effettuare un bonifico, ma ovviamente potete utilizzare lo strumento che più vi piace (vedi la cara vecchia busta chiusa).</p>
-        <p><span class="strong">Intestatario:</span> Ivano Fiorini<br>
-        <span class="strong">IBAN:</span> IT XXXXXXXXXXXXXX000000<br>
-        <span class="strong">Causale:</span> Nozze Ivano e Cristina, regalo da parte di... [mettere i nomi o famiglia]<br>
+        <p><span class="strong">Intestatario:</span> <span class="italico">Fiorini Ivano</span><br>
+        <span class="strong">IBAN:</span> <span class="italico">IT 22 G 02008 38892 000401232518</span><br>
+        <span class="strong">Causale:</span> <span class="italico">Nozze Ivano e Cristina, regalo da parte di... [mettere i nomi o famiglia]</span><br>
         </p>
         <p>Ultima cosa: ricordatevi di scrivere nella causale i vostri nomi (o nome della famiglia) in modo da riconoscere chi ci ha donato una parte della nostra vacanza.</p>
     </div>
