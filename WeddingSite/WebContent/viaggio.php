@@ -21,7 +21,7 @@
     	<p>Maldive? Caraibi? Bora Bora? Stati Uniti coast to coast? Crociera mediterranea?... niente di tutto questo!
         </p>
         <p>Con Alice, organizzare uno di questi viaggi sarebbe stato più impegnativo che rilassante.<br>
-        Quindi abbiamo optato per una vacanza più "vicina" e più rilassante per tutti i membri della famiglia.
+        Quindi abbiamo optato per una vacanza più "vicina" e più rilassante per tutti.
         </p>
         <p>Da buoni pianificatori e programmatori, abbiamo deciso di organizzare completamente da soli il nostro viaggio, senza l'aiuto di agenzie (che, oltre a limitare la scelta, ci mangiano sopra).<br>
         Dopo alcuni giorni di ricerca, finalmente troviamo il Villaggio che fa per noi: una suite con vista mare, piscine, centro benessere, aree per i bambini, vasta scelta di ristoranti, pacchetto speciale sposi e ovviamente tutti i servizi in versione "full".

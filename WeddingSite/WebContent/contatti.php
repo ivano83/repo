@@ -80,7 +80,7 @@ function validateMessageInsert() {
             <input type="text" id="name" name="name" value="Nome:" class="inputContact" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;">
             <input type="text" id="email" name="email" value="E-mail:" class="inputContact" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;">
             <textarea name="message" cols="" rows="" class="textareaContact" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;">Messaggio:</textarea>
-            <input type="reset" name="loginbtn" id="loginbtn" class="flatbtn-blu hidemodal" value="Pulisci" tabindex="2">
+            <input type="reset" name="loginbtn" id="loginbtn" class="flatbtn-blu hidemodal" value="Cancella" tabindex="2">
             <input type="submit" name="loginbtn" id="loginbtn" class="flatbtn-blu hidemodal" value="Invia" tabindex="3" onclick="javascript: return validateMessageInsert();">
         </form>
     </div>

@@ -22,7 +22,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	{
 		$_SESSION['login_user']=$name;
 		
-		$sql="INSERT INTO user_log (name, login_success, login_date, ip_address)  VALUES ('$name', 1, NOW(), '$ip'";
+		$sql="INSERT INTO user_log (name, login_success, login_date, ip_address)  VALUES ('$name', 1, NOW(), '$ip')";
 		$result=mysql_query($sql);
 		if(! $result )
 		{

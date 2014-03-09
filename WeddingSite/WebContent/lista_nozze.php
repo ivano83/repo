@@ -40,6 +40,10 @@
         <span class="strong">IBAN:</span> <span class="italico">IT 22 G 02008 38892 000401232518</span><br>
         <span class="strong">Causale:</span> <span class="italico">Nozze Ivano e Cristina, regalo da parte di... [mettere i nomi o famiglia]</span><br>
         </p>
+        <p><span class="strong">Intestatario:</span> <span class="italico">Janota Cristina</span><br>
+        <span class="strong">IBAN:</span> <span class="italico">IT 31 G 03062 34210 000000603101</span><br>
+        <span class="strong">Causale:</span> <span class="italico">Nozze Ivano e Cristina, regalo da parte di... [mettere i nomi o famiglia]</span><br>
+        </p>
         <p>Ultima cosa: ricordatevi di scrivere nella causale i vostri nomi (o nome della famiglia) in modo da riconoscere chi ci ha donato una parte della nostra vacanza.</p>
     </div>
     <div class="clearfloat"></div>
