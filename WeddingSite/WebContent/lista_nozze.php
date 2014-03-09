@@ -28,10 +28,9 @@
         Insomma, tagliando corto... abbiamo deciso che non ci sarà una lista nozze! Quindi iniziate a spremervi le meningi!!! <img src="images/skype-emoticon.png" alt=":P" style="height:22px; width:22px; max-height:22px; max-width:22px; vertical-align: bottom;"></p>
         
         <p>Se siete in alto mare su cosa regalare, potete sempre contribuire alla realizzazione del nostro <a href="viaggio.php" >viaggio di nozze</a>.</p>
+    	<div class="picBorder "><img src="images/lista_nozze_1.jpg" alt="lista nozze" style="height:260px; width:505px; max-height:260px; max-width:505px;"></div>
     </div>
-    <div class="sidebar">
-    	<div class="picBorder leftPic"><img src="images/lista_nozze_1.jpg" alt="lista nozze" style="height:200px; width:355px; max-height:200px; max-width:355px;"></div>
-    </div>
+    
     <div class="sidebar">
     	<h2>Coordinate</h2>
         <p>La scelta del regalo ovviamente spetta solo a voi, ma se volete partecipare alla realizzazione del nostro viaggio, non possiamo che esserne felici.</p>
