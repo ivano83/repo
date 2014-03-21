@@ -30,6 +30,10 @@ public abstract class ReleaseSiteService extends BaseService {
 	protected boolean enableScenelogService;
 	protected boolean enableYoutubeService;
 	protected boolean excludeRipRelease;
+	protected boolean excludeVA;
+	
+	protected String annoDa;
+	protected String annoAl;
 	
 	protected Long idUser;
 	
@@ -73,6 +77,14 @@ public abstract class ReleaseSiteService extends BaseService {
 	protected boolean isRadioRipRelease(ReleaseModel release) {
 		for(String rip : generalConf.RELEASE_EXCLUSION) {
 			if(release.getNameWithUnderscore().contains(rip))
+				return true;
+		}
+		return false;
+	}
+	
+	protected boolean isVARelease(ReleaseModel release) {
+		for(String rip : generalConf.RELEASE_VA) {
+			if(release.getNameWithUnderscore().startsWith(rip))
 				return true;
 		}
 		return false;
@@ -135,4 +147,30 @@ public abstract class ReleaseSiteService extends BaseService {
 	public void setExcludeRipRelease(boolean excludeRipRelease) {
 		this.excludeRipRelease = excludeRipRelease;
 	}
+
+	public boolean isExcludeVA() {
+		return excludeVA;
+	}
+
+	public void setExcludeVA(boolean excludeVA) {
+		this.excludeVA = excludeVA;
+	}
+
+	public String getAnnoDa() {
+		return annoDa;
+	}
+
+	public void setAnnoDa(String annoDa) {
+		this.annoDa = annoDa;
+	}
+
+	public String getAnnoAl() {
+		return annoAl;
+	}
+
+	public void setAnnoAl(String annoAl) {
+		this.annoAl = annoAl;
+	}
+	
+	
 }

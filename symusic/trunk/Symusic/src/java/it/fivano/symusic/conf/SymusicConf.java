@@ -10,6 +10,7 @@ public class SymusicConf {
 
 	public String MAX_ACTIVE_THREAD;
 	public List<String> RELEASE_EXCLUSION;
+	public List<String> RELEASE_VA;
 
 	public SymusicConf() throws IOException {
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("symusic.properties");
@@ -18,6 +19,7 @@ public class SymusicConf {
 		
 		MAX_ACTIVE_THREAD = props.getProperty("maxActiveThread");
 		RELEASE_EXCLUSION = Arrays.asList(props.getProperty("releaseExclusion").split(","));
+		RELEASE_VA = Arrays.asList(props.getProperty("releaseVa").split(","));
 
 	}
 	

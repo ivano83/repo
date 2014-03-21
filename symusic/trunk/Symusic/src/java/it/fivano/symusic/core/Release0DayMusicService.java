@@ -133,6 +133,10 @@ public class Release0DayMusicService extends ReleaseSiteService {
 				if(excludeRipRelease && this.isRadioRipRelease(release)) {
 					continue;
 				}
+				
+				if(excludeVA && this.isVARelease(release)) {
+					continue;
+				}
 
 				// LINK
 				release.addLink(SymusicUtility.popolateLink(linkDoc));

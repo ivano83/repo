@@ -93,12 +93,18 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 			// per ogni release scenelog recupera i dati da beatport
 			BeatportParser beatport = new BeatportParser();
 			List<BeatportParserModel> beatportRes = null;
+			int count = 0;
 			for(ZeroDayMp3ParserModel sc : resZero) {
 
+				count++;
 				ReleaseModel release = new ReleaseModel();
-
+				
 				release.setNameWithUnderscore(sc.getReleaseName());
 				if(excludeRipRelease && this.isRadioRipRelease(release)) {
+					continue;
+				}
+				
+				if(excludeVA && this.isVARelease(release)) {
 					continue;
 				}
 
@@ -169,6 +175,9 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 				GoogleService google = new GoogleService();
 				google.addManualSearchLink(release);
 				youtube.addManualSearchLink(release); // link a youtube per la ricerca manuale
+				
+				log.info("********* Processate "+count+" release su "+resZero.size()+"*********");
+
 
 			}
 
@@ -187,6 +196,7 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 		
 	}
 	
+
 	private void checkProcessPage(List<ZeroDayMp3ParserModel> resScenelog, ScenelogInfo info) {
 		Date max = null;
 		Date min = null;

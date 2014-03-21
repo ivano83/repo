@@ -60,10 +60,15 @@ public class ZeroDayMusicServlet extends BaseAction {
 			String iDate = request.getParameter("initDate");
 			String eDate = request.getParameter("endDate");
 			
+			String annoDa = request.getParameter("annoDa");
+			String annoAl = request.getParameter("annoAl");
+			
 			String enableBeatport = request.getParameter("enableBeatport");
 			String excludeReleaseRip = request.getParameter("excludeRelaseRip");
+			String excludeReleaseVA = request.getParameter("excludeVA");
 			boolean flagBeatport = (enableBeatport!=null && enableBeatport.equalsIgnoreCase("true"))?true:false;
 			boolean flagRip = (excludeReleaseRip!=null && excludeReleaseRip.equalsIgnoreCase("true"))?true:false;
+			boolean flagVA = (excludeReleaseVA!=null && excludeReleaseVA.equalsIgnoreCase("true"))?true:false;
 			
 			// se non presente le date sono inizializzate alla data corrente
 			initDate = (iDate==null || iDate.isEmpty())? sdf.parse(sdf.format(new Date())) : sdf.parse(iDate);
@@ -82,11 +87,17 @@ public class ZeroDayMusicServlet extends BaseAction {
 				Release0DayMusicService zeroDay = new Release0DayMusicService(user.getId());
 				zeroDay.setEnableBeatportService(flagBeatport);
 				zeroDay.setExcludeRipRelease(flagRip);
+				zeroDay.setExcludeVA(flagVA);
+				zeroDay.setAnnoDa(annoDa);
+				zeroDay.setAnnoAl(annoAl);
 				listRelease = zeroDay.parse0DayMusicRelease(genre, initDate, endDate);
 			} else if(site.equals("2")) {
 				Release0DayMp3Service zeroDay = new Release0DayMp3Service(user.getId());
 				zeroDay.setEnableBeatportService(flagBeatport);
 				zeroDay.setExcludeRipRelease(flagRip);
+				zeroDay.setExcludeVA(flagVA);
+				zeroDay.setAnnoDa(annoDa);
+				zeroDay.setAnnoAl(annoAl);
 				listRelease = zeroDay.parse0DayMp3Release(genre, initDate, endDate);
 			}
 			

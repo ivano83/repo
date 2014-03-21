@@ -7,7 +7,7 @@
 	<link rel="stylesheet" href="./styles/symusic.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="./styles/jRating.jquery.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="./styles/jdel.jquery.css" type="text/css" media="screen" />
-	
+
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<meta http-equiv="Pragma" content="no-cache">
 	<meta http-equiv="Expires" content="0" > 

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -33,6 +34,7 @@
 					<option value="dance" selected="selected">Dance</option>
 					<option value="trance">Trance</option>
 					<option value="house">House</option>
+					<option value="0day-mp3">0day-mp3</option>
 				</select>
 			</td>
 		</tr>
@@ -67,6 +69,24 @@
 			</td>
 			<td>
 				<input type="checkbox" name="excludeRelaseRip" value="true" checked="checked" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>Ignora Release Various Artist (VA)</div>
+			</td>
+			<td>
+				<input type="checkbox" name="excludeVA" value="true" checked="checked" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>Range Data</div>
+			</td>
+			<td>
+				<jsp:useBean id="date" class="java.util.Date" />
+				<fmt:formatDate value="${date}" pattern="yyyy" var="currentYear" />
+				Dal <input type="text" name="annoDa" size="5" value="${currentYear}"/> Al <input type="text" name="annoAl" size="5" value="${currentYear}"/>
 			</td>
 		</tr>
 	</table>
