@@ -7,6 +7,19 @@
 	<jsp:include page="jsp/head_common.jsp"/>
 	
 	<title>SYMUSIC - Facilita la ricerca delle release musicali</title>
+	
+	<script type="text/javascript">
+		function checkDataRange() {
+			var da = document.getElementById("annoDa");
+			var a = document.getElementById("annoAl");
+			var daValue = da.options[da.selectedIndex].value;
+			var aValue = a.options[a.selectedIndex].value;
+			if(aValue<daValue) {
+				da.selectedIndex = a.selectedIndex;
+			}
+
+		}
+	</script>
 </head>
 <body>
 <h2>S Y M U S I C</h2>
@@ -86,7 +99,30 @@
 			<td>
 				<jsp:useBean id="date" class="java.util.Date" />
 				<fmt:formatDate value="${date}" pattern="yyyy" var="currentYear" />
-				Dal <input type="text" name="annoDa" size="5" value="${currentYear}"/> Al <input type="text" name="annoAl" size="5" value="${currentYear}"/>
+				Dal <select id="annoDa" name="annoDa" onchange="javascript:checkDataRange();">
+				<c:forEach items="${listaAnni}" var="anno">
+					<c:choose>
+						<c:when test="${anno==currentYear}">
+							<option value="${anno}" selected="selected">${anno}</option>
+						</c:when>
+						<c:otherwise>
+							<option value="${anno}">${anno}</option>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+				</select>
+				Al <select id="annoAl" name="annoAl" onchange="javascript:checkDataRange();">
+				<c:forEach items="${listaAnni}" var="anno">
+					<c:choose>
+						<c:when test="${anno==currentYear}">
+							<option value="${anno}" selected="selected">${anno}</option>
+						</c:when>
+						<c:otherwise>
+							<option value="${anno}">${anno}</option>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+				</select>
 			</td>
 		</tr>
 	</table>

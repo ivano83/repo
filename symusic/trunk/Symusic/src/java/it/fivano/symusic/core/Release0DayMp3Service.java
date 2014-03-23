@@ -101,10 +101,12 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 				
 				release.setNameWithUnderscore(sc.getReleaseName());
 				if(excludeRipRelease && this.isRadioRipRelease(release)) {
+					log.info(sc.getReleaseName()+" ignorata poichè è un RIP");
 					continue;
 				}
 				
 				if(excludeVA && this.isVARelease(release)) {
+					log.info(sc.getReleaseName()+" ignorata poichè è una VA");
 					continue;
 				}
 
@@ -134,6 +136,11 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 				}
 
 				release = zero.parseReleaseDetails(sc, release);
+				
+				if(!this.verificaAnnoRelease(release,annoDa,annoAl)) {
+					log.info(sc.getReleaseName()+" ignorata poichè l'anno non è all'interno del range.");
+					continue;
+				}
 
 				if(enableBeatportService)
 					beatportRes = beatport.searchRelease(sc.getReleaseName());
@@ -196,6 +203,31 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 		
 	}
 	
+
+	private boolean verificaAnnoRelease(ReleaseModel release, String annoDa, String annoAl) {
+		if(release.getYear()!=null) {
+
+			try {
+				Integer annoRel = Integer.parseInt(release.getYear());
+				Integer da = Integer.parseInt(annoDa);
+				Integer a = Integer.parseInt(annoAl);
+				
+				if(annoRel<=a && annoRel>=da) {
+					return true;
+				}
+			} catch(Exception e) {
+				log.error("Errore nella verifica dell'anno release. "+e.getMessage());
+				return true; // anno non recuperato... per defualt la release è considerata
+			}
+			
+			return false;
+		}
+		else 
+			return true; // anno non recuperato... per defualt la release è considerata
+		
+		
+	}
+
 
 	private void checkProcessPage(List<ZeroDayMp3ParserModel> resScenelog, ScenelogInfo info) {
 		Date max = null;

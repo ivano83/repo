@@ -43,11 +43,21 @@ public class InitServlet extends HttpServlet {
 				request.getSession().setAttribute("genreMap", res);
 			}
 			
+			List<String> listaAnni = new ArrayList<String>();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+			Integer annoFine = Integer.parseInt(sdf.format(new Date()));
+			Integer anno = 1980;
+			while(anno<=annoFine) {
+				listaAnni.add(anno.toString());
+				anno++;
+			}
+			request.getSession().setAttribute("listaAnni", listaAnni);
+			
 			UserModel user = new UserService().getUser("ivano");
 			if(user==null)
 				System.out.println("utente sconosciuto!");
 			
-			request.getSession().setAttribute("user", user);
+			request.getSession().setAttribute("user", user); 
 			
 			RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.jsp");
 			rd.forward(request, response);
