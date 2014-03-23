@@ -7,7 +7,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	// username and password sent from Form
 	$name=addslashes(trim($_POST['name']));
 	$email=addslashes(trim($_POST['email']));
-	$message=addslashes(trim($_POST['message']));
+	$message=nl2br($_POST['message']);
 	$ip=$_SERVER['REMOTE_ADDR'];
 	
 	if(empty($name) || empty($email) || empty($message)) {

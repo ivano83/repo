@@ -5,7 +5,7 @@
 <?php  include('common/head.php'); ?>
 </head>
 <body>
-<div class="wrapper">
+<div class="wrapper" style="width:460px;">
 	<div class="logoContainer" style="text-align: center;">
         <span class="logo"><a href=""><img class="image_title" alt="Ivano &amp; Cristina" src="images/header_title.png" height="60px" /></a></span>
     </div>
