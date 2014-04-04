@@ -5,7 +5,6 @@ session_start();
 if($_SERVER["REQUEST_METHOD"] == "POST")
 {
 	// username and password sent from Form
-	$name=addslashes($_POST['name']);
 	$myusername=addslashes($_POST['username']);
 	$mypassword=addslashes($_POST['password']);
 	$mypassword=sha1($mypassword);
@@ -20,7 +19,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	// If result matched $myusername and $mypassword, table row must be 1 row
 	if($count==1)
 	{
-		$_SESSION['login_user']=$name;
+		$_SESSION['login_user']=$myusername;
 		
 		$sql="INSERT INTO user_log (name, login_success, login_date, ip_address)  VALUES ('$name', 1, NOW(), '$ip')";
 		$result=mysql_query($sql);
@@ -28,8 +27,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 		{
 			die('Could not enter data: ' . mysql_error());
 		}
-
-		header("location: home.php");
+		
+		header("location: admin_home.php");
 		
 	}
 	else
@@ -53,7 +52,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 		{
 			die('Could not enter data: ' . mysql_error());
 		}
-		header("Location:login_failed.php");
+		header("Location:login_failed_admin.php");
 	}
 }
 ?>
