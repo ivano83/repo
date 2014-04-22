@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/JID3.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/BestUtility"/>
+	<classpathentry kind="lib" path="lib/vlcj-3.0.1.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/FileCatalog/lib/vlcj-3.0.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
