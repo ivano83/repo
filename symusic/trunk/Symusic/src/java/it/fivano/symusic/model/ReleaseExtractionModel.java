@@ -72,6 +72,9 @@ public class ReleaseExtractionModel {
 		this.scenelogDate = scenelogDate;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return idRelease+" [SCENELOG:"+scenelog+", YOUTUBE:"+youtube+", BEATPORT:"+beatport+"]";
+	}
 
 }

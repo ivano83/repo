@@ -130,6 +130,8 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 						enableScenelogService = !extr.getScenelog();
 						enableYoutubeService = !extr.getYoutube();
 						enableBeatportService = !extr.getBeatport();
+						log.info(sc.getReleaseName()+" dati estrazione --> "+extr);
+
 					}
 					isRecuperato = true;
 					release = relDb; // SOSTITUISCE I DATI FINO AD ORA ESTRATTI CON QUELLI DEL DB

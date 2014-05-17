@@ -26,6 +26,8 @@ public class BeatportServlet extends BaseAction {
 	
 	private String urlPrecedente;
 	private String urlSuccessivo;
+	
+	private String reload;
 
     /**
      * Default constructor. 
@@ -68,8 +70,13 @@ public class BeatportServlet extends BaseAction {
 			List<ReleaseModel> listRelease = new ArrayList<ReleaseModel>();
 			ReleaseBeatportService beatport = new ReleaseBeatportService(user.getId());
 			
-			listRelease = beatport.parseBeatportRelease(urlGenre, genre);
-			
+			reload = request.getParameter("reload");
+			if(reload!=null && reload.length()>0) {
+				listRelease = (List<ReleaseModel>) request.getSession().getAttribute("listRelease");
+			} else {
+				listRelease = beatport.parseBeatportRelease(urlGenre, genre);
+			}
+
 			request.getSession().setAttribute("listRelease", listRelease);
 			
 			
@@ -106,6 +113,14 @@ public class BeatportServlet extends BaseAction {
 
 	public void setUrlSuccessivo(String urlSuccessivo) {
 		this.urlSuccessivo = urlSuccessivo;
+	}
+
+	public String getReload() {
+		return reload;
+	}
+
+	public void setReload(String reload) {
+		this.reload = reload;
 	}
 	
 	
