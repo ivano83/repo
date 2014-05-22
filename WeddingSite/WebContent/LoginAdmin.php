@@ -21,7 +21,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	{
 		$_SESSION['login_user']=$myusername;
 		
-		$sql="INSERT INTO user_log (name, login_success, login_date, ip_address)  VALUES ('$name', 1, NOW(), '$ip')";
+		//$sql="INSERT INTO user_log (name, login_success, login_date, ip_address)  VALUES ('$myusername', 1, NOW(), '$ip')";
 		$result=mysql_query($sql);
 		if(! $result )
 		{
@@ -46,7 +46,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 
  		
  		$passChiaro = $_POST['password'];
-		$sql="INSERT INTO user_log (name, login_success, login_date, ip_address, digit_password)  VALUES ('$name', 0, NOW(), '$ip', '$passChiaro')";
+		$sql="INSERT INTO user_log (name, login_success, login_date, ip_address, digit_password)  VALUES ('$myusername', 0, NOW(), '$ip', '$passChiaro')";
 		$result=mysql_query($sql);
 		if(! $result )
 		{
