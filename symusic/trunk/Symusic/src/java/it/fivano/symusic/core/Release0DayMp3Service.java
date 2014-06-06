@@ -129,7 +129,7 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 					if(extr!=null ){
 						enableScenelogService = !extr.getScenelog();
 						enableYoutubeService = !extr.getYoutube();
-						enableBeatportService = !extr.getBeatport();
+						enableBeatportService = !extr.getBeatport() && enableBeatportService;
 						log.info(sc.getReleaseName()+" dati estrazione --> "+extr);
 
 					}
