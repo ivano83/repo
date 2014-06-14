@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import it.fivano.symusic.AntiDdosUtility;
 import it.fivano.symusic.MyLogger;
 import it.fivano.symusic.conf.SymusicConf;
 import it.fivano.symusic.model.LinkModel;
@@ -20,10 +22,12 @@ public abstract class BaseService {
 	protected MyLogger log;
 	protected SymusicConf generalConf;
 	protected static final int TIMEOUT = 8000;
+	protected AntiDdosUtility antiDDOS;
 	
 	public BaseService() {
 		try {
 			generalConf = new SymusicConf();
+			antiDDOS = new AntiDdosUtility();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -87,14 +91,19 @@ public abstract class BaseService {
 		return lista;
 	}
 	
-	protected Document bypassAntiDDOS(Document doc, String baseUrl, String urlToRedirect) throws IOException {
+	protected Document bypassAntiDDOS(Document doc, String baseUrl, String urlToRedirect) throws Exception {
 		String jschl_vc = doc.getElementsByAttributeValue("name", "jschl_vc").get(0).attr("value");
 //		System.out.println(jschl_vc);
 		Elements scriptElements = doc.getElementsByTag("script");
-		String numberCalcLine = null;
+		Integer numberCalcLine = null;
 		for (Element element :scriptElements ){                
 			for (DataNode node : element.dataNodes()) {
 				String text = node.getWholeData();
+				
+				
+				numberCalcLine = antiDDOS.calcolateAnswer(text);
+				
+				/**
 				String[] lines = text.split("\n");
 				for(String scriptLine : lines) {
 					if(scriptLine.trim().startsWith("a.value = ")) {
@@ -102,6 +111,7 @@ public abstract class BaseService {
 						break;
 					}
 				}
+				*/
 
 			}
 //			System.out.println(numberCalcLine);            
@@ -109,6 +119,9 @@ public abstract class BaseService {
 		
 		int jschl_answer = 0;
 		if(numberCalcLine!=null) {
+			
+			jschl_answer = numberCalcLine;
+			/**
 			String[] addizioni = numberCalcLine.split("\\+");
 			int i1,i2,i3;
 			i1 = Integer.parseInt(addizioni[0]);
@@ -117,6 +130,8 @@ public abstract class BaseService {
 			i3 = Integer.parseInt(moltipl[1]);
 			
 			jschl_answer = ((i2*i3)+i1)+11;
+			
+			*/
 		}
 		
 		if(!baseUrl.endsWith("/"))
@@ -128,13 +143,6 @@ public abstract class BaseService {
 		
 		return doc;
 	}
-
-	protected boolean isAntiDDOS(Document doc) {
-		Elements res = doc.getElementsByClass("cf-browser-verification");
-		log.info("DDOS protection: "+(res.size()==0 ? false : true));
-		return res.size()==0 ? false : true;
-	}
-	
 	
 	protected String randomUserAgent() {
 		
@@ -143,4 +151,30 @@ public abstract class BaseService {
 	
 	protected abstract String applyFilterSearch(String result);
 
+	
+	public static void main(String[] args) throws Exception {
+		String script = "<script type=\"text/javascript\">\n"+
+        "var t,r,a,f, sFFWaQb={\"nvbotxImQWzc\":+((!+[]+!![]+!![]+!![]+[])+(!+[]+!![]+!![]+!![]+!![]+!![]))};\n"+
+		"a = document.getElementById('uno');\n"+
+        "t = document.createElement('div');\n"+
+        "t.innerHTML=\"<a href='/'>x</a>\";\n"+
+        "t = t.firstChild.href;r = t.match(/https?:\\/\\//)[0];\n"+
+        "t = t.substr(r.length); t = t.substr(0,t.length-1);\n"+
+        
+        "f = document.getElementById('challenge-form');\n"+
+        ";sFFWaQb.nvbotxImQWzc+=+((!+[]+!![]+!![]+[])+(!+[]+!![]+!![]));sFFWaQb.nvbotxImQWzc+=!+[]+!![]+!![]+!![]+!![]+!![]+!![];sFFWaQb.nvbotxImQWzc+=+((!+[]+!![]+[])+(!+[]+!![]+!![]+!![]));sFFWaQb.nvbotxImQWzc*=+((+!![]+[])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![]));sFFWaQb.nvbotxImQWzc*=+((!+[]+!![]+!![]+!![]+[])+(!+[]+!![]+!![]+!![]+!![]+!![]));sFFWaQb.nvbotxImQWzc-=+((+!![]+[])+(!+[]+!![]+!![]+!![]+!![]));sFFWaQb.nvbotxImQWzc+=+((!+[]+!![]+!![]+[])+(+!![]));sFFWaQb.nvbotxImQWzc*=+((!+[]+!![]+!![]+[])+(!+[]+!![]));a.value = parseInt(sFFWaQb.nvbotxImQWzc, 10) + t.length;\n"+
+		
+		"</script>";
+		
+		BaseService b = new BaseService() {
+			
+			@Override
+			protected String applyFilterSearch(String result) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
+		
+		b.antiDDOS.calcolateAnswer(script);
+	}
 }

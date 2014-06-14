@@ -2,15 +2,12 @@ package it.fivano.symusic.core.parser;
 
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.SymusicUtility.LevelSimilarity;
-import it.fivano.symusic.backend.service.LinkService;
-import it.fivano.symusic.backend.service.TrackService;
 import it.fivano.symusic.conf.ScenelogConf;
-import it.fivano.symusic.core.BaseService;
 import it.fivano.symusic.core.parser.model.ScenelogParserModel;
 import it.fivano.symusic.exception.ParseReleaseException;
+import it.fivano.symusic.model.ReleaseExtractionModel.AreaExtraction;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.TrackModel;
-import it.fivano.symusic.model.ReleaseExtractionModel.AreaExtraction;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -19,7 +16,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
@@ -57,7 +53,7 @@ public class ScenelogParser extends GenericParser {
 			log.info("Connessione in corso --> "+urlPage);
 			Document doc = Jsoup.connect(urlPage).timeout(TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
 			
-			if(this.isAntiDDOS(doc)) {
+			if(antiDDOS.isAntiDDOS(doc)) {
 				doc = this.bypassAntiDDOS(doc, conf.URL, urlPage);
 			}
 
@@ -79,7 +75,11 @@ public class ScenelogParser extends GenericParser {
 		} catch (ParseException e) {
 			log.error("Errore nel parsing", e);
 			throw new ParseReleaseException("Errore nel parsing",e);
+		} catch (Exception e) {
+			log.error("Errore generico", e);
+			throw new ParseReleaseException("Errore generico",e);
 		}
+		
 		
 		return result;
 						
@@ -111,7 +111,7 @@ public class ScenelogParser extends GenericParser {
 					log.info("Connessione in corso --> "+urlConn);
 					doc = Jsoup.connect(urlConn).timeout((tentativi+1)*TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
 					
-					if(this.isAntiDDOS(doc)) {
+					if(antiDDOS.isAntiDDOS(doc)) {
 						doc = this.bypassAntiDDOS(doc, conf.URL, urlConn);
 					}
 					
@@ -185,7 +185,7 @@ public class ScenelogParser extends GenericParser {
 			String userAgent = this.randomUserAgent();
 			doc = Jsoup.connect(scenelogModel.getUrlReleaseDetails()).userAgent(userAgent).ignoreHttpErrors(true).get();
 			
-			if(this.isAntiDDOS(doc)) {
+			if(antiDDOS.isAntiDDOS(doc)) {
 				doc = this.bypassAntiDDOS(doc, conf.URL, scenelogModel.getUrlReleaseDetails());
 			}
 

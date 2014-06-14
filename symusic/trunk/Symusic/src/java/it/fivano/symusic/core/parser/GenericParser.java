@@ -1,5 +1,6 @@
 package it.fivano.symusic.core.parser;
 
+import it.fivano.symusic.AntiDdosUtility;
 import it.fivano.symusic.MyLogger;
 import it.fivano.symusic.conf.SymusicConf;
 import it.fivano.symusic.model.LinkModel;
@@ -21,6 +22,7 @@ public abstract class GenericParser {
 	protected MyLogger log;
 	protected SymusicConf generalConf;
 	protected static final int TIMEOUT = 8000;
+	protected AntiDdosUtility antiDDOS;
 	
 	protected Date dataDa;
 	protected Date dataA;
@@ -28,6 +30,7 @@ public abstract class GenericParser {
 	public GenericParser() {
 		try {
 			generalConf = new SymusicConf();
+			antiDDOS = new AntiDdosUtility();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -113,14 +116,19 @@ public abstract class GenericParser {
 		return result;
 	}
 	
-	protected Document bypassAntiDDOS(Document doc, String baseUrl, String urlToRedirect) throws IOException {
+	protected Document bypassAntiDDOS(Document doc, String baseUrl, String urlToRedirect) throws Exception {
 		String jschl_vc = doc.getElementsByAttributeValue("name", "jschl_vc").get(0).attr("value");
 //		System.out.println(jschl_vc);
 		Elements scriptElements = doc.getElementsByTag("script");
-		String numberCalcLine = null;
+		Integer numberCalcLine = null;
 		for (Element element :scriptElements ){                
 			for (DataNode node : element.dataNodes()) {
 				String text = node.getWholeData();
+				
+				
+				numberCalcLine = antiDDOS.calcolateAnswer(text);
+				
+				/**
 				String[] lines = text.split("\n");
 				for(String scriptLine : lines) {
 					if(scriptLine.trim().startsWith("a.value = ")) {
@@ -128,6 +136,7 @@ public abstract class GenericParser {
 						break;
 					}
 				}
+				*/
 
 			}
 //			System.out.println(numberCalcLine);            
@@ -135,6 +144,9 @@ public abstract class GenericParser {
 		
 		int jschl_answer = 0;
 		if(numberCalcLine!=null) {
+			
+			jschl_answer = numberCalcLine;
+			/**
 			String[] addizioni = numberCalcLine.split("\\+");
 			int i1,i2,i3;
 			i1 = Integer.parseInt(addizioni[0]);
@@ -143,6 +155,8 @@ public abstract class GenericParser {
 			i3 = Integer.parseInt(moltipl[1]);
 			
 			jschl_answer = ((i2*i3)+i1)+11;
+			
+			*/
 		}
 		
 		if(!baseUrl.endsWith("/"))
@@ -154,13 +168,6 @@ public abstract class GenericParser {
 		
 		return doc;
 	}
-
-	protected boolean isAntiDDOS(Document doc) {
-		Elements res = doc.getElementsByClass("cf-browser-verification");
-		log.info("DDOS protection: "+(res.size()==0 ? false : true));
-		return res.size()==0 ? false : true;
-	}
-
 	
 	protected abstract String applyFilterSearch(String result);
 

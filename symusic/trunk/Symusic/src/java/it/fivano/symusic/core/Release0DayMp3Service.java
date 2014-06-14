@@ -264,7 +264,7 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 	}
 	
 
-	private void parse0DayMp3(String urlConn, Date da, Date a, ScenelogInfo info) throws BackEndException, ParseReleaseException, ParseException, IOException {
+	private void parse0DayMp3(String urlConn, Date da, Date a, ScenelogInfo info) throws Exception {
 		
 //		List<ReleaseModel> listRelease = new ArrayList<ReleaseModel>();
 		
@@ -277,7 +277,7 @@ public class Release0DayMp3Service extends ReleaseSiteService {
 		String userAgent = this.randomUserAgent();
 		Document doc = Jsoup.connect(urlConn).timeout(TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
 				
-		if(this.isAntiDDOS(doc)) {
+		if(antiDDOS.isAntiDDOS(doc)) {
 			doc = this.bypassAntiDDOS(doc, conf.URL, urlConn);
 		}
 

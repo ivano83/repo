@@ -50,7 +50,7 @@ public class ZeroDayMp3Parser extends GenericParser {
 			log.info("Connessione in corso --> "+urlPage);
 			Document doc = Jsoup.connect(urlPage).timeout(TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
 			
-			if(this.isAntiDDOS(doc)) {
+			if(antiDDOS.isAntiDDOS(doc)) {
 				doc = this.bypassAntiDDOS(doc, conf.URL, urlPage);
 			}
 
@@ -72,13 +72,15 @@ public class ZeroDayMp3Parser extends GenericParser {
 		} catch (ParseException e) {
 			log.error("Errore nel parsing", e);
 			throw new ParseReleaseException("Errore nel parsing",e);
+		}  catch (Exception e) {
+			log.error("Errore generico", e);
+			throw new ParseReleaseException("Errore generico",e);
 		}
 		
 		return result;
 						
 	}
 
-	
 
 	public List<ZeroDayMp3ParserModel> searchRelease(String releaseName) throws ParseReleaseException {
 		
@@ -105,7 +107,7 @@ public class ZeroDayMp3Parser extends GenericParser {
 					log.info("Connessione in corso --> "+urlConn);
 					doc = Jsoup.connect(urlConn).timeout((tentativi+1)*TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
 					
-					if(this.isAntiDDOS(doc)) {
+					if(antiDDOS.isAntiDDOS(doc)) {
 						doc = this.bypassAntiDDOS(doc,conf.URL, urlConn);
 					}
 

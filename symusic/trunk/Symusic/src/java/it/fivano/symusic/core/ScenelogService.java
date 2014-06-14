@@ -49,7 +49,7 @@ public class ScenelogService extends BaseService {
 					log.info("Connessione in corso --> "+urlConn);
 					doc = Jsoup.connect(urlConn).timeout((tentativi+1)*TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
 					
-					if(this.isAntiDDOS(doc)) {
+					if(antiDDOS.isAntiDDOS(doc)) {
 						doc = this.bypassAntiDDOS(doc, conf.URL, urlConn);
 					}
 					
