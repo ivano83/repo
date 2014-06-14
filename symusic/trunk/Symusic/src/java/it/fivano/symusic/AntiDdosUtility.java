@@ -45,7 +45,7 @@ public class AntiDdosUtility {
 	public int calcolateAnswer(String script) throws Exception {
 		
 		int tot = 0;
-		log.info(script);
+//		log.info(script);
 		String[] lines = script.split("\n");
 		String varName = "";
 		for(String scriptLine : lines) {
@@ -55,12 +55,12 @@ public class AntiDdosUtility {
 				
 				String[] tmp = varName.split(":");
 				varName = tmp[0].replace("=", ".").trim();
-				log.info(varName);
+//				log.info(varName);
 				tot = parseCalc(tot, "+", tmp[1]);
 				
 			}
 			else if(scriptLine.contains(varName) && varName.length()>0) {
-				log.info(scriptLine);
+//				log.info(scriptLine);
 				String[] tmp = scriptLine.split(";");
 				for(String x : tmp) {
 					if(!x.contains("parseInt") && x.trim().length()>0) {
@@ -77,7 +77,7 @@ public class AntiDdosUtility {
 		
 		tot += 11;
 		
-		log.info("TOT = "+tot);
+//		log.info("ANTI_DDOS TOT = "+tot);
 		return tot;
 	}
 
