@@ -50,13 +50,18 @@ function validateMessageInsert() {
  ?>
         <h2>Informazioni utili</h2>
         <p>
-        	<span class="strong">Partenza: Casa degli Sposi</span><br>
-        	<span>Ore 17:00 circa</span><br>
+        	<span class="strong">Partenza dello sposo</span><br>
+        	<span>Ore 16:15 circa</span><br>
+        	<span>Via Corrado del Greco, 90 - Roma</span>
+        </p>
+        <p>
+        	<span class="strong">Partenza della sposa</span><br>
+        	<span>Ore 16:30 circa</span><br>
         	<span>Via Corrado del Greco, 90 - Roma</span>
         </p>
         <p>
         	<span class="strong">Destinazione: Il Castello Borghese</span><br>
-        	<span>Ore 18:15 circa</span><br>
+        	<span>Dalle ore 18:00</span><br>
         	<span>Via dell'Olmata, 99 - Nettuno (Rm)</span>
         </p>
         <p>

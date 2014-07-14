@@ -25,8 +25,8 @@
     </div>
     <div class="sidebar" style="margin-top: 50px;">
     	<h2>Si parte!</h2>
-        <p>Contro ogni tradizione, lo sposo, la sposa e la loro "paggetta" partiranno insieme dalla loro dimora.<br>
-        Un'automobile d'epoca con autista ci aspetterà sotto casa, pronta per portarci direttamente al castello di Nettuno.<br>
+        <p>Contro ogni tradizione, lo sposo, la sposa e la loro "paggetta" partiranno tutti dalla loro dimora.<br>
+        Lo sposo e la piccola Alice andranno avanti, mentre un'automobile d'epoca con autista aspetterà la sposa sotto casa, pronta per portarla direttamente al castello di Nettuno.<br>
         </p>
         <!--  <div class="picBorder" style="opacity:0.8; background:none;border:none; visibility:hidden;"><img src="images/roll_royce.png" alt="about" style="height:180px; width:320px; max-height:180px; max-width:320px; margin-left: 17px;"></div>-->
     </div>

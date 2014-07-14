@@ -31,6 +31,12 @@
         </p>
         <p>Ecco un piccolo assaggio di quello che ci aspetterà! <br><br><br>
         </p>
+        
+    </div>
+    <div class="sidebar">
+   		<div class="picBorder rightPic"><img src="images/dunaBianca.jpg" alt="about" style="height:250px; width:355px; max-height:250px; max-width:355px;"></div>
+   		<br>
+    	<div class="picBorder rightPic"><img src="images/villaggio_2.jpg" alt="about" style="height:250px; width:355px; max-height:250px; max-width:355px;"></div>
     </div>
     <div class="clearfloat"></div>
      <div class="picBorder"><img src="images/resort-benessere.jpg" alt="SPA" style="height:330px; width:950px; max-height:330px; max-width:950px;"></div>
