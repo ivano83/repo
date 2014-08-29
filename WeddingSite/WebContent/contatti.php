@@ -10,6 +10,7 @@ function validateMessageInsert() {
 	var mail = form.email.value;
 	var message = form.message.value;
 	var errori = document.getElementById("errori");
+	errori.innerHTML = "";
 	var res = true;
 	if(name == "Nome:" || name.trim() == "") {
 		var elem = document.createElement("li");
@@ -17,12 +18,12 @@ function validateMessageInsert() {
 		errori.appendChild(elem);
 		res = false;
 	}
-	if(mail == "E-mail:" || mail.trim() == "") {
-		var elem = document.createElement("li");
-		elem.innerHTML = "E-mail obbligatoria";
-		errori.appendChild(elem);
-		res = false;
-	}
+// 	if(mail == "E-mail:" || mail.trim() == "") {
+// 		var elem = document.createElement("li");
+// 		elem.innerHTML = "E-mail obbligatoria";
+// 		errori.appendChild(elem);
+// 		res = false;
+// 	}
 	if(message == "Messaggio:" || message.trim() == "") {
 		var elem = document.createElement("li");
 		elem.innerHTML = "Messaggio obbligatorio";
@@ -82,11 +83,13 @@ function validateMessageInsert() {
 	        <div>
 	        	<ul id="errori" ></ul>
 	        </div>
-            <input type="text" id="name" name="name" value="Nome:" class="inputContact" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;">
-            <input type="text" id="email" name="email" value="E-mail:" class="inputContact" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;">
-            <textarea name="message" cols="" rows="" class="textareaContact" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;">Messaggio:</textarea>
-            <input type="reset" name="loginbtn" id="loginbtn" class="flatbtn-blu hidemodal" value="Cancella" tabindex="2">
-            <input type="submit" name="loginbtn" id="loginbtn" class="flatbtn-blu hidemodal" value="Invia" tabindex="3" onclick="javascript: return validateMessageInsert();">
+            <div><input type="text" id="name" name="name" value="Nome:" class="inputContact" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;"></div>
+            <div><input type="text" id="email" name="email" value="E-mail:" class="inputContact" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;"></div>
+            <div><textarea name="message" cols="" rows="" class="textareaContact" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;">Messaggio:</textarea></div>
+            <div>
+            	<input type="reset" name="loginbtn" id="loginbtn" class="flatbtn-blu hidemodal" value="Cancella" tabindex="2">
+            	<input type="submit" name="loginbtn" id="loginbtn" class="flatbtn-blu hidemodal" value="Invia" tabindex="3" onclick="javascript: return validateMessageInsert();">
+            </div>
         </form>
     </div>
     <div class="clearfloat"></div>
