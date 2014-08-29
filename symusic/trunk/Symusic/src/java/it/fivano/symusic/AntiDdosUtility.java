@@ -89,7 +89,7 @@ public class AntiDdosUtility {
 			int res = StringUtils.countMatches(x, "!!") + StringUtils.countMatches(x, "!+");
 			totale += res+"";
 		}
-		log.info(totale+" --> "+value);
+//		log.info(totale+" --> "+value);
 		int totInt = Integer.parseInt(totale);
 		if(operatore.equals("+"))
 			return tot+totInt;
@@ -109,5 +109,25 @@ public class AntiDdosUtility {
 		return res.size()==0 ? false : true;
 	}
 	
+	public static void main(String[] args) throws Exception {
+		String script = "var a = function() {try{return !!window.addEventListener} catch(e) {return !1} },\n"+
+    "b = function(b, c) {a() ? document.addEventListener(\"DOMContentLoaded\", b, c) : document.attachEvent(\"onreadystatechange\", b)};\n"+
+    "b(function(){\n"+
+      "var a = document.getElementById('cf-content');a.style.display = 'block';\n"+
+      "setTimeout(function(){\n"+
+       "var t,r,a,f, rDekWzY={\"pT\":+((!+[]+!![]+!![]+[])+(!+[]+!![]+!![]+!![]))};\n"+
+        "t = document.createElement('div');\n"+
+        "t.innerHTML=\"<a href='/'>x</a>\";\n"+
+        "t = t.firstChild.href;r = t.match(/https?:\\/\\//)[0];\n"+
+        "t = t.substr(r.length); t = t.substr(0,t.length-1);\n"+
+        "a = document.getElementById('jschl-answer');\n"+
+        "f = document.getElementById('challenge-form');\n"+
+        ";rDekWzY.pT-=+((!+[]+!![]+!![]+!![]+[])+(+[]));a.value = parseInt(rDekWzY.pT, 10) + t.length;\n"+
+        "f.submit();\n"+
+      "}, 5850);\n"+
+   "}, false);\n";
+		
+		System.out.println(new AntiDdosUtility().calcolateAnswer(script));
+	}
 
 }

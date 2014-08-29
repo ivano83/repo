@@ -28,6 +28,8 @@ public class ZeroDayMusicServlet extends BaseAction {
 	
 	private String urlPrecedente;
 	private String urlSuccessivo;
+	
+	private String reload;
 
     /**
      * Default constructor. 
@@ -83,22 +85,29 @@ public class ZeroDayMusicServlet extends BaseAction {
 			request.setAttribute("urlSuccessivo", urlSuccessivo);
 			
 			List<ReleaseModel> listRelease = new ArrayList<ReleaseModel>();
-			if(site.equals("1")) {
-				Release0DayMusicService zeroDay = new Release0DayMusicService(user.getId());
-				zeroDay.setEnableBeatportService(flagBeatport);
-				zeroDay.setExcludeRipRelease(flagRip);
-				zeroDay.setExcludeVA(flagVA);
-				zeroDay.setAnnoDa(annoDa);
-				zeroDay.setAnnoAl(annoAl);
-				listRelease = zeroDay.parse0DayMusicRelease(genre, initDate, endDate);
-			} else if(site.equals("2")) {
-				Release0DayMp3Service zeroDay = new Release0DayMp3Service(user.getId());
-				zeroDay.setEnableBeatportService(flagBeatport);
-				zeroDay.setExcludeRipRelease(flagRip);
-				zeroDay.setExcludeVA(flagVA);
-				zeroDay.setAnnoDa(annoDa);
-				zeroDay.setAnnoAl(annoAl);
-				listRelease = zeroDay.parse0DayMp3Release(genre, initDate, endDate);
+			
+			reload = request.getParameter("reload");
+			if(reload!=null && reload.length()>0) {
+				listRelease = (List<ReleaseModel>) request.getSession().getAttribute("listRelease");
+			} else {
+				
+				if(site.equals("1")) {
+					Release0DayMusicService zeroDay = new Release0DayMusicService(user.getId());
+					zeroDay.setEnableBeatportService(flagBeatport);
+					zeroDay.setExcludeRipRelease(flagRip);
+					zeroDay.setExcludeVA(flagVA);
+					zeroDay.setAnnoDa(annoDa);
+					zeroDay.setAnnoAl(annoAl);
+					listRelease = zeroDay.parse0DayMusicRelease(genre, initDate, endDate);
+				} else if(site.equals("2")) {
+					Release0DayMp3Service zeroDay = new Release0DayMp3Service(user.getId());
+					zeroDay.setEnableBeatportService(flagBeatport);
+					zeroDay.setExcludeRipRelease(flagRip);
+					zeroDay.setExcludeVA(flagVA);
+					zeroDay.setAnnoDa(annoDa);
+					zeroDay.setAnnoAl(annoAl);
+					listRelease = zeroDay.parse0DayMp3Release(genre, initDate, endDate);
+				}
 			}
 			
 			request.getSession().setAttribute("listRelease", listRelease);
@@ -137,6 +146,14 @@ public class ZeroDayMusicServlet extends BaseAction {
 
 	public void setUrlSuccessivo(String urlSuccessivo) {
 		this.urlSuccessivo = urlSuccessivo;
+	}
+
+	public String getReload() {
+		return reload;
+	}
+
+	public void setReload(String reload) {
+		this.reload = reload;
 	}
 	
 	

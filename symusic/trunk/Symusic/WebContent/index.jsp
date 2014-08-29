@@ -125,6 +125,14 @@
 				</select>
 			</td>
 		</tr>
+		<tr>
+			<td>
+				<div>Ricarica pagina precedente</div>
+			</td>
+			<td>
+				<input type="checkbox" name="reload" value="true" />
+			</td>
+		</tr>
 	</table>
 	<input type="submit" value="Ricerca">
 	
