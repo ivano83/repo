@@ -61,10 +61,11 @@
        		include("Conn.php");
        		
        		$html = "";
-       		$sql="SELECT nome, messaggio,data FROM message order by data desc";
+       		$sql="SELECT nome, messaggio,email, data FROM message order by data desc";
        		$result=mysql_query($sql);
        		while($r=mysql_fetch_array($result)){
-				$html .= '<li><span>' . $r['nome'] .' [' . $r['data'] . ']</span>';
+				$html .= '<li><span>' . $r['nome'] .' [' . $r['data'] . ']</span><br>';
+				$html .= '<span>' . $r['email'] . '</span>';
 				$html .= '<p>' . $r['messaggio'] . '</p></li>';
 			}
 			echo $html;
