@@ -9,6 +9,7 @@ import it.fivano.symusic.model.ReleaseModel;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -54,7 +55,10 @@ public class ZeroDayMp3Parser extends GenericParser {
 				doc = this.bypassAntiDDOS(doc, conf.URL, urlPage);
 			}
 
-			Elements releaseGroup = doc.getElementsByClass(conf.ID_CONTENT);
+			Elements releaseGroup = doc.getElementsByAttributeValue("id",conf.ID_CONTENT);
+			if(releaseGroup.size()==0) {
+				releaseGroup = doc.getElementsByClass(conf.ID_CONTENT);
+			}
 			if(releaseGroup.size()>0) {
 				ZeroDayMp3ParserModel release = null;
 				log.info("####################################");
@@ -112,6 +116,9 @@ public class ZeroDayMp3Parser extends GenericParser {
 					}
 
 					Elements releaseGroup = doc.getElementsByAttributeValue("id",conf.ID_CONTENT);
+					if(releaseGroup.size()==0) {
+						releaseGroup = doc.getElementsByClass(conf.ID_CONTENT);
+					}
 					if(releaseGroup.size()>0) {
 						ZeroDayMp3ParserModel release = null;
 						log.info("####################################");
@@ -198,6 +205,8 @@ public class ZeroDayMp3Parser extends GenericParser {
 		Element dateComp = tmp.getElementsByClass(conf.RELEASE_DATE).get(0);
 		String date = dateComp.text();
 		String dateIn = this.getStandardDateFormat(date);
+		if(dateIn.contains("/1970"))
+			dateIn = dateIn.replace("/1970", "/"+new SimpleDateFormat("yyyy").format(new Date()));
 		Date dateInDate = SymusicUtility.getStandardDate(dateIn);
 
 		// RANGE DATA, SOLO LE RELEASE COMPRESE DA - A
@@ -210,7 +219,7 @@ public class ZeroDayMp3Parser extends GenericParser {
 		// RELEASE NAME
 		String releaseName = tmp.getElementsByClass(conf.RELEASE_NAME).get(0).text();
 //		releaseName = releaseName.replace("Permalink to ","");
-		release.setReleaseName(releaseName);
+		release.setReleaseName(releaseName.replace(" – ", " ").replace("–", " "));
 		// LINK
 		release.setReleaseLink(SymusicUtility.popolateLink(relComp));
 

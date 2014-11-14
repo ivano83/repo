@@ -66,6 +66,9 @@ public class YoutubeParser extends GenericParser {
 						Element videoTitle = video.getElementsByClass(conf.CLASS_VIDEO_TITLE).get(0);
 						title = videoTitle.text();
 						
+						title = new String(title.getBytes(), "UTF-8");
+						title = title.replaceAll("\\xF0", "").replaceAll("\\x9F", "").replaceAll("\\x8E", "").replaceAll("\\xA7", "").replaceAll("\\xB5", "");
+						
 						String relName = this.formatQueryString(releaseName,tentativi);
 						boolean similarity = SymusicUtility.compareStringSimilarity(relName, title, LevelSimilarity.ALTO);
 						if(!similarity) {
