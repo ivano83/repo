@@ -2,8 +2,8 @@ package it.fivano.symusic.core.parser;
 
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.SymusicUtility.LevelSimilarity;
-import it.fivano.symusic.conf.ScenelogConf;
-import it.fivano.symusic.core.parser.model.ScenelogParserModel;
+import it.fivano.symusic.conf.MusicDLConf;
+import it.fivano.symusic.core.parser.model.MusicDLParserModel;
 import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.ReleaseExtractionModel.AreaExtraction;
 import it.fivano.symusic.model.ReleaseModel;
@@ -21,17 +21,17 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
-public class ScenelogParser extends GenericParser {
+public class MusicDLParser extends GenericParser {
 	
-	private ScenelogConf conf;
+	private MusicDLConf conf;
 	
 	
-	public ScenelogParser() throws IOException {
-		conf = new ScenelogConf();
+	public MusicDLParser() throws IOException {
+		conf = new MusicDLConf();
 		this.setLogger(getClass());
 	}
 	
-	public List<ScenelogParserModel> parseFullPage(String urlPage, Date da, Date a) throws ParseReleaseException {
+	public List<MusicDLParserModel> parseFullPage(String urlPage, Date da, Date a) throws ParseReleaseException {
 		this.dataDa = da;
 		this.dataA = a;
 		
@@ -39,9 +39,9 @@ public class ScenelogParser extends GenericParser {
 		
 	}
 	
-	public List<ScenelogParserModel> parseFullPage(String urlPage) throws ParseReleaseException {
+	public List<MusicDLParserModel> parseFullPage(String urlPage) throws ParseReleaseException {
 		
-		List<ScenelogParserModel> result = new ArrayList<ScenelogParserModel>();
+		List<MusicDLParserModel> result = new ArrayList<MusicDLParserModel>();
 		
 		if(urlPage == null)
 			return result;
@@ -58,12 +58,16 @@ public class ScenelogParser extends GenericParser {
 			}
 
 			Elements releaseGroup = doc.getElementsByClass(conf.CLASS_RELEASE_LIST_ITEM);
+			if(releaseGroup.size()==0) {
+				releaseGroup = doc.getElementsByAttributeValue("id",conf.CLASS_RELEASE_LIST_ITEM);
+				
+			}
 			if(releaseGroup.size()>0) {
-				ScenelogParserModel release = null;
+				MusicDLParserModel release = null;
 				log.info("####################################");
 				for(Element tmp : releaseGroup) {
 					
-					release = this.popolaScenelogRelease(tmp);
+					release = this.popolaMusicDLRelease(tmp);
 					
 					result.add(release);
 				}
@@ -85,9 +89,9 @@ public class ScenelogParser extends GenericParser {
 						
 	}
 
-	public ScenelogParserModel searchRelease(String releaseName) throws ParseReleaseException {
+	public MusicDLParserModel searchRelease(String releaseName) throws ParseReleaseException {
 		
-		ScenelogParserModel result = null;
+		MusicDLParserModel result = null;
 		
 		if(releaseName == null)
 			return result;
@@ -123,7 +127,7 @@ public class ScenelogParser extends GenericParser {
 				
 					trovato = true;
 				} catch (Exception e1) {
-					log.error("[SCENELOG] Nessun risultato ottenuto per la release = "+releaseName+"  --> "+e1.getMessage());
+					log.error("[MUSICDL] Nessun risultato ottenuto per la release = "+releaseName+"  --> "+e1.getMessage());
 					userAgent = this.randomUserAgent(); // proviamo un nuovo user agent
 					tentativi++;
 				}
@@ -131,9 +135,9 @@ public class ScenelogParser extends GenericParser {
 			} while(tentativi<2 && !trovato);
 			
 			if(releaseItems==null) {
-				log.info("[SCENELOG] Nessun risultato ottenuto per la release = "+releaseName);
+				log.info("[MUSICDL] Nessun risultato ottenuto per la release = "+releaseName);
 				return null;
-//				throw new ParseReleaseException("[SCENELOG] Nessun risultato ottenuto per la release = "+releaseName);
+//				throw new ParseReleaseException("[MUSICDL] Nessun risultato ottenuto per la release = "+releaseName);
 			}
 						
 			String releaseLinkGood = null;
@@ -143,9 +147,9 @@ public class ScenelogParser extends GenericParser {
 								
 				if(SymusicUtility.compareStringSimilarity(releaseName, relCandidate.text(), LevelSimilarity.ALTO)) {
 					releaseLinkGood = relCandidate.attr("href");
-					log.info("[SCENELOG] Trovata la release: "+relCandidate.text()+" - "+releaseLinkGood);
+					log.info("[MUSICDL] Trovata la release: "+relCandidate.text()+" - "+releaseLinkGood);
 					
-					result = this.popolaScenelogRelease(e);
+					result = this.popolaMusicDLRelease(e);
 					
 					break;
 				}
@@ -153,7 +157,7 @@ public class ScenelogParser extends GenericParser {
 			}
 			
 			if(result == null) {
-				log.info("[SCENELOG] Release non trovata tra tutti i risultati ottenuti: "+releaseName);	
+				log.info("[MUSICDL] Release non trovata tra tutti i risultati ottenuti: "+releaseName);	
 			}
 			
 			
@@ -167,50 +171,55 @@ public class ScenelogParser extends GenericParser {
 	}
 	
 	
-	public ReleaseModel parseReleaseDetails(ScenelogParserModel scenelogModel, ReleaseModel release) throws ParseReleaseException {
+	public ReleaseModel parseReleaseDetails(MusicDLParserModel MUSICDLModel, ReleaseModel release) throws ParseReleaseException {
 		
 		Document doc = null;
 		try {
 
-			if(scenelogModel==null)
+			if(MUSICDLModel==null)
 				return release;
 
 			// SE RELEASE ANCORA NON PRESENTE SI CREA L'OGGETTO
 			if(release==null)
 				release = new ReleaseModel();
 			
-			release = this.popolaRelease(release, scenelogModel);
+			release = this.popolaRelease(release, MUSICDLModel);
 
 			// release trovata
 			String userAgent = this.randomUserAgent();
-			doc = Jsoup.connect(scenelogModel.getUrlReleaseDetails()).userAgent(userAgent).ignoreHttpErrors(true).get();
+			doc = Jsoup.connect(MUSICDLModel.getUrlReleaseDetails()).userAgent(userAgent).ignoreHttpErrors(true).get();
 			
 			if(antiDDOS.isAntiDDOS(doc)) {
-				doc = this.bypassAntiDDOS(doc, conf.URL, scenelogModel.getUrlReleaseDetails());
+				doc = this.bypassAntiDDOS(doc, conf.URL, MUSICDLModel.getUrlReleaseDetails());
 			}
 
 			TrackModel currTrack = null;
-			Element releaseTrack = doc.getElementsByClass(conf.RELEASE_TRACK_NAME).get(0);
+			Element releaseTrack = doc.getElementsByClass(conf.TABLE_TRACKS).get(0);
+			
+			Elements listTrack = releaseTrack.select("table > tbody > tr");
 
-			List<TextNode> textnodes = releaseTrack.textNodes();
 			int numTr = 1;
 			List<TrackModel> tracks = new ArrayList<TrackModel>();
-			for(TextNode tx : textnodes) {
-				currTrack = new TrackModel();
-				currTrack.setTrackNumber(numTr);
-				String text = tx.text().replaceFirst("\\d+\\.",""); // se c'e' il numero di track, lo elimina
-//				System.out.println(text);
-				currTrack.setTrackName(text);
-				tracks.add(currTrack);
-				log.info("[SCENELOG] \t TRACK:  "+numTr+". "+currTrack);
-				numTr++;
+			for(Element tx : listTrack) {
+				
+				Elements row = tx.select("td");
+				if(row.size()==4) {
+					currTrack = new TrackModel();
+					currTrack.setTrackNumber(Integer.parseInt(row.get(0).text()));
+					currTrack.setTrackName(row.get(1).text());
+					currTrack.setArtist(row.get(2).text());
+					currTrack.setTime(row.get(3).text());
+					tracks.add(currTrack);
+					log.info("[MUSICDL] \t TRACK:  "+numTr+". "+currTrack);
+					numTr++;
+				}
 
 			}
 			
 			if(release.getTracks().isEmpty()) {
 				release.setTracks(tracks);
 			} else {
-				// PRIORITA' ALLE TRACCE SCENELOG
+				// PRIORITA' ALLE TRACCE MUSICDL
 				release.setTracks(SymusicUtility.chooseTrack(tracks, release.getTracks(), true));
 			}
 			
@@ -235,12 +244,12 @@ public class ScenelogParser extends GenericParser {
 	}
 
 
-	private ReleaseModel popolaRelease(ReleaseModel release, ScenelogParserModel scenelogModel) throws ParseException {
-		if(scenelogModel.getReleaseName()!=null) {
-			release.setNameWithUnderscore(scenelogModel.getReleaseName());
-			release.setName(scenelogModel.getReleaseName().replace("_", " "));
+	private ReleaseModel popolaRelease(ReleaseModel release, MusicDLParserModel MUSICDLModel) throws ParseException {
+		if(MUSICDLModel.getReleaseName()!=null) {
+			release.setNameWithUnderscore(MUSICDLModel.getReleaseName());
+			release.setName(MUSICDLModel.getReleaseName().replace("_", " "));
 		}
-		release.setReleaseDate(SymusicUtility.getStandardDate(scenelogModel.getReleaseDate()));
+		release.setReleaseDate(SymusicUtility.getStandardDate(MUSICDLModel.getReleaseDate()));
 		
 		// AGGIUNGE ULTERIORI INFO DELLA RELEASE A PARTIRE DAL NOME
 		// ES. CREW E ANNO RELEASE
@@ -249,16 +258,16 @@ public class ScenelogParser extends GenericParser {
 		return release;
 	}
 
-	private ScenelogParserModel popolaScenelogRelease(Element tmp) throws ParseException {
+	private MusicDLParserModel popolaMusicDLRelease(Element tmp) throws ParseException {
 		
-		ScenelogParserModel release = new ScenelogParserModel();
+		MusicDLParserModel release = new MusicDLParserModel();
 		
-		Element releaseItem = tmp.getElementsByTag("h1").get(0).getElementsByTag("a").get(0);
-		String releaseName = releaseItem.text();
+		Element releaseItem = tmp.getElementsByClass(conf.CLASS_RELEASE_TITLE).get(0).getElementsByTag("a").get(0);
+		String releaseName = this.standardFormatRelease(releaseItem.text());
 		String releaseUrl = releaseItem.attr("href");
 		
-		Element relDate = tmp.getElementsByClass(conf.CLASS_RELEASE_LIST_DATA).get(0);
-		String dateIn = relDate.text();
+		Element relDate = tmp.getElementsByClass(conf.CLASS_RELEASE_LIST_DATA).get(0).getElementsByTag("time").get(0);
+		String dateIn = relDate.attr("datetime");
 		dateIn = this.getStandardDateFormat(dateIn);
 		Date dateInDate = SymusicUtility.getStandardDate(dateIn);
 		
@@ -283,6 +292,11 @@ public class ScenelogParser extends GenericParser {
 		log.info("|"+release+"| acquisita");
 		
 		return release;
+	}
+
+	private String standardFormatRelease(String text) {
+		// TODO Auto-generated method stub
+		return text;
 	}
 
 	private String getStandardDateFormat(String dateIn) throws ParseException {
@@ -314,8 +328,8 @@ public class ScenelogParser extends GenericParser {
 	}
 	
 	public static void main(String[] args) throws IOException, ParseReleaseException {
-		ScenelogParser p = new ScenelogParser();
-		ScenelogParserModel m = p.parseFullPage("http://scenelog.eu/music/").get(0);
+		MusicDLParser p = new MusicDLParser();
+		MusicDLParserModel m = p.parseFullPage("http://MUSICDL.eu/music/").get(0);
 		ReleaseModel mm = p.parseReleaseDetails(m, null);
 		
 		System.out.println(mm);
