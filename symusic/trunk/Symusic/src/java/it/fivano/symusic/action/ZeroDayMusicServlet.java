@@ -4,10 +4,12 @@ import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.backend.service.UserService;
 import it.fivano.symusic.core.Release0DayMp3Service;
 import it.fivano.symusic.core.Release0DayMusicService;
+import it.fivano.symusic.core.ReleaseMusicDLService;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.UserModel;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -107,6 +109,14 @@ public class ZeroDayMusicServlet extends BaseAction {
 					zeroDay.setAnnoDa(annoDa);
 					zeroDay.setAnnoAl(annoAl);
 					listRelease = zeroDay.parse0DayMp3Release(genre, initDate, endDate);
+				} else if(site.equals("3")) {
+					ReleaseMusicDLService musicDL = new ReleaseMusicDLService(user.getId());
+					musicDL.setEnableBeatportService(flagBeatport);
+					musicDL.setExcludeRipRelease(flagRip);
+					musicDL.setExcludeVA(flagVA);
+					musicDL.setAnnoDa(annoDa);
+					musicDL.setAnnoAl(annoAl);
+					listRelease = musicDL.parseMusicDLRelease(genre, initDate, endDate);
 				}
 			}
 			
@@ -156,6 +166,8 @@ public class ZeroDayMusicServlet extends BaseAction {
 		this.reload = reload;
 	}
 	
-	
+	public static void main(String[] args) throws UnsupportedEncodingException {
+		System.out.println(new String("Ferry Tayle ft. Sarah Shields – The Most Important Thing (Club".getBytes(),"ISO-8859-1"));
+	}
 
 }

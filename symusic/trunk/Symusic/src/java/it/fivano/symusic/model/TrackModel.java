@@ -50,6 +50,14 @@ public class TrackModel {
 								(genere!=null? "{"+genere+"}" : "") + 
 										(bpm!=null? "{"+bpm+"}" : "") ;
 	}
+	public int toCount() {
+		return (artist!=null? 1 : 0) + 
+				(trackName!=null? 1 : 0) + 
+					(time!=null? 1 : 0) + 
+							(genere!=null? 1 : 0) + 
+									(bpm!=null? 1 : 0) ;
+	}
+	
 	public Integer getTrackNumber() {
 		return trackNumber;
 	}

@@ -171,34 +171,43 @@ public class MusicDLParser extends GenericParser {
 	}
 	
 	
-	public ReleaseModel parseReleaseDetails(MusicDLParserModel MUSICDLModel, ReleaseModel release) throws ParseReleaseException {
+	public ReleaseModel parseReleaseDetails(MusicDLParserModel musicDLModel, ReleaseModel release) throws ParseReleaseException {
 		
 		Document doc = null;
 		try {
 
-			if(MUSICDLModel==null)
+			if(musicDLModel==null)
 				return release;
 
 			// SE RELEASE ANCORA NON PRESENTE SI CREA L'OGGETTO
 			if(release==null)
 				release = new ReleaseModel();
 			
-			release = this.popolaRelease(release, MUSICDLModel);
-
+			
 			// release trovata
 			String userAgent = this.randomUserAgent();
-			doc = Jsoup.connect(MUSICDLModel.getUrlReleaseDetails()).userAgent(userAgent).ignoreHttpErrors(true).get();
+			doc = Jsoup.connect(musicDLModel.getUrlReleaseDetails()).userAgent(userAgent).ignoreHttpErrors(true).get();
 			
 			if(antiDDOS.isAntiDDOS(doc)) {
-				doc = this.bypassAntiDDOS(doc, conf.URL, MUSICDLModel.getUrlReleaseDetails());
+				doc = this.bypassAntiDDOS(doc, conf.URL, musicDLModel.getUrlReleaseDetails());
 			}
+			
+			Element releaseInfo = doc.getElementsByClass(conf.TABLE_INFO).get(0);
+			Elements listInfo = releaseInfo.select("tbody > tr");
+			
+			release.setArtist(listInfo.get(0).select("td").get(1).text());
+			release.setSong(listInfo.get(1).select("td").get(1).text());
+			release.setGenre(SymusicUtility.creaGenere(listInfo.get(1).select("td").get(1).text()));
 
+			release = this.popolaRelease(release, musicDLModel);
+
+			
 			TrackModel currTrack = null;
 			Element releaseTrack = doc.getElementsByClass(conf.TABLE_TRACKS).get(0);
 			
 			Elements listTrack = releaseTrack.select("table > tbody > tr");
 
-			int numTr = 1;
+			
 			List<TrackModel> tracks = new ArrayList<TrackModel>();
 			for(Element tx : listTrack) {
 				
@@ -210,8 +219,8 @@ public class MusicDLParser extends GenericParser {
 					currTrack.setArtist(row.get(2).text());
 					currTrack.setTime(row.get(3).text());
 					tracks.add(currTrack);
-					log.info("[MUSICDL] \t TRACK:  "+numTr+". "+currTrack);
-					numTr++;
+					log.info("[MUSICDL] \t TRACK:  "+currTrack.getTrackNumber()+". "+currTrack);
+					
 				}
 
 			}
@@ -244,12 +253,17 @@ public class MusicDLParser extends GenericParser {
 	}
 
 
-	private ReleaseModel popolaRelease(ReleaseModel release, MusicDLParserModel MUSICDLModel) throws ParseException {
-		if(MUSICDLModel.getReleaseName()!=null) {
-			release.setNameWithUnderscore(MUSICDLModel.getReleaseName());
-			release.setName(MUSICDLModel.getReleaseName().replace("_", " "));
+	private ReleaseModel popolaRelease(ReleaseModel release, MusicDLParserModel musicDLModel) throws ParseException {
+		if(musicDLModel.getReleaseName()!=null) {
+			release.setNameWithUnderscore(musicDLModel.getReleaseName());
+
+			if(release.getArtist()!=null && release.getSong()!=null) {
+				release.setName(release.getArtist()+" - "+release.getSong());
+			} else {
+				release.setName(musicDLModel.getReleaseName().replace("_", " "));
+			}
 		}
-		release.setReleaseDate(SymusicUtility.getStandardDate(MUSICDLModel.getReleaseDate()));
+		release.setReleaseDate(SymusicUtility.getStandardDate(musicDLModel.getReleaseDate()));
 		
 		// AGGIUNGE ULTERIORI INFO DELLA RELEASE A PARTIRE DAL NOME
 		// ES. CREW E ANNO RELEASE
@@ -329,7 +343,7 @@ public class MusicDLParser extends GenericParser {
 	
 	public static void main(String[] args) throws IOException, ParseReleaseException {
 		MusicDLParser p = new MusicDLParser();
-		MusicDLParserModel m = p.parseFullPage("http://MUSICDL.eu/music/").get(0);
+		MusicDLParserModel m = p.parseFullPage("http://musicdl.net/trance").get(0);
 		ReleaseModel mm = p.parseReleaseDetails(m, null);
 		
 		System.out.println(mm);

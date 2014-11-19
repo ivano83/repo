@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -35,6 +35,7 @@
 				<select name="site">
 					<option value="1">0DayMusic</option>
 					<option value="2" selected="selected">0DayMp3</option>
+					<option value="3">Music DL</option>
 				</select>
 			</td>
 		</tr>
@@ -47,7 +48,6 @@
 					<option value="dance" selected="selected">Dance</option>
 					<option value="trance">Trance</option>
 					<option value="house">House</option>
-					<option value="0day-mp3">0day-mp3</option>
 				</select>
 			</td>
 		</tr>

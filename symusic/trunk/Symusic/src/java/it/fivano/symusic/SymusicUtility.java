@@ -1,5 +1,6 @@
 package it.fivano.symusic;
 
+import it.fivano.symusic.model.GenreModel;
 import it.fivano.symusic.model.LinkModel;
 import it.fivano.symusic.model.ReleaseExtractionModel;
 import it.fivano.symusic.model.ReleaseExtractionModel.AreaExtraction;
@@ -199,6 +200,10 @@ public class SymusicUtility {
 			if(tracks1.size()!=tracks2.size())
 				return tracks1;
 			else {
+				if(tracks1.get(0).toCount()<tracks2.get(0).toCount())
+					return tracks2;
+				else if(tracks1.get(0).toCount()>tracks2.get(0).toCount())
+					return tracks1;
 				if(primaListaPreferita)
 					return tracks1;
 				else
@@ -271,6 +276,13 @@ public class SymusicUtility {
 		sottraiData(new Date(), 2);
 		
 		customCompare("ciao-pippo e paperino, bene!!?!", "");
+	}
+
+
+	public static GenreModel creaGenere(String text) {
+		GenreModel genre = new GenreModel();
+		genre.setName(text);
+		return genre;
 	}
 }
 

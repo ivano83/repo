@@ -20,7 +20,6 @@ public class MusicDLConf {
 	public String RELEASE_DOWNLOAD;
 	public String RELEASE_NAME;
 	
-	public String ID_PAGE_NUMBER;
 	public String CLASS_RELEASE_LIST_ITEM;
 	public String CLASS_RELEASE_LIST_DATA;
 	public String DATE_FORMAT;
@@ -44,7 +43,6 @@ public class MusicDLConf {
 		RELEASE_DOWNLOAD = props.getProperty("release_download");
 		RELEASE_NAME = props.getProperty("release_name");
 		
-		ID_PAGE_NUMBER = props.getProperty("id_page_number");
 		CLASS_RELEASE_LIST_ITEM = props.getProperty("class_release_list_item");
 		CLASS_RELEASE_LIST_DATA = props.getProperty("class_release_list_data");
 		DATE_FORMAT = props.getProperty("date_format");
