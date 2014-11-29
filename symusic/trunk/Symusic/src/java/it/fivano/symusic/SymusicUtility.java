@@ -80,7 +80,7 @@ public class SymusicUtility {
 	public static void processReleaseName(ReleaseModel rel) {
 		
 		String name = rel.getNameWithUnderscore();
-		String[] nameSplit = name.replace("-","_").split("_");
+		String[] nameSplit = name.replace(" ","_").replace("-","_").split("_");
 		int size = nameSplit.length;
 		if(size<=2) return;
 		
@@ -89,8 +89,12 @@ public class SymusicUtility {
 		if(!year.matches("\\d\\d\\d\\d") && year.length()!=4) {
 			year = nameSplit[size-3];
 			crew = nameSplit[size-2] + "_" + nameSplit[size-1];
-			if(year.length()!=4)
-				year = null; // meglio non salvare
+			if(!year.matches("\\d\\d\\d\\d") && year.length()!=4) {
+				if(nameSplit[size-1].matches("\\d\\d\\d\\d") && nameSplit[size-1].length()!=4)
+					year = nameSplit[size-1];
+				else
+					year = null; // meglio non salvare
+			}
 		}
 		if(year.matches("\\d\\d\\d\\d")) {
 			rel.setCrew(crew);

@@ -197,7 +197,7 @@ public class MusicDLParser extends GenericParser {
 			
 			release.setArtist(listInfo.get(0).select("td").get(1).text());
 			release.setSong(listInfo.get(1).select("td").get(1).text());
-			release.setGenre(SymusicUtility.creaGenere(listInfo.get(1).select("td").get(1).text()));
+			release.setGenre(SymusicUtility.creaGenere(listInfo.get(2).select("td").get(1).text()));
 
 			release = this.popolaRelease(release, musicDLModel);
 
