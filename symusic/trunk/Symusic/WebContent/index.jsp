@@ -218,6 +218,44 @@
 	
 </form>
 
+<div style="padding-bottom: 60px"></div>
+
+<form action="LocalReleaseServlet"> 
+	<h3>Ricerca Release Salvate</h3>
+	<table>
+		<tr>
+			<td>
+				<div>Genere Release</div>
+			</td>
+			<td>
+				<select name="genre">
+					<option value="ALL" selected="selected">[ALL]</option>
+					<option value="dance">Dance</option>
+					<option value="trance">Trance</option>
+					<option value="house">House</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>Data inizio </div>
+			</td>
+			<td>
+				<input type="text" name="initDate" class="tcal">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>Data Fine </div>
+			</td>
+			<td>
+				<input type="text" name="endDate" class="tcal">
+			</td>
+		</tr>
+	</table>
+	<input type="submit" value="Ricerca">&nbsp;&nbsp;
+	
+</form>
 
 
 <div style="padding-bottom: 100px"></div>

@@ -186,6 +186,17 @@ public class TransformerUtility {
 		
 	}
 	
+	public static List<ReleaseModel> transformReleasesToModel(List<Release> in) throws ParseException {
+		List<ReleaseModel> res = new ArrayList<ReleaseModel>();
+		
+		for(Release r : in) {
+			res.add(transformReleaseToModel(r));
+		}
+		
+		return res;
+		
+	}
+	
 	public static VideoModel transformVideoToModel(ReleaseVideo video) {
 		if(video==null)
 			return null;
@@ -336,6 +347,5 @@ public class TransformerUtility {
 		
 		return res;
 	}
-
 
 }

@@ -53,6 +53,7 @@
 		<tr class="row_${item.id}">
 			<td width="30%">
 				<div>Data: ${item.releaseDate}</div>
+				<div>Genere: ${item.genre.name}</div>
 				<c:choose>
 				  <c:when test="${empty item.links}"><div class="rel_name" style="background-color:#ffff77">${item.nameWithUnderscore}</div></c:when>
 				  <c:otherwise><div class="rel_name">${item.nameWithUnderscore}</div></c:otherwise>

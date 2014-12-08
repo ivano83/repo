@@ -1,21 +1,9 @@
 package it.fivano.symusic.backend.service;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import it.fivano.symusic.backend.TransformerUtility;
-import it.fivano.symusic.backend.dao.ReleaseExtractionMapper;
 import it.fivano.symusic.backend.dao.ReleaseMapper;
-import it.fivano.symusic.backend.dao.ReleaseTrackMapper;
 import it.fivano.symusic.backend.model.Release;
 import it.fivano.symusic.backend.model.ReleaseExample;
-import it.fivano.symusic.backend.model.ReleaseExtraction;
-import it.fivano.symusic.backend.model.ReleaseExtractionExample;
-import it.fivano.symusic.backend.model.ReleaseTrack;
-import it.fivano.symusic.backend.model.ReleaseTrackExample;
 import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.model.GenreModel;
 import it.fivano.symusic.model.LinkModel;
@@ -24,6 +12,13 @@ import it.fivano.symusic.model.ReleaseFlagModel;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.TrackModel;
 import it.fivano.symusic.model.VideoModel;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ReleaseService extends RootService {
 	
@@ -81,6 +76,42 @@ public class ReleaseService extends RootService {
 		} finally {
 			this.chiudiSessione();
 		}
+	}
+	
+	
+	public List<ReleaseModel> getListRelease(String genre, Date initDate, Date endDate, Long idUser) throws BackEndException {
+		
+		List<ReleaseModel> result = new ArrayList<ReleaseModel>();
+		Set<String> resTmp = new HashSet<String>();
+		try {
+			
+			ReleaseMapper releaseDao = this.getReleaseMapper();
+			
+			ReleaseExample input = new ReleaseExample();
+			ReleaseExample.Criteria cr = input.createCriteria();
+			if(genre!=null) {
+				cr.andIdGenreEqualTo(new GenreService().getGenreByName(genre).getId());
+			}
+			cr.andReleaseDateBetween(initDate, endDate);
+			
+			List<Release> res = releaseDao.selectByExample(input);
+
+			for(Release r : res) {
+				resTmp.add(r.getReleaseName());
+				log.warn("Recuperata da DB la release = '"+r.getReleaseName()+"' - ID Genere = "+r.getIdGenre());
+			}
+			
+		} catch (Exception e) {
+			throw new BackEndException(e);
+		} finally {
+			this.chiudiSessione();
+		}
+		
+		for(String releaseName : resTmp) {
+			result.add(this.getReleaseFull(releaseName, idUser));
+		}
+		
+		return result;
 	}
 
 	public ReleaseModel getReleaseFull(String name, Long idUser) throws BackEndException {

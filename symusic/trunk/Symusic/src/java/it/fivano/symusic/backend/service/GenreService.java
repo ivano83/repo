@@ -44,6 +44,7 @@ public class GenreService extends RootService {
 			GenreMapper gDao = this.getGenreMapper();
 						
 			GenreExample ex = new GenreExample();
+			ex.createCriteria().andIdGenreEqualTo(id);
 			
 			GenreModel res = TransformerUtility.transformGenreToModel(gDao.selectByExample(ex).get(0));
 			
