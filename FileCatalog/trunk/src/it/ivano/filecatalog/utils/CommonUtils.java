@@ -15,7 +15,7 @@ public class CommonUtils extends BaseCatalog {
 		super(CommonUtils.class);
 	}
 
-	public void estraiMetadati(File file, Object input) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException {
+	public void estraiMetadatiStandard(File file, Object input) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException {
 		Method metodo = input.getClass().getMethod("setNome", String.class);
 		metodo.invoke(input, file.getName());
 		metodo = input.getClass().getMethod("setEstensione", String.class);

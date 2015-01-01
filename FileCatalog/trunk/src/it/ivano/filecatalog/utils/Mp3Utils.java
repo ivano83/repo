@@ -21,7 +21,7 @@ public class Mp3Utils extends CommonUtils {
 			if(file==null) {
 				throw new FileDataException("Il file e' nullo e non puo' essere processato");
 			}
-			super.estraiMetadati(file, res);
+			super.estraiMetadatiStandard(file, res);
 			
 			// create an MP3File object representing our chosen file
 			MediaFile oMediaFile = new MP3File(file);

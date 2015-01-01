@@ -28,7 +28,7 @@ public class VideoUtils extends CommonUtils {
 			if(file==null) {
 				throw new FileDataException("Il file e' nullo e non puo' essere processato");
 			}
-			super.estraiMetadati(file, res);
+			super.estraiMetadatiStandard(file, res);
 
 			NativeLibrary.addSearchPath("libvlc", "vlc");
 			
