@@ -19,5 +19,7 @@
 			<attribute name="owner.project.facets" value="jst.java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/jmimemagic-0.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/tika-app-1.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
