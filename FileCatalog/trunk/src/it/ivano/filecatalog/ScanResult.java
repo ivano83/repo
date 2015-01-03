@@ -1,5 +1,6 @@
 package it.ivano.filecatalog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,8 +33,10 @@ public class ScanResult {
 	public void addNextFile(String nextFile) {
 		this.nextFiles.add(nextFile);
 	}
-	public void addNextFiles(String[] nextFiles) {
-		this.nextFiles.addAll(Arrays.asList(nextFiles));
+	public void addNextFiles(File file) {
+		for(String nextFile : file.list()) {
+			this.nextFiles.add(file.getPath()+"\\"+nextFile);
+		}
 	}
 	
 	
