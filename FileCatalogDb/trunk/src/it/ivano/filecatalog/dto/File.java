@@ -1,14 +1,12 @@
 package it.ivano.filecatalog.dto;
-
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Date;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity
 public class File implements Serializable {
@@ -16,8 +14,14 @@ public class File implements Serializable {
 	@Column(name="id_file")
 	private String idFile;
 
+	@Column(name="id_archivio")
+	private BigInteger idArchivio;
+
 	@Column(name="file_name")
 	private String fileName;
+
+	@Column(name="id_cartella")
+	private BigInteger idCartella;
 
 	private String estensione;
 
@@ -36,18 +40,8 @@ public class File implements Serializable {
 	private byte flagCancellazione;
 
 	@ManyToOne
-	@JoinColumn(name="id_archivio")
-	private Archivio idArchivio;
-
-	@ManyToOne
-	@JoinColumn(name="id_cartella")
-	private Cartella idCartella;
-
-	@OneToMany(mappedBy="idFile")
-	private Set<FileVideo> fileVideoCollection;
-
-	@OneToMany(mappedBy="idFile")
-	private Set<FileMusica> fileMusicaCollection;
+	@JoinColumn(name="id_mime_type")
+	private MimeType idMimeType;
 
 	private static final long serialVersionUID = 1L;
 
@@ -63,12 +57,28 @@ public class File implements Serializable {
 		this.idFile = idFile;
 	}
 
+	public BigInteger getIdArchivio() {
+		return this.idArchivio;
+	}
+
+	public void setIdArchivio(BigInteger idArchivio) {
+		this.idArchivio = idArchivio;
+	}
+
 	public String getFileName() {
 		return this.fileName;
 	}
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public BigInteger getIdCartella() {
+		return this.idCartella;
+	}
+
+	public void setIdCartella(BigInteger idCartella) {
+		this.idCartella = idCartella;
 	}
 
 	public String getEstensione() {
@@ -119,36 +129,12 @@ public class File implements Serializable {
 		this.flagCancellazione = flagCancellazione;
 	}
 
-	public Archivio getIdArchivio() {
-		return this.idArchivio;
+	public MimeType getIdMimeType() {
+		return this.idMimeType;
 	}
 
-	public void setIdArchivio(Archivio idArchivio) {
-		this.idArchivio = idArchivio;
-	}
-
-	public Cartella getIdCartella() {
-		return this.idCartella;
-	}
-
-	public void setIdCartella(Cartella idCartella) {
-		this.idCartella = idCartella;
-	}
-
-	public Set<FileVideo> getFileVideoCollection() {
-		return this.fileVideoCollection;
-	}
-
-	public void setFileVideoCollection(Set<FileVideo> fileVideoCollection) {
-		this.fileVideoCollection = fileVideoCollection;
-	}
-
-	public Set<FileMusica> getFileMusicaCollection() {
-		return this.fileMusicaCollection;
-	}
-
-	public void setFileMusicaCollection(Set<FileMusica> fileMusicaCollection) {
-		this.fileMusicaCollection = fileMusicaCollection;
+	public void setIdMimeType(MimeType idMimeType) {
+		this.idMimeType = idMimeType;
 	}
 
 }

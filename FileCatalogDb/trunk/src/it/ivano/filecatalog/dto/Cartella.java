@@ -2,13 +2,9 @@ package it.ivano.filecatalog.dto;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Cartella implements Serializable {
@@ -21,18 +17,14 @@ public class Cartella implements Serializable {
 	@Column(name="id_cartella_padre")
 	private BigInteger idCartellaPadre;
 
+	@Column(name="id_archivio")
+	private BigInteger idArchivio;
+
 	@Column(name="cartella_base")
 	private byte cartellaBase;
 
 	@Column(name="cartelle_precedenti")
 	private String cartellePrecedenti;
-
-	@ManyToOne
-	@JoinColumn(name="id_archivio")
-	private Archivio idArchivio;
-
-	@OneToMany(mappedBy="idCartella")
-	private Set<File> fileCollection;
 
 	private static final long serialVersionUID = 1L;
 
@@ -64,6 +56,14 @@ public class Cartella implements Serializable {
 		this.idCartellaPadre = idCartellaPadre;
 	}
 
+	public BigInteger getIdArchivio() {
+		return this.idArchivio;
+	}
+
+	public void setIdArchivio(BigInteger idArchivio) {
+		this.idArchivio = idArchivio;
+	}
+
 	public byte getCartellaBase() {
 		return this.cartellaBase;
 	}
@@ -78,22 +78,6 @@ public class Cartella implements Serializable {
 
 	public void setCartellePrecedenti(String cartellePrecedenti) {
 		this.cartellePrecedenti = cartellePrecedenti;
-	}
-
-	public Archivio getIdArchivio() {
-		return this.idArchivio;
-	}
-
-	public void setIdArchivio(Archivio idArchivio) {
-		this.idArchivio = idArchivio;
-	}
-
-	public Set<File> getFileCollection() {
-		return this.fileCollection;
-	}
-
-	public void setFileCollection(Set<File> fileCollection) {
-		this.fileCollection = fileCollection;
 	}
 
 }

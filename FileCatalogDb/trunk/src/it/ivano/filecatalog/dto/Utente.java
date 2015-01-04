@@ -1,11 +1,9 @@
 package it.ivano.filecatalog.dto;
 
 import java.io.Serializable;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Utente implements Serializable {
@@ -20,9 +18,6 @@ public class Utente implements Serializable {
 	private String email;
 
 	private String password;
-
-	@OneToMany(mappedBy="idUtente")
-	private Set<Archivio> archivioCollection;
 
 	private static final long serialVersionUID = 1L;
 
@@ -68,14 +63,6 @@ public class Utente implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public Set<Archivio> getArchivioCollection() {
-		return this.archivioCollection;
-	}
-
-	public void setArchivioCollection(Set<Archivio> archivioCollection) {
-		this.archivioCollection = archivioCollection;
 	}
 
 }
