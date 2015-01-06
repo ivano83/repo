@@ -24,9 +24,9 @@ public class SpostaFileMp3eNfo {
 //		String folderFileNfo = "C:\\Users\\ivano\\Documents\\IVANO\\ARCHIVIO_IVANO\\info mp3";
 //		String folderFileMp3 = "C:\\Users\\ivano\\Desktop\\JDOWNLOAD\\DOWNL\\2004";
 		
-		String folderInput = "C:\\Users\\ivano\\Documents\\IVANO\\ARCHIVIO_IVANO\\Mp3\\TMP giugno\\Dance & House";
+		String folderInput = "C:\\Users\\ivano\\Documents\\IVANO\\ARCHIVIO_IVANO\\Mp3\\TMP novembre\\Trance";
 		String folderFileNfo = "C:\\Users\\ivano\\Documents\\IVANO\\ARCHIVIO_IVANO\\info mp3";
-		String folderFileMp3 = "C:\\Users\\ivano\\Documents\\IVANO\\ARCHIVIO_IVANO\\Mp3\\TMP giugno\\Dance & House";
+		String folderFileMp3 = "C:\\Users\\ivano\\Documents\\IVANO\\ARCHIVIO_IVANO\\Mp3\\TMP novembre\\Trance";
 		
 		// Trance
 		// Dance & House

@@ -10,8 +10,8 @@ public class RiempiFileCueMp3 {
 	public static void main(String[] args) {
 		
 		try {
-			String pathCue = "C:\\Users\\ivano\\Desktop\\Crixy House Compilation Vol.10\\Crixy House Compilation Vol.10.cue";
-			String pathList = "C:\\Users\\ivano\\Desktop\\Crixy House Compilation Vol.10\\Tracklist.txt";
+			String pathCue = "C:\\Users\\ivano\\Desktop\\Crixy House Compilation Vol.13\\Crixy House Compilation Vol.13.cue";
+			String pathList = "C:\\Users\\ivano\\Desktop\\Crixy House Compilation Vol.13\\Tracklist.txt";
 			
 			String fileCue = FileUtility.estraiTestoDaFile(FileUtility.caricaFile(pathCue).get(0));
 			Set<String> fileList = FileUtility.estraiRigheDaFile(FileUtility.caricaFile(pathList).get(0));
