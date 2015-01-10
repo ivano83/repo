@@ -45,7 +45,7 @@ public class InitServlet extends HttpServlet {
 			
 			List<String> listaAnni = new ArrayList<String>();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-			Integer annoFine = Integer.parseInt(sdf.format(new Date()));
+			Integer annoFine = Integer.parseInt(sdf.format(new Date()))+1;
 			Integer anno = 1980;
 			while(anno<=annoFine) {
 				listaAnni.add(anno.toString());

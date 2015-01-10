@@ -61,7 +61,10 @@ public class YoutubeParser extends GenericParser {
 					VideoModel yt = null;
 					String title = "";
 					int count = 0;
+					int currentPosition = 0;
+					List<VideoModel> extraVideo = new ArrayList<VideoModel>();
 					for(Element video : videoGroup) {
+						currentPosition++;
 						yt = new VideoModel();
 						Element videoTitle = video.getElementsByClass(conf.CLASS_VIDEO_TITLE).get(0);
 						title = videoTitle.text();
@@ -70,10 +73,7 @@ public class YoutubeParser extends GenericParser {
 						title = title.replaceAll("\\xF0", "").replaceAll("\\x9F", "").replaceAll("\\x8E", "").replaceAll("\\xA7", "").replaceAll("\\xB5", "");
 						
 						String relName = this.formatQueryString(releaseName,tentativi);
-						boolean similarity = SymusicUtility.compareStringSimilarity(relName, title, LevelSimilarity.ALTO);
-						if(!similarity) {
-							continue;
-						}
+						
 						
 						yt.setName(title);
 						
@@ -87,6 +87,12 @@ public class YoutubeParser extends GenericParser {
 							log.warn("Impossibile recuperare il dato eta' del video = "+title);
 						}
 						
+						boolean similarity = SymusicUtility.compareStringSimilarity(relName, title, LevelSimilarity.ALTO);
+						if(!similarity) {
+							extraVideo.add(yt);
+							continue;
+						}
+						
 						result.add(yt);
 
 						// salva solo MAX_VIDEO_EXTRACT video
@@ -98,6 +104,15 @@ public class YoutubeParser extends GenericParser {
 					if(result.isEmpty()) {
 						trovato = false;
 						tentativi++;
+					} else if(result.size()<conf.MAX_VIDEO_EXTRACT) {
+						// se non è stato raggiunto il max dei video, aggiunge i primi della lista
+						// che dovrebbero essere i più simili
+						int i = 0;
+						while(result.size()==conf.MAX_VIDEO_EXTRACT) {
+							result.add(extraVideo.get(i));
+							i++;
+						}
+						trovato = true;
 					} else
 						trovato = true;
 

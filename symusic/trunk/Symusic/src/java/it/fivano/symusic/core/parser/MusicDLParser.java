@@ -240,11 +240,11 @@ public class MusicDLParser extends GenericParser {
 				release.addLink(this.popolateLink(dl));
 			}
 			
-			SymusicUtility.updateReleaseExtraction(release.getReleaseExtraction(),true,AreaExtraction.SCENELOG);
+//			SymusicUtility.updateReleaseExtraction(release.getReleaseExtraction(),true,AreaExtraction.SCENELOG);
 
 		} catch(Exception e) {
 			log.error("Errore nel parsing", e);
-			SymusicUtility.updateReleaseExtraction(release.getReleaseExtraction(),false,AreaExtraction.SCENELOG);
+//			SymusicUtility.updateReleaseExtraction(release.getReleaseExtraction(),false,AreaExtraction.SCENELOG);
 //			throw new ParseReleaseException("Errore nel parsing",e);
 		}
 		

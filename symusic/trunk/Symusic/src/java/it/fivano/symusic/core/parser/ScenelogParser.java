@@ -24,10 +24,11 @@ import org.jsoup.select.Elements;
 public class ScenelogParser extends GenericParser {
 	
 	private ScenelogConf conf;
-	
+	private int countFailConnection;
 	
 	public ScenelogParser() throws IOException {
 		conf = new ScenelogConf();
+		countFailConnection = 0;
 		this.setLogger(getClass());
 	}
 	
@@ -122,10 +123,14 @@ public class ScenelogParser extends GenericParser {
 					}
 				
 					trovato = true;
+					countFailConnection = 0; // reset contatore di fail
 				} catch (Exception e1) {
 					log.error("[SCENELOG] Nessun risultato ottenuto per la release = "+releaseName+"  --> "+e1.getMessage());
 					userAgent = this.randomUserAgent(); // proviamo un nuovo user agent
 					tentativi++;
+					if("Read timed out".equalsIgnoreCase(e1.getMessage())) {
+						countFailConnection++;
+					}
 				}
 				
 			} while(tentativi<2 && !trovato);
@@ -313,6 +318,10 @@ public class ScenelogParser extends GenericParser {
 		return t;
 	}
 	
+	public int getCountFailConnection() {
+		return countFailConnection;
+	}
+	
 	public static void main(String[] args) throws IOException, ParseReleaseException {
 		ScenelogParser p = new ScenelogParser();
 		ScenelogParserModel m = p.parseFullPage("http://scenelog.eu/music/").get(0);
@@ -320,5 +329,8 @@ public class ScenelogParser extends GenericParser {
 		
 		System.out.println(mm);
 	}
+
+
+
 
 }

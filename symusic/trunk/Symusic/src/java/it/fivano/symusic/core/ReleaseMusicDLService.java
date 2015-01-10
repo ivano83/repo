@@ -31,6 +31,8 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 	private MusicDLConf conf;
 	private String genre;
 	
+	private static int MAX_CONSECUTIVE_FAILS = 20;
+	
 	private List<ReleaseModel> listRelease;
 	
 
@@ -82,8 +84,11 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 				
 			}
 			
-			// per ogni release scenelog recupera i dati da beatport
+			// init dei parser
 			BeatportParser beatport = new BeatportParser();
+			ScenelogParser scenelog = new ScenelogParser();
+			YoutubeParser youtube = new YoutubeParser();
+			GoogleService google = new GoogleService();
 			List<BeatportParserModel> beatportRes = null;
 			int count = 0;
 			for(MusicDLParserModel sc : resZero) {
@@ -148,14 +153,15 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 				}
 
 				// DETTAGLIO SCENELOG
-				if(enableScenelogService) {
-					ScenelogParser scenelog = new ScenelogParser();
+				if(scenelog.getCountFailConnection()>MAX_CONSECUTIVE_FAILS)
+					log.warn("Il sito 'Scenelog' sembrerebbe al momento non raggiungibile... verra' di seguito disabilitata la ricerca.");
+				if(enableScenelogService && scenelog.getCountFailConnection()<=MAX_CONSECUTIVE_FAILS) {
+					
 					ScenelogParserModel releaseScenelog = scenelog.searchRelease(release.getName());
 					release = scenelog.parseReleaseDetails(releaseScenelog, release);
 				}
 
 				// YOUTUBE VIDEO
-				YoutubeParser youtube = new YoutubeParser();
 				if(enableYoutubeService) {
 					List<VideoModel> youtubeVideos = youtube.searchYoutubeVideos(release.getName());
 					release.setVideos(youtubeVideos);
@@ -173,7 +179,7 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 
 
 				// AGGIUNGE I LINK DI RICERCA MANUALE (DIRETTAMENTE SU GOOGLE E YOUTUBE)
-				GoogleService google = new GoogleService();
+				
 				google.addManualSearchLink(release);
 				youtube.addManualSearchLink(release); // link a youtube per la ricerca manuale
 				

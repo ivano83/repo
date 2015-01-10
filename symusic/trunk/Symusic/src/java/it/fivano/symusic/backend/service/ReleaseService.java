@@ -151,8 +151,10 @@ public class ReleaseService extends RootService {
 				List<TrackModel> tracks = new TrackService().getTracks(idRel);
 				relRes.setTracks(tracks);
 				
-				GenreModel genere = new GenreService().getGenre(res.get(0).getIdGenre());
-				relRes.setGenre(genere);
+				if(res.get(0).getIdGenre()!=null) {
+					GenreModel genere = new GenreService().getGenre(res.get(0).getIdGenre());
+					relRes.setGenre(genere);
+				}
 				
 				ReleaseExtractionModel extr = new ReleaseExtractionService().getReleaseExtraction(idRel);
 				relRes.setReleaseExtraction(extr);
