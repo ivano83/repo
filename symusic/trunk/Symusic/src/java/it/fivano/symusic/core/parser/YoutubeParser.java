@@ -35,6 +35,7 @@ public class YoutubeParser extends GenericParser {
 			boolean trovato = false;
 
 			releaseName = this.getReleaseNameWithoutUnderscore(releaseName);
+			releaseName = releaseName.replace("'", " ");
 			
 			Elements videoGroup = null;
 			Document doc = null;
@@ -102,16 +103,25 @@ public class YoutubeParser extends GenericParser {
 					}
 					
 					if(result.isEmpty()) {
+						try {
+							int i = 0;
+							while(result.size()==conf.MAX_VIDEO_EXTRACT) {
+								result.add(extraVideo.get(i));
+								i++;
+							}
+						} catch (Exception e) { }
 						trovato = false;
 						tentativi++;
 					} else if(result.size()<conf.MAX_VIDEO_EXTRACT) {
 						// se non è stato raggiunto il max dei video, aggiunge i primi della lista
 						// che dovrebbero essere i più simili
-						int i = 0;
-						while(result.size()==conf.MAX_VIDEO_EXTRACT) {
-							result.add(extraVideo.get(i));
-							i++;
-						}
+						try {
+							int i = 0;
+							while(result.size()==conf.MAX_VIDEO_EXTRACT) {
+								result.add(extraVideo.get(i));
+								i++;
+							}
+						} catch (Exception e) { }
 						trovato = true;
 					} else
 						trovato = true;

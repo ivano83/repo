@@ -55,7 +55,7 @@ public class AntiDdosUtility {
 				
 				String[] tmp = varName.split(":");
 				varName = tmp[0].replace("=", ".").trim();
-//				log.info(varName);
+//				System.out.println(varName);
 				tot = parseCalc(tot, "+", tmp[1]);
 				
 			}
@@ -75,7 +75,8 @@ public class AntiDdosUtility {
 			
 		}
 		
-		tot += 11;
+//		tot += 11;
+		tot += 9;
 		
 //		log.info("ANTI_DDOS TOT = "+tot);
 		return tot;
@@ -87,9 +88,11 @@ public class AntiDdosUtility {
 		String[] tmp = value.split("\\)\\+\\(");
 		for(String x : tmp) {
 			int res = StringUtils.countMatches(x, "!!") + StringUtils.countMatches(x, "!+");
+//			System.out.println(res+" --> "+x);
 			totale += res+"";
 		}
 //		log.info(totale+" --> "+value);
+//		System.out.println(totale+" --> "+value);
 		int totInt = Integer.parseInt(totale);
 		if(operatore.equals("+"))
 			return tot+totInt;
@@ -115,17 +118,18 @@ public class AntiDdosUtility {
     "b(function(){\n"+
       "var a = document.getElementById('cf-content');a.style.display = 'block';\n"+
       "setTimeout(function(){\n"+
-       "var t,r,a,f, rDekWzY={\"pT\":+((!+[]+!![]+!![]+[])+(!+[]+!![]+!![]+!![]))};\n"+
-        "t = document.createElement('div');\n"+
+       "var t,r,a,f, VHzHqsQ={\"XZikfK\":!+[]+!![]+!![]+!![]};\n"+
+        "t = document.createElement('div')\n;"+
         "t.innerHTML=\"<a href='/'>x</a>\";\n"+
         "t = t.firstChild.href;r = t.match(/https?:\\/\\//)[0];\n"+
-        "t = t.substr(r.length); t = t.substr(0,t.length-1);\n"+
+        "t = t.substr(r.length); t = t.substr(0,t.length-1)\n;"+
         "a = document.getElementById('jschl-answer');\n"+
         "f = document.getElementById('challenge-form');\n"+
-        ";rDekWzY.pT-=+((!+[]+!![]+!![]+!![]+[])+(+[]));a.value = parseInt(rDekWzY.pT, 10) + t.length;\n"+
+        ";VHzHqsQ.XZikfK+=+((!+[]+!![]+!![]+!![]+!![]+[])+(+[]));VHzHqsQ.XZikfK*=+((!+[]+!![]+[])+(+!![]));VHzHqsQ.XZikfK+=!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+!![];a.value = parseInt(VHzHqsQ.XZikfK, 10) + t.length;\n"+
         "f.submit();\n"+
       "}, 5850);\n"+
    "}, false);\n";
+	// GET /cdn-cgi/l/chk_jschl?jschl_vc=8e76d977fe8fbab6e22c98f3d0b759d1&jschl_answer=1152 HTTP/1.1
 		
 		System.out.println(new AntiDdosUtility().calcolateAnswer(script));
 	}
