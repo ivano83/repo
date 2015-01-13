@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+	<persistence-unit name="FileCatalogDb" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<non-jta-data-source>java:FileCatalogDS</non-jta-data-source>
+		
+		<class>it.ivano.catalog.backend.dto.Utente</class>
+		<class>it.ivano.catalog.backend.dto.FileVideoAudio</class>
+		<class>it.ivano.catalog.backend.dto.FileVideo</class>
+		<class>it.ivano.catalog.backend.dto.FileMusica</class>
+		<class>it.ivano.catalog.backend.dto.File</class>
+		<class>it.ivano.catalog.backend.dto.Cartella</class>
+		<class>it.ivano.catalog.backend.dto.Archivio</class>
+		<class>it.ivano.catalog.backend.dto.MimeType</class>
+		<class>it.ivano.catalog.backend.dto.ConfigUtente</class>
+		<class>it.ivano.catalog.backend.dto.ConfigUtentePK</class>
+
+
+		<properties>
+<!--			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />-->
+<!--			<property name="javax.persistence.jdbc.url"	value="jdbc:mysql://localhost:3306/filecatalog" />-->
+<!--			<property name="javax.persistence.jdbc.user" value="root" />-->
+<!--			<property name="javax.persistence.jdbc.password" value="passw0rd.1" />-->
+			
+			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
+			<property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/filecatalog" />
+			<property name="hibernate.connection.username" value="root" />
+			<property name="hibernate.connection.password" value="passw0rd.1" /> 
+
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect" />
+			<property name="hibernate.show_sql" value="true" />
+			
+		</properties>
+		
+	</persistence-unit>
+</persistence>
