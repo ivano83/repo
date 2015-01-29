@@ -7,6 +7,8 @@
 
 	<properties>
 		<spring.version>4.1.4.RELEASE</spring.version>
+		<tiles.version>3.0.5</tiles.version>
+		<hibernate.version>4.3.8.Final</hibernate.version>
 	</properties>
 
 	<dependencies>
@@ -36,11 +38,65 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		
+		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.34</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>
+						hibernate-commons-annotations
+					</artifactId>
+					<groupId>org.hibernate.common</groupId>
+				</exclusion>
+			</exclusions>
+			<optional>true</optional>
+		</dependency> 
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>
+						hibernate-commons-annotations
+					</artifactId>
+					<groupId>org.hibernate.common</groupId>
+				</exclusion>
+			</exclusions>
+			<optional>true</optional>
+		</dependency>
+
 		
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-commons-annotations</artifactId>
+			<version>3.2.0.Final</version>
+		</dependency>
+		
+		
+		<dependency>
+			<groupId>org.apache.tiles</groupId>
+			<artifactId>tiles-core</artifactId>
+			<version>${tiles.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tiles</groupId>
+			<artifactId>tiles-jsp</artifactId>
+			<version>${tiles.version}</version>
+		</dependency>
+
 
 <!-- 		<dependency> -->
 <!-- 			<groupId>org.springframework.data</groupId> -->

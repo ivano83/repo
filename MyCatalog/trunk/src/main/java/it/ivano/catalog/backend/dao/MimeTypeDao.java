@@ -8,37 +8,53 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-public class MimeTypeDao extends BaseDao {
+import org.springframework.stereotype.Repository;
 
+@Repository
+public class MimeTypeDao extends BaseDao implements MimeTypeDaoInt {
+	
 	private static final String CONFIG_MIME_TYPE = "MT";
 	
 	
+	private EntityManager entityManager;
+	
+	public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+	@PersistenceContext(unitName="MyCatalog")
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+	
+    
 	public MimeTypeDao() {
 		super(MimeTypeDao.class);
 	}
 	
 	public List<MimeType> getAllMimeType() throws FileDataException {
-		EntityManager em = null;
+//		EntityManager em = null;
 		try {
-			em = em().createEntityManager();
-			Query q = em.createQuery("SELECT m FROM MimeType m");
+//			em = em().createEntityManager();
+			Query q = entityManager.createQuery("SELECT m FROM MimeType m");
 			List<MimeType> res = q.getResultList();
 			
 			return res;
 		} catch (Exception e) {
 			throw logAndLaunchException("Errore nel recupero della lista dei mimeType", e, false);
 		} finally {
-			emClose(em);
+//			emClose(entityManager);
 		}
 	}
 	
 	public List<MimeType> getListaMimeTypeByArea(String area) throws FileDataException {
-		EntityManager em = null;
+//		EntityManager em = null;
 		try {
-			em = em().createEntityManager();
-			Query q = em.createQuery("SELECT m FROM MimeType m where m.area = :area");
+//			em = em().createEntityManager();
+			Query q = entityManager.createQuery("SELECT m FROM MimeType m where m.area = :area");
 			q.setParameter("area", area);
 			List<MimeType> res = q.getResultList();
 			
@@ -46,15 +62,15 @@ public class MimeTypeDao extends BaseDao {
 		} catch (Exception e) {
 			throw logAndLaunchException("Errore nel recupero del mimeType cercato", e, false);
 		} finally {
-			emClose(em);
+//			emClose(entityManager);
 		}
 	}
 	
 	public MimeType getMimeTypeByName(String name) throws FileDataException {
-		EntityManager em = null;
+//		EntityManager em = null;
 		try {
-			em = em().createEntityManager();
-			Query q = em.createQuery("SELECT m FROM MimeType m where m.mimeType = :name");
+//			em = em().createEntityManager();
+			Query q = entityManager.createQuery("SELECT m FROM MimeType m where m.mimeType = :name");
 			q.setParameter("name", name);
 			MimeType res = (MimeType)q.getSingleResult();
 			
@@ -62,30 +78,30 @@ public class MimeTypeDao extends BaseDao {
 		} catch (Exception e) {
 			throw logAndLaunchException("Errore nel recupero del mimeType cercato", e, false);
 		} finally {
-			emClose(em);
+//			emClose(entityManager);
 		}
 	}
 	
 	public MimeType getMimeTypeByKey(Long key) throws FileDataException {
-		EntityManager em = null;
+//		EntityManager em = null;
 		try {
-			em = em().createEntityManager();
-			MimeType m = em.find(MimeType.class, key);
+//			em = em().createEntityManager();
+			MimeType m = entityManager.find(MimeType.class, key);
 
 			return m;
 		} catch (Exception e) {
 			throw logAndLaunchException("Errore nel recupero del mimeType cercato", e, false);
 		} finally {
-			emClose(em);
+//			emClose(entityManager);
 		}
 	}
 	
 	public List<MimeType> getListaMimeTypeByUtente(Long utente) throws FileDataException {
 		
-		EntityManager em = null;
+//		EntityManager em = null;
 		try {
-			em = em().createEntityManager();
-			Query q = em.createQuery("SELECT c FROM ConfigUtente c where c.configType = "+CONFIG_MIME_TYPE+" and c.idUtente = :utente");
+//			em = em().createEntityManager();
+			Query q = entityManager.createQuery("SELECT c FROM ConfigUtente c where c.configType = "+CONFIG_MIME_TYPE+" and c.idUtente = :utente");
 			q.setParameter("utente", utente);
 			List<ConfigUtente> resTmp = q.getResultList();
 			
@@ -94,7 +110,7 @@ public class MimeTypeDao extends BaseDao {
 				listaMimeKey.add(cu.getPk().getIdConfig());
 			}
 			
-			q = em.createQuery("SELECT m FROM MimeType m where m.idMimeType IN :mime");
+			q = entityManager.createQuery("SELECT m FROM MimeType m where m.idMimeType IN :mime");
 			q.setParameter("mime", listaMimeKey);
 			
 			List<MimeType> res = q.getResultList();
@@ -103,7 +119,7 @@ public class MimeTypeDao extends BaseDao {
 		} catch (Exception e) {
 			throw logAndLaunchException("Errore nel recupero del mimeType cercato", e, false);
 		} finally {
-			emClose(em);
+//			emClose(entityManager);
 		}
 		
 	}
