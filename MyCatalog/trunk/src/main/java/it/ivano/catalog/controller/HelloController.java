@@ -1,6 +1,10 @@
 package it.ivano.catalog.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import it.ivano.catalog.backend.dao.MimeTypeDao;
+import it.ivano.catalog.backend.dto.MimeType;
 import it.ivano.filecatalog.exception.FileDataException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +20,20 @@ public class HelloController{
 	@Autowired
 	private MimeTypeDao dao;
  
-   @RequestMapping(method = RequestMethod.GET)
-   public String printHello(ModelMap model) {
-	   
-	   try {
-		System.out.println(dao.getAllMimeType());
-	} catch (FileDataException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	@RequestMapping(method = RequestMethod.GET)
+	public String printHello(ModelMap model) {
+
+		List<MimeType> mtlist = new ArrayList<MimeType>();
+		try {
+			mtlist = dao.getAllMimeType();
+		} catch (FileDataException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		model.addAttribute("message", "Hello Spring MVC Framework!");
+		model.addAttribute("mtlist", mtlist);
+		return "index";
 	}
-	   
-      model.addAttribute("message", "Hello Spring MVC Framework!");
-      return "index";
-   }
    
 }

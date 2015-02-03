@@ -7,30 +7,15 @@ import it.ivano.filecatalog.exception.FileDataException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class MimeTypeDao extends BaseDao implements MimeTypeDaoInt {
+public class MimeTypeDao extends BaseDao {
 	
 	private static final String CONFIG_MIME_TYPE = "MT";
 	
-	
-	private EntityManager entityManager;
-	
-	public EntityManager getEntityManager() {
-        return entityManager;
-    }
-
-	@PersistenceContext(unitName="MyCatalog")
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-	
-    
 	public MimeTypeDao() {
 		super(MimeTypeDao.class);
 	}
@@ -39,7 +24,7 @@ public class MimeTypeDao extends BaseDao implements MimeTypeDaoInt {
 //		EntityManager em = null;
 		try {
 //			em = em().createEntityManager();
-			Query q = entityManager.createQuery("SELECT m FROM MimeType m");
+			Query q = getEntityManager().createQuery("SELECT m FROM MimeType m");
 			List<MimeType> res = q.getResultList();
 			
 			return res;
@@ -54,7 +39,7 @@ public class MimeTypeDao extends BaseDao implements MimeTypeDaoInt {
 //		EntityManager em = null;
 		try {
 //			em = em().createEntityManager();
-			Query q = entityManager.createQuery("SELECT m FROM MimeType m where m.area = :area");
+			Query q = getEntityManager().createQuery("SELECT m FROM MimeType m where m.area = :area");
 			q.setParameter("area", area);
 			List<MimeType> res = q.getResultList();
 			
@@ -70,7 +55,7 @@ public class MimeTypeDao extends BaseDao implements MimeTypeDaoInt {
 //		EntityManager em = null;
 		try {
 //			em = em().createEntityManager();
-			Query q = entityManager.createQuery("SELECT m FROM MimeType m where m.mimeType = :name");
+			Query q = getEntityManager().createQuery("SELECT m FROM MimeType m where m.mimeType = :name");
 			q.setParameter("name", name);
 			MimeType res = (MimeType)q.getSingleResult();
 			
@@ -86,7 +71,7 @@ public class MimeTypeDao extends BaseDao implements MimeTypeDaoInt {
 //		EntityManager em = null;
 		try {
 //			em = em().createEntityManager();
-			MimeType m = entityManager.find(MimeType.class, key);
+			MimeType m = getEntityManager().find(MimeType.class, key);
 
 			return m;
 		} catch (Exception e) {
@@ -101,16 +86,16 @@ public class MimeTypeDao extends BaseDao implements MimeTypeDaoInt {
 //		EntityManager em = null;
 		try {
 //			em = em().createEntityManager();
-			Query q = entityManager.createQuery("SELECT c FROM ConfigUtente c where c.configType = "+CONFIG_MIME_TYPE+" and c.idUtente = :utente");
+			Query q = getEntityManager().createQuery("SELECT c FROM ConfigUtente c where c.configType = "+CONFIG_MIME_TYPE+" and c.idUtente = :utente");
 			q.setParameter("utente", utente);
 			List<ConfigUtente> resTmp = q.getResultList();
 			
 			List<Long> listaMimeKey = new ArrayList<Long>();
 			for(ConfigUtente cu : resTmp) {
-				listaMimeKey.add(cu.getPk().getIdConfig());
+				listaMimeKey.add(cu.getId().getIdConfig());
 			}
 			
-			q = entityManager.createQuery("SELECT m FROM MimeType m where m.idMimeType IN :mime");
+			q = getEntityManager().createQuery("SELECT m FROM MimeType m where m.idMimeType IN :mime");
 			q.setParameter("mime", listaMimeKey);
 			
 			List<MimeType> res = q.getResultList();

@@ -8,16 +8,16 @@
 	<persistence-unit name="MyCatalog" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		
-		<class>it.ivano.catalog.backend.dto.Utente</class>
-		<class>it.ivano.catalog.backend.dto.FileVideoAudio</class>
-		<class>it.ivano.catalog.backend.dto.FileVideo</class>
-		<class>it.ivano.catalog.backend.dto.FileMusica</class>
-		<class>it.ivano.catalog.backend.dto.File</class>
-		<class>it.ivano.catalog.backend.dto.Cartella</class>
 		<class>it.ivano.catalog.backend.dto.Archivio</class>
-		<class>it.ivano.catalog.backend.dto.MimeType</class>
+		<class>it.ivano.catalog.backend.dto.Cartella</class>
 		<class>it.ivano.catalog.backend.dto.ConfigUtente</class>
-		<class>it.ivano.catalog.backend.dto.ConfigUtentePK</class>
+		<class>it.ivano.catalog.backend.dto.File</class>
+		<class>it.ivano.catalog.backend.dto.FileMusica</class>
+		<class>it.ivano.catalog.backend.dto.FileVideo</class>
+		<class>it.ivano.catalog.backend.dto.FileVideoAudio</class>
+		<class>it.ivano.catalog.backend.dto.FileImage</class>
+		<class>it.ivano.catalog.backend.dto.MimeType</class>
+		<class>it.ivano.catalog.backend.dto.Utente</class>
 
 
 		<properties>
