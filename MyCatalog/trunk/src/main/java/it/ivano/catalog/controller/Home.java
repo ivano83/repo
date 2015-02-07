@@ -26,7 +26,7 @@ public class Home {
 	private MyLogger logger = new MyLogger(getClass());
  
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView homeLogin(ModelMap model, HttpSession session) throws FileDataException {
+	public ModelAndView homeLogin(HttpSession session) throws FileDataException {
 
 		ModelAndView mv = new ModelAndView();
 		Utente utente = null;
