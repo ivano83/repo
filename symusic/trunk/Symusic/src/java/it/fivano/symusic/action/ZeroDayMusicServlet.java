@@ -4,6 +4,7 @@ import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.backend.service.UserService;
 import it.fivano.symusic.core.Release0DayMp3Service;
 import it.fivano.symusic.core.Release0DayMusicService;
+import it.fivano.symusic.core.ReleaseFromPresceneService;
 import it.fivano.symusic.core.ReleaseMusicDLService;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.UserModel;
@@ -117,6 +118,14 @@ public class ZeroDayMusicServlet extends BaseAction {
 					musicDL.setAnnoDa(annoDa);
 					musicDL.setAnnoAl(annoAl);
 					listRelease = musicDL.parseMusicDLRelease(genre, initDate, endDate);
+				} else if(site.equals("4")) {
+					ReleaseFromPresceneService musicDL = new ReleaseFromPresceneService(user.getId());
+					musicDL.setEnableBeatportService(flagBeatport);
+					musicDL.setExcludeRipRelease(flagRip);
+					musicDL.setExcludeVA(flagVA);
+					musicDL.setAnnoDa(annoDa);
+					musicDL.setAnnoAl(annoAl);
+					listRelease = musicDL.parsePresceneRelease(genre, initDate, endDate);
 				}
 			}
 			

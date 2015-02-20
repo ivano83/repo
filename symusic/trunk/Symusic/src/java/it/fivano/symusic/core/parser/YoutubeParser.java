@@ -35,7 +35,7 @@ public class YoutubeParser extends GenericParser {
 			boolean trovato = false;
 
 			releaseName = this.getReleaseNameWithoutUnderscore(releaseName);
-			releaseName = releaseName.replace("'", " ");
+			releaseName = releaseName.replaceAll("[^a-zA-Z0-9-()]+"," ");
 			
 			Elements videoGroup = null;
 			Document doc = null;
@@ -177,7 +177,9 @@ public class YoutubeParser extends GenericParser {
 		YoutubeParser p = new YoutubeParser();
 //		List<VideoModel> v = p.searchYoutubeVideos("Crystal_Lake_Feat_Barbie_G_-_Darkness-(HUMF001)-WEB-2013-FMC");
 //		System.out.println(v);
-		System.out.println(p.applyFilterSearch("i-fewf.ww feat j, cf wdk!!ckd wcv?"));
+		System.out.println(p.applyFilterSearch("i-fewf.ww feat j, cf wdk!!ckd wcv?").replaceAll("[^a-zA-Z0-9\\-]+"," "));
+		System.out.println("i-fewf.ww (feat j, cf wdk!!ckd) wcv?".replaceAll("[^a-zA-Z0-9-()]+"," "));
+		
 	}
 
 }

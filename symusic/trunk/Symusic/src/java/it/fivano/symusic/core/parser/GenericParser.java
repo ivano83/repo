@@ -21,7 +21,7 @@ public abstract class GenericParser {
 	
 	protected MyLogger log;
 	protected SymusicConf generalConf;
-	protected static final int TIMEOUT = 10000;
+	protected static final int TIMEOUT = 8000;
 	protected AntiDdosUtility antiDDOS;
 	
 	protected Date dataDa;

@@ -2,11 +2,13 @@ package it.fivano.symusic.core;
 
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.backend.service.ReleaseService;
-import it.fivano.symusic.conf.MusicDLConf;
+import it.fivano.symusic.conf.PresceneConf;
 import it.fivano.symusic.core.parser.BeatportParser;
 import it.fivano.symusic.core.parser.MusicDLParser;
+import it.fivano.symusic.core.parser.PresceneParser;
 import it.fivano.symusic.core.parser.ScenelogParser;
 import it.fivano.symusic.core.parser.YoutubeParser;
+import it.fivano.symusic.core.parser.model.BaseReleaseParserModel;
 import it.fivano.symusic.core.parser.model.BeatportParserModel;
 import it.fivano.symusic.core.parser.model.MusicDLParserModel;
 import it.fivano.symusic.core.parser.model.ScenelogParserModel;
@@ -22,26 +24,25 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-public class ReleaseMusicDLService extends ReleaseSiteService {
+public class ReleaseFromPresceneService extends ReleaseSiteService {
 	
-	private MusicDLConf conf;
+	private PresceneConf conf;
 	private String genre;
 	
 	private static int MAX_CONSECUTIVE_FAILS = 20;
 	
 	private List<ReleaseModel> listRelease;
 	
-
+	private static int pageGap = 50;
 	
-	public ReleaseMusicDLService(Long idUser) throws IOException {
+	public ReleaseFromPresceneService(Long idUser) throws IOException {
 		super();
 		this.idUser = idUser;
-		conf = new MusicDLConf();
+		conf = new PresceneConf();
 		enableBeatportService = true;
 		enableScenelogService = true;
 		enableYoutubeService = true;
@@ -50,24 +51,24 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 	}
 	
 	
-	public List<ReleaseModel> parseMusicDLRelease(String genere, Date da, Date a) throws BackEndException, ParseReleaseException {
+	public List<ReleaseModel> parsePresceneRelease(String genere, Date da, Date a) throws BackEndException, ParseReleaseException {
 		
 		this.genre = genere;
 		listRelease = new ArrayList<ReleaseModel>();
 		try {
 			
 			// PAGINA DI INIZIO
-			String urlConn = conf.URL_MUSIC+genere;
+			String urlConn = conf.URL+"?"+conf.PARAMS_GENRE.replace("{0}", genere);
 			
 			// OGGETTO PER GESTIRE IL CARICAMENTO DELLE PAGINE SUCCESSIVE DEL SITO
-			ScenelogInfo info = new ScenelogInfo();
+			PresceneInfo info = new PresceneInfo();
 			info.setProcessNextPage(true);
 			info.setA(a);
 			info.setDa(da);
 			
 			// PROCESSA LE RELEASE DELLA PRIMA PAGINA
-			MusicDLParser music = new MusicDLParser();
-			List<MusicDLParserModel> resZero = music.parseFullPage(urlConn, da, a);
+			PresceneParser music = new PresceneParser();
+			List<BaseReleaseParserModel> resZero = music.parseFullPage(urlConn, da, a);
 			this.checkProcessPage(resZero, info);
 			
 			// SE C'È DA RECUPERARE ALTRE RELEASE, CAMBIA PAGINA
@@ -75,11 +76,11 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 				
 				// SALVA LA URL DELLA PROSSIMA PAGINA (SE NECESSARIA)
 				info.changePage(); // AGGIORNA IL NUMERO PAGINA
-				info.setNextPage(this.extractNextPage(info));
+				info.setNextPage(this.extractNextPage(info,urlConn));
 						
 				log.info("Andiamo alla pagina successiva...");
 				// PROCESSA LE RELEASE DELLE PAGINE SUCCESSIVE
-				List<MusicDLParserModel> resZeroTmp = music.parseFullPage(info.getNextPage(), da, a);
+				List<BaseReleaseParserModel> resZeroTmp = music.parseFullPage(info.getNextPage(), da, a);
 				this.checkProcessPage(resZeroTmp, info);
 				resZero.addAll(resZeroTmp);
 				
@@ -92,7 +93,7 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 			GoogleService google = new GoogleService();
 			List<BeatportParserModel> beatportRes = null;
 			int count = 0;
-			for(MusicDLParserModel sc : resZero) {
+			for(BaseReleaseParserModel sc : resZero) {
 
 				count++;
 				ReleaseModel release = new ReleaseModel();
@@ -134,8 +135,9 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 					isRecuperato = true;
 					release = relDb; // SOSTITUISCE I DATI FINO AD ORA ESTRATTI CON QUELLI DEL DB
 				}
-
-				release = music.parseReleaseDetails(sc, release);
+				else {
+					release = this.arricchisciRelease(sc, release);
+				}
 				
 				if(!this.verificaAnnoRelease(release,annoDa,annoAl)) {
 					log.info(sc.getReleaseName()+" ignorata poichè l'anno non è all'interno del range.");
@@ -158,8 +160,20 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 					log.warn("Il sito 'Scenelog' sembrerebbe al momento non raggiungibile... verra' di seguito disabilitata la ricerca.");
 				if(enableScenelogService && scenelog.getCountFailConnection()<=MAX_CONSECUTIVE_FAILS) {
 					
-					ScenelogParserModel releaseScenelog = scenelog.searchRelease(release.getName());
+					ScenelogParserModel releaseScenelog = new ScenelogParserModel();
+					releaseScenelog.setReleaseName(sc.getReleaseName());
+					releaseScenelog.setReleaseDate(sc.getReleaseDate());
+					releaseScenelog.setUrlReleaseDetails(scenelog.getUrlRelease(sc.getReleaseName()));
 					release = scenelog.parseReleaseDetails(releaseScenelog, release);
+					
+					if(release.getLinks()==null || release.getLinks().size()==0) {
+						// RELEASE NON TROVATA SU SCENELOG, PROVA MUSICDL
+						MusicDLParser dl = new MusicDLParser();
+						MusicDLParserModel dlModel = dl.searchRelease(sc.getReleaseName());
+						if(dlModel!=null) 
+							release = dl.parseReleaseDetails(dlModel, release);
+					}
+					
 				}
 
 				// YOUTUBE VIDEO
@@ -204,6 +218,13 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 		
 	}
 	
+	private ReleaseModel arricchisciRelease(BaseReleaseParserModel sc, ReleaseModel release) {
+		release.setCrew(sc.getCrew());
+		release.setGenre(SymusicUtility.creaGenere(sc.getGenre()));
+		return release;
+	}
+
+
 	protected boolean isRadioRipRelease(ReleaseModel release) {
 		
 		ReleaseModel r = new ReleaseModel();
@@ -237,13 +258,13 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 	}
 
 
-	private void checkProcessPage(List<MusicDLParserModel> resScenelog, ScenelogInfo info) {
+	private void checkProcessPage(List<BaseReleaseParserModel> resScenelog, PresceneInfo info) {
 		Date max = null;
 		Date min = null;
 		if(!resScenelog.isEmpty()) {
-			Iterator<MusicDLParserModel> it = resScenelog.iterator();
+			Iterator<BaseReleaseParserModel> it = resScenelog.iterator();
 			while(it.hasNext()) {
-				MusicDLParserModel sc = it.next();
+				BaseReleaseParserModel sc = it.next();
 
 				if(max == null) max = sc.getReleaseDate();
 				if(min == null) min = sc.getReleaseDate();
@@ -259,12 +280,6 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 					it.remove();
 				}
 				
-				Calendar c = Calendar.getInstance();
-				c.setTime(max);
-				c.add(Calendar.DATE, 5);  // number of days to add
-				if(c.getTime().before(sc.getReleaseDate())) {
-					info.changePage(4);
-				}
 			}
 			
 			
@@ -302,9 +317,9 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 	}
 
 
-	private String extractNextPage(ScenelogInfo info) {
+	private String extractNextPage(PresceneInfo info, String originalUrl) {
 		
-		return conf.URL_MUSIC+genre+conf.PARAMS_PAGE+info.getNumPagina();
+		return originalUrl+"&"+conf.PARAMS_PAGE.replace("{0}", (info.getNumPagina()*pageGap)+"");
 
 	}
 
@@ -317,16 +332,17 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 
 	public static void main(String[] args) throws IOException, ParseException, BackEndException, ParseReleaseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-		Date da = sdf.parse("20141117");
-		Date a = sdf.parse("20141118");
+		Date da = sdf.parse("20150215");
+		Date a = sdf.parse("20150216");
 		
-		ReleaseMusicDLService s = new ReleaseMusicDLService(1L);
+		ReleaseFromPresceneService s = new ReleaseFromPresceneService(1L);
+		List<ReleaseModel> res = s.parsePresceneRelease("Dance", da, a);
 //		List<ReleaseModel> res = s.parseMusicDLRelease("trance",da,a);
-//		for(ReleaseModel r : res)
-//			System.out.println(r);
-		System.out.println(s.genericFilter("fhfh( dewdef) fef"));
-		System.out.println(s.genericFilter("fhfh( dewdef) fef"));
-		System.out.println("fhfh( dewdef) fef".replaceAll("[()]", ""));
+		for(ReleaseModel r : res)
+			System.out.println(r);
+//		System.out.println(s.genericFilter("fhfh( dewdef) fef"));
+//		System.out.println(s.genericFilter("fhfh( dewdef) fef"));
+//		System.out.println("fhfh( dewdef) fef".replaceAll("[()]", ""));
 	}
 
 
@@ -339,11 +355,13 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 
 }
 
-class MusicDLInfo {
+class PresceneInfo {
 	
 	private int numPagina = 1;
 	private String nextPage;
 	private boolean processNextPage;
+	private Date da;
+	private Date a;
 	
 	public void changePage() {
 		numPagina = numPagina + 1;
@@ -364,6 +382,22 @@ class MusicDLInfo {
 	}
 	public void setProcessNextPage(boolean processNextPage) {
 		this.processNextPage = processNextPage;
+	}
+
+	public Date getDa() {
+		return da;
+	}
+
+	public void setDa(Date da) {
+		this.da = da;
+	}
+
+	public Date getA() {
+		return a;
+	}
+
+	public void setA(Date a) {
+		this.a = a;
 	}
 	
 	

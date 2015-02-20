@@ -519,7 +519,7 @@ public class ReleaseScenelogService extends ReleaseSiteService {
 
 class ScenelogInfo {
 	
-	private int numPagina = 1;
+	private int numPagina = 0;
 	private String nextPage;
 	private boolean processNextPage;
 	private Date da;
@@ -527,6 +527,10 @@ class ScenelogInfo {
 	
 	public void changePage() {
 		numPagina = numPagina + 1;
+	}
+	
+	public void changePage(int gap) {
+		numPagina = numPagina + gap;
 	}
 	
 	public int getNumPagina() {

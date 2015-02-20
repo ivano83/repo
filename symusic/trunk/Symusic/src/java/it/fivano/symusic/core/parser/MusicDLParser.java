@@ -161,9 +161,9 @@ public class MusicDLParser extends GenericParser {
 			}
 			
 			
-		} catch (ParseException e) {
+		} catch (Exception e) {
 			log.error("Errore nel parsing", e);
-			throw new ParseReleaseException("Errore nel parsing",e);
+//			throw new ParseReleaseException("Errore nel parsing",e);
 		}
 		
 		return result;

@@ -93,6 +93,7 @@ public class ReleaseService extends RootService {
 				cr.andIdGenreEqualTo(new GenreService().getGenreByName(genre).getId());
 			}
 			cr.andReleaseDateBetween(initDate, endDate);
+			input.setOrderByClause("release_date asc");
 			
 			List<Release> res = releaseDao.selectByExample(input);
 

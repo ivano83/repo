@@ -2,6 +2,8 @@ package it.fivano.symusic.action;
 
 import it.fivano.symusic.backend.service.ReleaseService;
 import it.fivano.symusic.backend.service.UserService;
+import it.fivano.symusic.core.GoogleService;
+import it.fivano.symusic.core.parser.YoutubeParser;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.UserModel;
 
@@ -58,6 +60,13 @@ public class LocalReleaseServlet extends BaseAction {
 			
 			ReleaseService relServ = new ReleaseService();
 			listRelease = relServ.getListRelease(genre, initDate, endDate, user.getId());
+			
+			YoutubeParser youtube = new YoutubeParser();
+			GoogleService google = new GoogleService();
+			for(ReleaseModel r : listRelease) {
+				youtube.addManualSearchLink(r);
+				google.addManualSearchLink(r);
+			}
 			
 			request.getSession().setAttribute("listRelease", listRelease);
 			
