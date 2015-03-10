@@ -186,6 +186,7 @@ public class ScenelogParser extends GenericParser {
 			
 			release = this.popolaRelease(release, scenelogModel);
 
+			log.info("[SCENELOG] \t connecting to:  "+scenelogModel.getUrlReleaseDetails());
 			// release trovata
 			String userAgent = this.randomUserAgent();
 			doc = Jsoup.connect(scenelogModel.getUrlReleaseDetails()).userAgent(userAgent).ignoreHttpErrors(true).get();
@@ -228,9 +229,10 @@ public class ScenelogParser extends GenericParser {
 			}
 			
 			SymusicUtility.updateReleaseExtraction(release.getReleaseExtraction(),true,AreaExtraction.SCENELOG);
-
+			countFailConnection = 0;
 		} catch(Exception e) {
 			log.error("Errore nel parsing", e);
+			countFailConnection++;
 			SymusicUtility.updateReleaseExtraction(release.getReleaseExtraction(),false,AreaExtraction.SCENELOG);
 //			throw new ParseReleaseException("Errore nel parsing",e);
 		}
@@ -245,7 +247,8 @@ public class ScenelogParser extends GenericParser {
 			release.setNameWithUnderscore(scenelogModel.getReleaseName());
 			release.setName(scenelogModel.getReleaseName().replace("_", " "));
 		}
-		release.setReleaseDate(SymusicUtility.getStandardDate(scenelogModel.getReleaseDate()));
+		if(release.getReleaseDate()==null && scenelogModel.getReleaseDate()!=null)
+			release.setReleaseDate(SymusicUtility.getStandardDate(scenelogModel.getReleaseDate()));
 		
 		// AGGIUNGE ULTERIORI INFO DELLA RELEASE A PARTIRE DAL NOME
 		// ES. CREW E ANNO RELEASE

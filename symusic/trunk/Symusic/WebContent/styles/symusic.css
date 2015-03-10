@@ -94,6 +94,10 @@
     width: 150px;
 }
 
+.rel_site:hover {
+    border: 2px solid;
+}
+
 .new_icon {
 	padding-left:10px; 
 	top:10px; 

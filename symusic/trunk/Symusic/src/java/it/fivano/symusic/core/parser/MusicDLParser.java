@@ -263,7 +263,9 @@ public class MusicDLParser extends GenericParser {
 				release.setName(musicDLModel.getReleaseName().replace("_", " "));
 			}
 		}
-		release.setReleaseDate(SymusicUtility.getStandardDate(musicDLModel.getReleaseDate()));
+		
+		if(release.getReleaseDate()==null && musicDLModel.getReleaseDate()!=null)
+			release.setReleaseDate(SymusicUtility.getStandardDate(musicDLModel.getReleaseDate()));
 		
 		// AGGIUNGE ULTERIORI INFO DELLA RELEASE A PARTIRE DAL NOME
 		// ES. CREW E ANNO RELEASE
@@ -324,10 +326,11 @@ public class MusicDLParser extends GenericParser {
 	}
 	
 	private String createSearchString(String releaseName) {
-		if(releaseName.contains("_"))
-			return releaseName;
-		else
-			return this.applyFilterSearch(releaseName);
+		return releaseName.replaceAll("[^A-Za-z0-9 -_]", "").replace("_", "-");
+//		if(releaseName.contains("_"))
+//			return releaseName;
+//		else
+//			return this.applyFilterSearch(releaseName);
 	}
 	
 	@Override
@@ -339,6 +342,10 @@ public class MusicDLParser extends GenericParser {
 			t = t.substring(0,t.indexOf("("));
 		}
 		return t;
+	}
+	
+	public String getUrlRelease(String releaseName, String genre) {
+		return conf.URL+(genre.toLowerCase())+"/"+(createSearchString(releaseName).toLowerCase())+"/";
 	}
 	
 	public static void main(String[] args) throws IOException, ParseReleaseException {

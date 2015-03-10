@@ -119,6 +119,11 @@
 				<c:forEach items="${item.links}" var="link" varStatus="status">
 					<div class="rel_link rel_link_${item.id}"><a name="link_copy_class" rel-id="${item.id}" id="link_copy_${item.id}_${status.count}" href="${link.link}" target="_blank" data-clipboard-text="${link.link}">${link.name}</a></div>
 				</c:forEach>
+				<div>
+				<a class="rel_site" href="LinkServlet?site=SCENELOG&release=${item.nameWithUnderscore}" target="_blank"><img src="img/Scnlog_eu.png" alt="Scenelog" height="20px" /></a>
+				<a class="rel_site" href="LinkServlet?site=MP3_TRACKZ&release=${item.nameWithUnderscore}" target="_blank"><img src="img/mp3Trackz.png" alt="mp3Trackz" height="20px" /></a>
+				<a class="rel_site" href="LinkServlet?site=MUSIC_DL&release=${item.nameWithUnderscore}&genre=${item.genre.name}" target="_blank"><img src="img/MusicDL.png" alt="MusicDL" height="20px" /></a>
+				</div>
 			</td>
 		</tr>
 	</c:forEach>

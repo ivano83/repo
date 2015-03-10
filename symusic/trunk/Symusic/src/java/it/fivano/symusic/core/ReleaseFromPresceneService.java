@@ -91,6 +91,7 @@ public class ReleaseFromPresceneService extends ReleaseSiteService {
 			ScenelogParser scenelog = new ScenelogParser();
 			YoutubeParser youtube = new YoutubeParser();
 			GoogleService google = new GoogleService();
+			ReleaseLinkService linkService = new ReleaseLinkService();
 			List<BeatportParserModel> beatportRes = null;
 			int count = 0;
 			for(BaseReleaseParserModel sc : resZero) {
@@ -137,6 +138,7 @@ public class ReleaseFromPresceneService extends ReleaseSiteService {
 				}
 				else {
 					release = this.arricchisciRelease(sc, release);
+					SymusicUtility.processReleaseName(release);
 				}
 				
 				if(!this.verificaAnnoRelease(release,annoDa,annoAl)) {
@@ -160,19 +162,7 @@ public class ReleaseFromPresceneService extends ReleaseSiteService {
 					log.warn("Il sito 'Scenelog' sembrerebbe al momento non raggiungibile... verra' di seguito disabilitata la ricerca.");
 				if(enableScenelogService && scenelog.getCountFailConnection()<=MAX_CONSECUTIVE_FAILS) {
 					
-					ScenelogParserModel releaseScenelog = new ScenelogParserModel();
-					releaseScenelog.setReleaseName(sc.getReleaseName());
-					releaseScenelog.setReleaseDate(sc.getReleaseDate());
-					releaseScenelog.setUrlReleaseDetails(scenelog.getUrlRelease(sc.getReleaseName()));
-					release = scenelog.parseReleaseDetails(releaseScenelog, release);
-					
-					if(release.getLinks()==null || release.getLinks().size()==0) {
-						// RELEASE NON TROVATA SU SCENELOG, PROVA MUSICDL
-						MusicDLParser dl = new MusicDLParser();
-						MusicDLParserModel dlModel = dl.searchRelease(sc.getReleaseName());
-						if(dlModel!=null) 
-							release = dl.parseReleaseDetails(dlModel, release);
-					}
+					release = linkService.searchlink(release);
 					
 				}
 
@@ -218,9 +208,11 @@ public class ReleaseFromPresceneService extends ReleaseSiteService {
 		
 	}
 	
-	private ReleaseModel arricchisciRelease(BaseReleaseParserModel sc, ReleaseModel release) {
+	private ReleaseModel arricchisciRelease(BaseReleaseParserModel sc, ReleaseModel release) throws ParseException {
 		release.setCrew(sc.getCrew());
 		release.setGenre(SymusicUtility.creaGenere(sc.getGenre()));
+		if(release.getReleaseDate()==null)
+			release.setReleaseDate(SymusicUtility.getStandardDate(sc.getReleaseDate()));
 		return release;
 	}
 
@@ -289,6 +281,8 @@ public class ReleaseFromPresceneService extends ReleaseSiteService {
 				info.setProcessNextPage(false);
 			}
 				
+		} else {
+			info.setProcessNextPage(false);
 		}
 		
 	}
