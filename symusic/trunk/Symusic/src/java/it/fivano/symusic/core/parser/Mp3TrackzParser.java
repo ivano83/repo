@@ -50,6 +50,10 @@ public class Mp3TrackzParser extends GenericParser {
 			}
 			
 			
+		} catch(IndexOutOfBoundsException e) {
+			log.error("Nessun risultato ottenuto per la release "+releaseName);
+//			SymusicUtility.updateReleaseExtraction(release.getReleaseExtraction(),false,AreaExtraction.SCENELOG);
+//			throw new ParseReleaseException("Errore nel parsing",e);
 		} catch(Exception e) {
 			log.error("Errore nel parsing", e);
 //			SymusicUtility.updateReleaseExtraction(release.getReleaseExtraction(),false,AreaExtraction.SCENELOG);

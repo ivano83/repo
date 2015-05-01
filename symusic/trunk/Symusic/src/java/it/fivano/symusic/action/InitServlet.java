@@ -1,6 +1,7 @@
 package it.fivano.symusic.action;
 
 import it.fivano.symusic.SymusicUtility;
+import it.fivano.symusic.backend.service.ReleaseService;
 import it.fivano.symusic.backend.service.UserService;
 import it.fivano.symusic.core.BeatportService;
 import it.fivano.symusic.core.ReleaseScenelogService;
@@ -41,6 +42,14 @@ public class InitServlet extends HttpServlet {
 				genreList = res.keySet();
 				request.getSession().setAttribute("genreList", genreList);
 				request.getSession().setAttribute("genreMap", res);
+			}
+			
+			List<String> crewList = null;
+			if(request.getSession().getAttribute("crewList")!=null) {
+				crewList = (List<String>) request.getSession().getAttribute("crewList");
+			} else {
+				crewList = new ReleaseService().getCrewList();
+				request.getSession().setAttribute("crewList", crewList);
 			}
 			
 			List<String> listaAnni = new ArrayList<String>();

@@ -259,15 +259,15 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 					it.remove();
 				}
 				
-				Calendar c = Calendar.getInstance();
-				c.setTime(max);
-				c.add(Calendar.DATE, 5);  // number of days to add
-				if(c.getTime().before(sc.getReleaseDate())) {
-					info.changePage(4);
-				}
+				
 			}
 			
-			
+			Calendar c = Calendar.getInstance();
+			c.setTime(info.getA());
+			c.add(Calendar.DATE, 5);  // number of days to add
+			if(c.getTime().before(min)) {
+				info.changePage(4);
+			}
 			
 			// la pagina ha superato il range scelto
 			if(min.before(info.getDa())) {

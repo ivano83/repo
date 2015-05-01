@@ -50,8 +50,13 @@ public class MusicDLParser extends GenericParser {
 		try {
 			// CONNESSIONE ALLA PAGINA
 			String userAgent = this.randomUserAgent();
-			log.info("Connessione in corso --> "+urlPage);
-			Document doc = Jsoup.connect(urlPage).timeout(TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
+			Document doc = null;
+			try {
+				log.info("Connessione in corso --> "+urlPage);
+				doc = Jsoup.connect(urlPage).timeout(TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
+			} catch (IOException e) {
+				doc = Jsoup.connect(urlPage).timeout(TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
+			}
 			
 			if(antiDDOS.isAntiDDOS(doc)) {
 				doc = this.bypassAntiDDOS(doc, conf.URL, urlPage);

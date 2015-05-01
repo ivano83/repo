@@ -141,6 +141,118 @@
 
 <div style="padding-bottom: 60px"></div>
 
+<form action="ZeroDayMusicServlet"> 
+
+	<table>
+		<tr>
+			<td>
+				<div>Fonte Release</div>
+			</td>
+			<td>
+				<select name="site">
+					<option value="4a">Prescene.tk</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>Crew List</div>
+			</td>
+			<td>
+				<select name="crew">
+					<c:forEach items="${crewList}" var="cr">
+        				<option value="${cr}">${cr}</option>
+    			  	</c:forEach>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>Data inizio </div>
+			</td>
+			<td>
+				<input type="text" name="initDate" class="tcal">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>Data Fine </div>
+			</td>
+			<td>
+				<input type="text" name="endDate" class="tcal">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>Estrai dati da Beatport</div>
+
+			</td>
+			<td>
+				<input type="checkbox" name="enableBeatport" value="true"/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>Ignora Release Radio/Sat RIP</div>
+			</td>
+			<td>
+				<input type="checkbox" name="excludeRelaseRip" value="true" checked="checked" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>Ignora Release Various Artist (VA)</div>
+			</td>
+			<td>
+				<input type="checkbox" name="excludeVA" value="true" checked="checked" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>Range Data</div>
+			</td>
+			<td>
+				<fmt:formatDate value="${date}" pattern="yyyy" var="currentYear" />
+				Dal <select id="annoDa" name="annoDa" onchange="javascript:checkDataRange();">
+				<c:forEach items="${listaAnni}" var="anno">
+					<c:choose>
+						<c:when test="${anno==currentYear}">
+							<option value="${anno}" selected="selected">${anno}</option>
+						</c:when>
+						<c:otherwise>
+							<option value="${anno}">${anno}</option>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+				</select>
+				Al <select id="annoAl" name="annoAl" onchange="javascript:checkDataRange();">
+				<c:forEach items="${listaAnni}" var="anno">
+					<c:choose>
+						<c:when test="${anno==currentYear}">
+							<option value="${anno}" selected="selected">${anno}</option>
+						</c:when>
+						<c:otherwise>
+							<option value="${anno}">${anno}</option>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>Ricarica pagina precedente</div>
+			</td>
+			<td>
+				<input type="checkbox" name="reload" value="true" />
+			</td>
+		</tr>
+	</table>
+	<input type="submit" value="Ricerca">
+	
+</form>
+
+<div style="padding-bottom: 60px"></div>
 
 <form action="ScenelogServlet"> 
 	<h3>Ricerca Scenelog</h3>

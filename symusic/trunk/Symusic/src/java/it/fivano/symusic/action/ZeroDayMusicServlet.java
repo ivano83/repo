@@ -6,6 +6,7 @@ import it.fivano.symusic.core.Release0DayMp3Service;
 import it.fivano.symusic.core.Release0DayMusicService;
 import it.fivano.symusic.core.ReleaseFromPresceneService;
 import it.fivano.symusic.core.ReleaseMusicDLService;
+import it.fivano.symusic.core.ReleaseFromPresceneService.SearchType;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.UserModel;
 
@@ -58,6 +59,7 @@ public class ZeroDayMusicServlet extends BaseAction {
 			
 			String site = request.getParameter("site");
 			String genre = request.getParameter("genre");
+			String crew = request.getParameter("crew");
 			Date initDate = null;
 			Date endDate = null;
 			
@@ -118,14 +120,17 @@ public class ZeroDayMusicServlet extends BaseAction {
 					musicDL.setAnnoDa(annoDa);
 					musicDL.setAnnoAl(annoAl);
 					listRelease = musicDL.parseMusicDLRelease(genre, initDate, endDate);
-				} else if(site.equals("4")) {
+				} else if(site.equals("4") || site.equals("4a")) {
 					ReleaseFromPresceneService musicDL = new ReleaseFromPresceneService(user.getId());
 					musicDL.setEnableBeatportService(flagBeatport);
 					musicDL.setExcludeRipRelease(flagRip);
 					musicDL.setExcludeVA(flagVA);
 					musicDL.setAnnoDa(annoDa);
 					musicDL.setAnnoAl(annoAl);
-					listRelease = musicDL.parsePresceneRelease(genre, initDate, endDate);
+					if(site.equals("4"))
+						listRelease = musicDL.parsePresceneRelease(genre, initDate, endDate, SearchType.SEARCH_GENRE);
+					else
+						listRelease = musicDL.parsePresceneRelease(crew, initDate, endDate, SearchType.SEARCH_CREW);
 				}
 			}
 			

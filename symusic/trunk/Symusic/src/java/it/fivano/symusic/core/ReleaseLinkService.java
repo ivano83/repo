@@ -17,6 +17,7 @@ public class ReleaseLinkService {
 	private Mp3TrackzParser mp3trackz;
 	
 	private static int MAX_CONSECUTIVE_FAILS = 20;
+	private int countScenelogSleep = 0;
 	
 	public ReleaseLinkService() throws IOException {
 		scenelog = new ScenelogParser();
@@ -34,6 +35,12 @@ public class ReleaseLinkService {
 			releaseScenelog.setReleaseName(releaseName);
 			releaseScenelog.setUrlReleaseDetails(scenelog.getUrlRelease(releaseName));
 			release = scenelog.parseReleaseDetails(releaseScenelog, release);
+		}
+		else {
+			countScenelogSleep++;
+			if(countScenelogSleep==MAX_CONSECUTIVE_FAILS) {
+				scenelog.resetCountFailConnection();
+			}
 		}
 		
 		if(release.getLinks()!=null && !release.getLinks().isEmpty()) {

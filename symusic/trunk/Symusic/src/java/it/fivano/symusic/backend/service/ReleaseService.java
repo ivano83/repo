@@ -20,6 +20,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.ibatis.jdbc.SQL;
+
 public class ReleaseService extends RootService {
 	
 	public ReleaseService() {
@@ -78,6 +80,22 @@ public class ReleaseService extends RootService {
 		}
 	}
 	
+	public List<String> getCrewList() throws BackEndException {
+		
+		try {
+
+			ReleaseMapper releaseDao = this.getReleaseMapper();
+			
+			List<String> res = releaseDao.selectDistinctCrew();
+
+			return res;
+			
+		} catch (Exception e) {
+			throw new BackEndException(e);
+		} finally {
+			this.chiudiSessione();
+		}
+	}
 	
 	public List<ReleaseModel> getListRelease(String genre, Date initDate, Date endDate, Long idUser) throws BackEndException {
 		

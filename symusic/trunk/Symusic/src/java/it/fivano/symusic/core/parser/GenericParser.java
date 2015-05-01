@@ -6,6 +6,7 @@ import it.fivano.symusic.conf.SymusicConf;
 import it.fivano.symusic.model.LinkModel;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -118,6 +119,7 @@ public abstract class GenericParser {
 	
 	protected Document bypassAntiDDOS(Document doc, String baseUrl, String urlToRedirect) throws Exception {
 		String jschl_vc = doc.getElementsByAttributeValue("name", "jschl_vc").get(0).attr("value");
+		String pass = doc.getElementsByAttributeValue("name", "pass").get(0).attr("value");
 //		System.out.println(jschl_vc);
 		Elements scriptElements = doc.getElementsByTag("script");
 		Integer numberCalcLine = null;
@@ -163,7 +165,9 @@ public abstract class GenericParser {
 			baseUrl = baseUrl + "/";
 		String urlPage = baseUrl+"cdn-cgi/l/chk_jschl";
 		String userAgent = this.randomUserAgent();
-		doc = Jsoup.connect(urlPage).header("Referer", urlToRedirect).timeout(TIMEOUT).userAgent(userAgent).data("jschl_vc", jschl_vc).data("jschl_answer", jschl_answer+"").ignoreHttpErrors(true).get();
+		log.info(urlPage+"?jschl_vc="+jschl_vc+"&pass="+URLDecoder.decode(pass, "UTF-8")+"&jschl_answer="+jschl_answer);
+		doc = Jsoup.connect(urlPage).header("Referer", urlToRedirect).timeout(TIMEOUT).userAgent(userAgent)
+				.data("jschl_vc", jschl_vc).data("pass", URLDecoder.decode(pass, "UTF-8")).data("jschl_answer", jschl_answer+"").ignoreHttpErrors(true).get();
 		
 		
 		return doc;

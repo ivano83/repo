@@ -39,6 +39,11 @@ public class ReleaseFromPresceneService extends ReleaseSiteService {
 	
 	private static int pageGap = 50;
 	
+	public static enum SearchType {
+		SEARCH_GENRE,
+		SEARCH_CREW;
+	}
+	
 	public ReleaseFromPresceneService(Long idUser) throws IOException {
 		super();
 		this.idUser = idUser;
@@ -51,14 +56,19 @@ public class ReleaseFromPresceneService extends ReleaseSiteService {
 	}
 	
 	
-	public List<ReleaseModel> parsePresceneRelease(String genere, Date da, Date a) throws BackEndException, ParseReleaseException {
+	public List<ReleaseModel> parsePresceneRelease(String genere, Date da, Date a, SearchType searchType) throws BackEndException, ParseReleaseException {
 		
 		this.genre = genere;
 		listRelease = new ArrayList<ReleaseModel>();
 		try {
 			
+			String param = conf.PARAMS_GENRE;
+			if(searchType.equals(SearchType.SEARCH_CREW)) {
+				param = conf.PARAMS_CREW;
+			}
+			
 			// PAGINA DI INIZIO
-			String urlConn = conf.URL+"?"+conf.PARAMS_GENRE.replace("{0}", genere);
+			String urlConn = conf.URL+"?"+param.replace("{0}", genere);
 			
 			// OGGETTO PER GESTIRE IL CARICAMENTO DELLE PAGINE SUCCESSIVE DEL SITO
 			PresceneInfo info = new PresceneInfo();
@@ -330,7 +340,7 @@ public class ReleaseFromPresceneService extends ReleaseSiteService {
 		Date a = sdf.parse("20150216");
 		
 		ReleaseFromPresceneService s = new ReleaseFromPresceneService(1L);
-		List<ReleaseModel> res = s.parsePresceneRelease("Dance", da, a);
+		List<ReleaseModel> res = s.parsePresceneRelease("Dance", da, a, SearchType.SEARCH_GENRE);
 //		List<ReleaseModel> res = s.parseMusicDLRelease("trance",da,a);
 		for(ReleaseModel r : res)
 			System.out.println(r);

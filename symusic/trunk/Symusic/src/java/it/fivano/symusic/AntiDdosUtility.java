@@ -118,18 +118,18 @@ public class AntiDdosUtility {
     "b(function(){\n"+
       "var a = document.getElementById('cf-content');a.style.display = 'block';\n"+
       "setTimeout(function(){\n"+
-       "var t,r,a,f, VHzHqsQ={\"XZikfK\":!+[]+!![]+!![]+!![]};\n"+
-        "t = document.createElement('div')\n;"+
+        "var t,r,a,f, ZrxcFYU={\"bODbAk\":+((+!![]+[])+(!+[]+!![]+!![]+!![]+!![]+!![]))};\n"+
+        "t = document.createElement('div');\n"+
         "t.innerHTML=\"<a href='/'>x</a>\";\n"+
         "t = t.firstChild.href;r = t.match(/https?:\\/\\//)[0];\n"+
-        "t = t.substr(r.length); t = t.substr(0,t.length-1)\n;"+
+        "t = t.substr(r.length); t = t.substr(0,t.length-1);\n"+
         "a = document.getElementById('jschl-answer');\n"+
         "f = document.getElementById('challenge-form');\n"+
-        ";VHzHqsQ.XZikfK+=+((!+[]+!![]+!![]+!![]+!![]+[])+(+[]));VHzHqsQ.XZikfK*=+((!+[]+!![]+[])+(+!![]));VHzHqsQ.XZikfK+=!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+!![];a.value = parseInt(VHzHqsQ.XZikfK, 10) + t.length;\n"+
+        ";ZrxcFYU.bODbAk+=+((+!![]+[])+(+[]));a.value = parseInt(ZrxcFYU.bODbAk, 10) + t.length;\n"+
         "f.submit();\n"+
-      "}, 5850);\n"+
-   "}, false);\n";
-	// GET /cdn-cgi/l/chk_jschl?jschl_vc=8e76d977fe8fbab6e22c98f3d0b759d1&jschl_answer=1152 HTTP/1.1
+      "}, 8000);\n"+
+    "}, false);\n";
+	// GET http://scnlog.eu/cdn-cgi/l/chk_jschl?jschl_vc=3aa3bf2aae0861f7f08447a9a6649b58&pass=1429731087.261-ugSb%2FE6DdZ&jschl_answer=35
 		
 		System.out.println(new AntiDdosUtility().calcolateAnswer(script));
 	}

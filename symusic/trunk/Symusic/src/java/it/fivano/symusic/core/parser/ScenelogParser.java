@@ -325,6 +325,10 @@ public class ScenelogParser extends GenericParser {
 		return countFailConnection;
 	}
 	
+	public void resetCountFailConnection() {
+		countFailConnection = 0;
+	}
+	
 	public String getUrlRelease(String releaseName) {
 		return conf.URL_MUSIC+releaseName.toLowerCase()+"/";
 	}
