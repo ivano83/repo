@@ -24,20 +24,28 @@ public class SpostaFileMp3eNfo {
 //		String folderFileNfo = "C:\\Users\\ivano\\Documents\\IVANO\\ARCHIVIO_IVANO\\info mp3";
 //		String folderFileMp3 = "C:\\Users\\ivano\\Desktop\\JDOWNLOAD\\DOWNL\\2004";
 		
-		String folderInput = "C:\\Users\\ivano\\ROOT\\IVANO\\ARCHIVIO_IVANO\\Mp3\\TMP marzo\\Dance & House";
-		String folderFileNfo = "C:\\Users\\ivano\\ROOT\\IVANO\\ARCHIVIO_IVANO\\info mp3";
-		String folderFileMp3 = "C:\\Users\\ivano\\ROOT\\IVANO\\ARCHIVIO_IVANO\\Mp3\\TMP marzo\\Dance & House";
-		
 		// Trance
 		// Dance & House
 		
+		String mese = "giugno";
+		
+		String folderInput = "C:\\Users\\ivano\\ROOT\\IVANO\\ARCHIVIO_IVANO\\Mp3\\TMP "+mese+"\\Dance & House";
+		String folderFileNfo = "C:\\Users\\ivano\\ROOT\\IVANO\\ARCHIVIO_IVANO\\info mp3";
+		String folderFileMp3 = "C:\\Users\\ivano\\ROOT\\IVANO\\ARCHIVIO_IVANO\\Mp3\\TMP "+mese+"\\Dance & House";
 		List<File> l = FileUtility.caricaFile(folderInput);
+		spostaMp3(l, folderFileMp3);
+		spostaNfo(l, folderFileNfo);
 		
-//		ricercaDataRelease(l, folderFileMp3);
-		
+		folderInput = "C:\\Users\\ivano\\ROOT\\IVANO\\ARCHIVIO_IVANO\\Mp3\\TMP "+mese+"\\Trance";
+		folderFileNfo = "C:\\Users\\ivano\\ROOT\\IVANO\\ARCHIVIO_IVANO\\info mp3";
+		folderFileMp3 = "C:\\Users\\ivano\\ROOT\\IVANO\\ARCHIVIO_IVANO\\Mp3\\TMP "+mese+"\\Trance";
+		l = FileUtility.caricaFile(folderInput);
 		spostaMp3(l, folderFileMp3);
 		spostaNfo(l, folderFileNfo);
 
+		
+//		ricercaDataRelease(l, folderFileMp3);
+		
 //		String path = "C:\\Users\\ivano\\Desktop\\JDOWNLOAD\\DOWNL\\2007";
 		
 //		String path = "C:\\Users\\ivano\\Desktop\\JDOWNLOAD\\DOWNL\\2004\\2004-01,02,03";
