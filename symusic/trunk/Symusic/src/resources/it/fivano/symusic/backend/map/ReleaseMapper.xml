@@ -125,6 +125,9 @@
   <select id="selectDistinctCrew" resultType="java.lang.String">
     select distinct crew from symusic.release 
   </select>
+  <select id="selectLastReleaseDate" parameterType="java.lang.Integer" resultType="java.sql.Date">
+    select distinct max(release_date) as last_release_date from symusic.release where id_genre = #{idGenre,jdbcType=INTEGER}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - @mbggenerated

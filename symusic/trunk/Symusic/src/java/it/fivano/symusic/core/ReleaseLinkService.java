@@ -30,7 +30,7 @@ public class ReleaseLinkService {
 		String releaseName = release.getNameWithUnderscore();
 		
 		// SCENELOG
-		if(scenelog.getCountFailConnection()<MAX_CONSECUTIVE_FAILS) {
+		if(scenelog.getCountFailConnection()<MAX_CONSECUTIVE_FAILS && !release.getReleaseExtraction().getScenelog()) {
 			ScenelogParserModel releaseScenelog = new ScenelogParserModel();
 			releaseScenelog.setReleaseName(releaseName);
 			releaseScenelog.setUrlReleaseDetails(scenelog.getUrlRelease(releaseName));

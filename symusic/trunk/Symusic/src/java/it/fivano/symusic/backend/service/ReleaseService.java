@@ -20,8 +20,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.ibatis.jdbc.SQL;
-
 public class ReleaseService extends RootService {
 	
 	public ReleaseService() {
@@ -95,6 +93,23 @@ public class ReleaseService extends RootService {
 		} finally {
 			this.chiudiSessione();
 		}
+	}
+	
+	public Date getLastReleaseDate(Integer idGenre) throws BackEndException {
+		try {
+
+			ReleaseMapper releaseDao = this.getReleaseMapper();
+			
+			java.sql.Date res = releaseDao.selectLastReleaseDate(idGenre);
+
+			return new Date(res.getTime());
+			
+		} catch (Exception e) {
+			throw new BackEndException(e);
+		} finally {
+			this.chiudiSessione();
+		}
+		
 	}
 	
 	public List<ReleaseModel> getListRelease(String genre, Date initDate, Date endDate, Long idUser) throws BackEndException {

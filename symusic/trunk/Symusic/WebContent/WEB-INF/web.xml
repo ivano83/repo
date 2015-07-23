@@ -45,6 +45,12 @@
 	</servlet>
 	
 	<servlet>
+		<display-name>LastReleaseDateServlet</display-name>
+		<servlet-name>LastReleaseDateServlet</servlet-name>
+		<servlet-class>it.fivano.symusic.action.LastReleaseDateServlet</servlet-class>
+	</servlet>
+	
+	<servlet>
 		<display-name>LinkServlet</display-name>
 		<servlet-name>LinkServlet</servlet-name>
 		<servlet-class>it.fivano.symusic.action.LinkServlet</servlet-class>
@@ -81,6 +87,10 @@
 	<servlet-mapping>
 		<servlet-name>LocalReleaseServlet</servlet-name>
 		<url-pattern>/LocalReleaseServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>LastReleaseDateServlet</servlet-name>
+		<url-pattern>/LastReleaseDateServlet</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>LinkServlet</servlet-name>

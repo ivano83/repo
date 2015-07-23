@@ -19,12 +19,17 @@
 			}
 
 		}
+		function lastReleaseDate(genreIn) {
+			 $.get('LastReleaseDateServlet',{genre:genreIn},function(responseText) { 
+				 $('.inDate').val(responseText);
+	     });
+		}
 	</script>
 </head>
 <body>
 <h2>S Y M U S I C</h2>
 
-<form action="ZeroDayMusicServlet"> 
+<form action="ZeroDayMusicServlet" id="form1"> 
 
 	<table>
 		<tr>
@@ -35,8 +40,8 @@
 				<select name="site">
 					<option value="1">0DayMusic</option>
 					<option value="2">0DayMp3</option>
-					<option value="3" selected="selected">Music DL</option>
-					<option value="4">Prescene.tk</option>
+					<option value="3">Music DL</option>
+					<option value="4" selected="selected">Prescene.tk</option>
 				</select>
 			</td>
 		</tr>
@@ -45,7 +50,7 @@
 				<div>Genere Release</div>
 			</td>
 			<td>
-				<select name="genre">
+				<select name="genre" onchange="javascript:lastReleaseDate(document.forms['form1'].elements['genre'].value)">
 					<option value="dance" selected="selected">Dance</option>
 					<option value="trance">Trance</option>
 					<option value="house">House</option>
@@ -57,7 +62,7 @@
 				<div>Data inizio </div>
 			</td>
 			<td>
-				<input type="text" name="initDate" class="tcal">
+				<input type="text" name="initDate" class="inDate tcal">
 			</td>
 		</tr>
 		<tr>
@@ -65,7 +70,7 @@
 				<div>Data Fine </div>
 			</td>
 			<td>
-				<input type="text" name="endDate" class="tcal">
+				<input type="text" name="endDate" class="outDate tcal">
 			</td>
 		</tr>
 		<tr>
