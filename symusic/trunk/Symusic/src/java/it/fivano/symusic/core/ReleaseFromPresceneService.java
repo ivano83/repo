@@ -361,7 +361,7 @@ public class ReleaseFromPresceneService extends ReleaseSiteService {
 
 class PresceneInfo {
 	
-	private int numPagina = 1;
+	private int numPagina = 0;
 	private String nextPage;
 	private boolean processNextPage;
 	private Date da;

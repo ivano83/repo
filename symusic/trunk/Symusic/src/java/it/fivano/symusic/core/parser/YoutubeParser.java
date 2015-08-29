@@ -89,7 +89,8 @@ public class YoutubeParser extends GenericParser {
 						}
 						
 						boolean similarity = SymusicUtility.compareStringSimilarity(relName, title, LevelSimilarity.ALTO);
-						if(!similarity) {
+						// il primo elemento viene sempre preso, dovrebbe essere sempre il piu' coerente
+						if(!similarity && currentPosition>1) { 
 							extraVideo.add(yt);
 							continue;
 						}
