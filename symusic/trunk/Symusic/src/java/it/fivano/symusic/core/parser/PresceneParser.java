@@ -299,10 +299,10 @@ public class PresceneParser extends GenericParser {
 			release.setReleaseName(releaseName);
 			
 			// GENRE
-			release.setGenre(cells.get(3).text());
+			release.setGenre(cells.get(5).text()); 
 			
 			// CREW
-			release.setCrew(cells.get(4).text());
+			release.setCrew(cells.get(6).text());
 			
 			// RANGE DATA, SOLO LE RELEASE COMPRESE DA - A
 			if(dataDa!=null && dataA!=null) {
