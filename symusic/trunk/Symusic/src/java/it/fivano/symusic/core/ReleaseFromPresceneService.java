@@ -10,7 +10,7 @@ import it.fivano.symusic.core.parser.ScenelogParser;
 import it.fivano.symusic.core.parser.YoutubeParser;
 import it.fivano.symusic.core.parser.model.BaseReleaseParserModel;
 import it.fivano.symusic.core.parser.model.BeatportParserModel;
-import it.fivano.symusic.core.parser.model.MusicDLParserModel;
+import it.fivano.symusic.core.parser.model.BaseMusicParserModel;
 import it.fivano.symusic.core.parser.model.ScenelogParserModel;
 import it.fivano.symusic.core.thread.SupportObject;
 import it.fivano.symusic.exception.BackEndException;

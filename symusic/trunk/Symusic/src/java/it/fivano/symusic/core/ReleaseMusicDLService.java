@@ -8,7 +8,7 @@ import it.fivano.symusic.core.parser.MusicDLParser;
 import it.fivano.symusic.core.parser.ScenelogParser;
 import it.fivano.symusic.core.parser.YoutubeParser;
 import it.fivano.symusic.core.parser.model.BeatportParserModel;
-import it.fivano.symusic.core.parser.model.MusicDLParserModel;
+import it.fivano.symusic.core.parser.model.BaseMusicParserModel;
 import it.fivano.symusic.core.parser.model.ScenelogParserModel;
 import it.fivano.symusic.core.thread.SupportObject;
 import it.fivano.symusic.exception.BackEndException;
@@ -67,7 +67,7 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 			
 			// PROCESSA LE RELEASE DELLA PRIMA PAGINA
 			MusicDLParser music = new MusicDLParser();
-			List<MusicDLParserModel> resZero = music.parseFullPage(urlConn, da, a);
+			List<BaseMusicParserModel> resZero = music.parseFullPage(urlConn, da, a);
 			this.checkProcessPage(resZero, info);
 			
 			// SE C'È DA RECUPERARE ALTRE RELEASE, CAMBIA PAGINA
@@ -79,7 +79,7 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 						
 				log.info("Andiamo alla pagina successiva...");
 				// PROCESSA LE RELEASE DELLE PAGINE SUCCESSIVE
-				List<MusicDLParserModel> resZeroTmp = music.parseFullPage(info.getNextPage(), da, a);
+				List<BaseMusicParserModel> resZeroTmp = music.parseFullPage(info.getNextPage(), da, a);
 				this.checkProcessPage(resZeroTmp, info);
 				resZero.addAll(resZeroTmp);
 				
@@ -92,7 +92,7 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 			GoogleService google = new GoogleService();
 			List<BeatportParserModel> beatportRes = null;
 			int count = 0;
-			for(MusicDLParserModel sc : resZero) {
+			for(BaseMusicParserModel sc : resZero) {
 
 				count++;
 				ReleaseModel release = new ReleaseModel();
@@ -237,13 +237,13 @@ public class ReleaseMusicDLService extends ReleaseSiteService {
 	}
 
 
-	private void checkProcessPage(List<MusicDLParserModel> resScenelog, ScenelogInfo info) {
+	private void checkProcessPage(List<BaseMusicParserModel> resScenelog, ScenelogInfo info) {
 		Date max = null;
 		Date min = null;
 		if(!resScenelog.isEmpty()) {
-			Iterator<MusicDLParserModel> it = resScenelog.iterator();
+			Iterator<BaseMusicParserModel> it = resScenelog.iterator();
 			while(it.hasNext()) {
-				MusicDLParserModel sc = it.next();
+				BaseMusicParserModel sc = it.next();
 
 				if(max == null) max = sc.getReleaseDate();
 				if(min == null) min = sc.getReleaseDate();

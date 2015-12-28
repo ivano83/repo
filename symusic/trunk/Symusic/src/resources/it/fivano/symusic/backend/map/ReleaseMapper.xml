@@ -123,7 +123,7 @@
     where id_release = #{idRelease,jdbcType=BIGINT}
   </select>
   <select id="selectDistinctCrew" resultType="java.lang.String">
-    select distinct crew from symusic.release 
+    select distinct crew from symusic.release as r, symusic.release_user_option as o where r.id_release = o.id_release and release_downloaded = 1 group by crew order by count(crew) desc 
   </select>
   <select id="selectLastReleaseDate" parameterType="java.lang.Integer" resultType="java.sql.Date">
     select distinct max(release_date) as last_release_date from symusic.release where id_genre = #{idGenre,jdbcType=INTEGER}

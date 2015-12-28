@@ -54,6 +54,7 @@
 					<option value="dance" selected="selected">Dance</option>
 					<option value="trance">Trance</option>
 					<option value="house">House</option>
+					<option value="techno">Techno</option>
 				</select>
 			</td>
 		</tr>

@@ -231,7 +231,7 @@ public class ScenelogParser extends GenericParser {
 			SymusicUtility.updateReleaseExtraction(release.getReleaseExtraction(),true,AreaExtraction.SCENELOG);
 			countFailConnection = 0;
 		} catch(Exception e) {
-			log.error("Errore nel parsing", e);
+			log.error("Nessun risultato ottenuto oppure errore nel parsing. "+e.getMessage());
 			countFailConnection++;
 			SymusicUtility.updateReleaseExtraction(release.getReleaseExtraction(),false,AreaExtraction.SCENELOG);
 //			throw new ParseReleaseException("Errore nel parsing",e);

@@ -2,9 +2,10 @@ package it.fivano.symusic.core.parser;
 
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.SymusicUtility.LevelSimilarity;
-import it.fivano.symusic.conf.PresceneConf;
-import it.fivano.symusic.core.parser.model.BaseReleaseParserModel;
+import it.fivano.symusic.conf.AlbumDLConf;
+import it.fivano.symusic.conf.MusicDLConf;
 import it.fivano.symusic.core.parser.model.BaseMusicParserModel;
+import it.fivano.symusic.core.parser.model.BaseReleaseParserModel;
 import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.ReleaseExtractionModel.AreaExtraction;
 import it.fivano.symusic.model.ReleaseModel;
@@ -22,13 +23,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
-public class PresceneParser extends GenericParser {
+public class AlbumDLParser extends GenericParser {
 	
-	private PresceneConf conf;
+	private AlbumDLConf conf;
 	
 	
-	public PresceneParser() throws IOException {
-		conf = new PresceneConf();
+	public AlbumDLParser() throws IOException {
+		conf = new AlbumDLConf();
 		this.setLogger(getClass());
 	}
 	
@@ -51,26 +52,23 @@ public class PresceneParser extends GenericParser {
 		try {
 			// CONNESSIONE ALLA PAGINA
 			String userAgent = this.randomUserAgent();
+			Document doc = null;
 			log.info("Connessione in corso --> "+urlPage);
-			Document doc = Jsoup.connect(urlPage).timeout(TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
-			
+			doc = Jsoup.connect(urlPage).timeout(TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
+
 			if(antiDDOS.isAntiDDOS(doc)) {
 				doc = this.bypassAntiDDOS(doc, conf.URL, urlPage);
 			}
 
-			Elements releaseGroup = doc.getElementsByClass(conf.CLASS_RELEASE_GROUP);
-			
-			if(releaseGroup.size()>0) {
+			Elements releaseGroup = doc.getElementsByClass(conf.CLASS_RELEASE_LIST_ITEM);
+			if(releaseGroup.size()==0) {
+				releaseGroup = doc.getElementsByAttributeValue("id",conf.CLASS_RELEASE_LIST_ITEM);
 				
-				Elements releaseList = releaseGroup.get(0).getElementsByClass(conf.CLASS_RELEASE_ITEM);
+			}
+			if(releaseGroup.size()>0) {
 				BaseReleaseParserModel release = null;
 				log.info("####################################");
-				boolean isPrimo = true;
-				for(Element tmp : releaseList) {
-					if(isPrimo) {
-						isPrimo = false;
-						continue;
-					}
+				for(Element tmp : releaseGroup) {
 					
 					release = this.popolaMusicDLRelease(tmp);
 					
@@ -94,10 +92,9 @@ public class PresceneParser extends GenericParser {
 						
 	}
 
-	/**
-	public MusicDLParserModel searchRelease(String releaseName) throws ParseReleaseException {
+	public BaseReleaseParserModel searchRelease(String releaseName) throws ParseReleaseException {
 		
-		MusicDLParserModel result = null;
+		BaseReleaseParserModel result = null;
 		
 		if(releaseName == null)
 			return result;
@@ -133,7 +130,7 @@ public class PresceneParser extends GenericParser {
 				
 					trovato = true;
 				} catch (Exception e1) {
-					log.error("[MUSICDL] Nessun risultato ottenuto per la release = "+releaseName+"  --> "+e1.getMessage());
+					log.error("[ALBUMDL] Nessun risultato ottenuto per la release = "+releaseName+"  --> "+e1.getMessage());
 					userAgent = this.randomUserAgent(); // proviamo un nuovo user agent
 					tentativi++;
 				}
@@ -141,9 +138,9 @@ public class PresceneParser extends GenericParser {
 			} while(tentativi<2 && !trovato);
 			
 			if(releaseItems==null) {
-				log.info("[MUSICDL] Nessun risultato ottenuto per la release = "+releaseName);
+				log.info("[ALBUMDL] Nessun risultato ottenuto per la release = "+releaseName);
 				return null;
-//				throw new ParseReleaseException("[MUSICDL] Nessun risultato ottenuto per la release = "+releaseName);
+//				throw new ParseReleaseException("[ALBUMDL] Nessun risultato ottenuto per la release = "+releaseName);
 			}
 						
 			String releaseLinkGood = null;
@@ -153,7 +150,7 @@ public class PresceneParser extends GenericParser {
 								
 				if(SymusicUtility.compareStringSimilarity(releaseName, relCandidate.text(), LevelSimilarity.ALTO)) {
 					releaseLinkGood = relCandidate.attr("href");
-					log.info("[MUSICDL] Trovata la release: "+relCandidate.text()+" - "+releaseLinkGood);
+					log.info("[ALBUMDL] Trovata la release: "+relCandidate.text()+" - "+releaseLinkGood);
 					
 					result = this.popolaMusicDLRelease(e);
 					
@@ -163,13 +160,13 @@ public class PresceneParser extends GenericParser {
 			}
 			
 			if(result == null) {
-				log.info("[MUSICDL] Release non trovata tra tutti i risultati ottenuti: "+releaseName);	
+				log.info("[ALBUMDL] Release non trovata tra tutti i risultati ottenuti: "+releaseName);	
 			}
 			
 			
-		} catch (ParseException e) {
+		} catch (Exception e) {
 			log.error("Errore nel parsing", e);
-			throw new ParseReleaseException("Errore nel parsing",e);
+//			throw new ParseReleaseException("Errore nel parsing",e);
 		}
 		
 		return result;
@@ -177,12 +174,12 @@ public class PresceneParser extends GenericParser {
 	}
 	
 	
-	public ReleaseModel parseReleaseDetails(MusicDLParserModel musicDLModel, ReleaseModel release) throws ParseReleaseException {
+	public ReleaseModel parseReleaseDetails(BaseReleaseParserModel musicModel, ReleaseModel release) throws ParseReleaseException {
 		
 		Document doc = null;
 		try {
 
-			if(musicDLModel==null)
+			if(musicModel==null)
 				return release;
 
 			// SE RELEASE ANCORA NON PRESENTE SI CREA L'OGGETTO
@@ -192,10 +189,10 @@ public class PresceneParser extends GenericParser {
 			
 			// release trovata
 			String userAgent = this.randomUserAgent();
-			doc = Jsoup.connect(musicDLModel.getUrlReleaseDetails()).userAgent(userAgent).ignoreHttpErrors(true).get();
+			doc = Jsoup.connect(musicModel.getUrlReleaseDetails()).timeout(TIMEOUT*2).userAgent(userAgent).ignoreHttpErrors(true).get();
 			
 			if(antiDDOS.isAntiDDOS(doc)) {
-				doc = this.bypassAntiDDOS(doc, conf.URL, musicDLModel.getUrlReleaseDetails());
+				doc = this.bypassAntiDDOS(doc, conf.URL, musicModel.getUrlReleaseDetails());
 			}
 			
 			Element releaseInfo = doc.getElementsByClass(conf.TABLE_INFO).get(0);
@@ -205,7 +202,7 @@ public class PresceneParser extends GenericParser {
 			release.setSong(listInfo.get(1).select("td").get(1).text());
 			release.setGenre(SymusicUtility.creaGenere(listInfo.get(2).select("td").get(1).text()));
 
-			release = this.popolaRelease(release, musicDLModel);
+			release = this.popolaRelease(release, musicModel);
 
 			
 			TrackModel currTrack = null;
@@ -225,7 +222,7 @@ public class PresceneParser extends GenericParser {
 					currTrack.setArtist(row.get(2).text());
 					currTrack.setTime(row.get(3).text());
 					tracks.add(currTrack);
-					log.info("[MUSICDL] \t TRACK:  "+currTrack.getTrackNumber()+". "+currTrack);
+					log.info("[ALBUMDL] \t TRACK:  "+currTrack.getTrackNumber()+". "+currTrack);
 					
 				}
 
@@ -234,7 +231,7 @@ public class PresceneParser extends GenericParser {
 			if(release.getTracks().isEmpty()) {
 				release.setTracks(tracks);
 			} else {
-				// PRIORITA' ALLE TRACCE MUSICDL
+				// PRIORITA' ALLE TRACCE ALBUMDL
 				release.setTracks(SymusicUtility.chooseTrack(tracks, release.getTracks(), true));
 			}
 			
@@ -257,9 +254,9 @@ public class PresceneParser extends GenericParser {
 		return release;
 
 	}
-*/
 
-	private ReleaseModel popolaRelease(ReleaseModel release, BaseMusicParserModel musicDLModel) throws ParseException {
+
+	private ReleaseModel popolaRelease(ReleaseModel release, BaseReleaseParserModel musicDLModel) throws ParseException {
 		if(musicDLModel.getReleaseName()!=null) {
 			release.setNameWithUnderscore(musicDLModel.getReleaseName());
 
@@ -269,7 +266,9 @@ public class PresceneParser extends GenericParser {
 				release.setName(musicDLModel.getReleaseName().replace("_", " "));
 			}
 		}
-		release.setReleaseDate(SymusicUtility.getStandardDate(musicDLModel.getReleaseDate()));
+		
+		if(release.getReleaseDate()==null && musicDLModel.getReleaseDate()!=null)
+			release.setReleaseDate(SymusicUtility.getStandardDate(musicDLModel.getReleaseDate()));
 		
 		// AGGIUNGE ULTERIORI INFO DELLA RELEASE A PARTIRE DAL NOME
 		// ES. CREW E ANNO RELEASE
@@ -280,40 +279,36 @@ public class PresceneParser extends GenericParser {
 
 	private BaseReleaseParserModel popolaMusicDLRelease(Element tmp) throws ParseException {
 		
-		BaseReleaseParserModel release = null;
+		BaseReleaseParserModel release = new BaseReleaseParserModel();
 		
-		Elements cells = tmp.children();
+		Element releaseItem = tmp.getElementsByClass(conf.CLASS_RELEASE_TITLE).get(0).getElementsByTag("a").get(0);
+		String releaseName = this.standardFormatRelease(releaseItem.text());
+		String releaseUrl = releaseItem.attr("href");
 		
-		if(cells.size()>=5) {
-			release = new BaseReleaseParserModel();
-			
-			// RELEASE DATE
-			Element relDate = cells.get(1).getElementsByTag("a").get(0);
-			String dateIn = relDate.text();
-			dateIn = this.getStandardDateFormat(dateIn);
-			Date dateInDate = SymusicUtility.getStandardDate(dateIn);
-			release.setReleaseDate(dateInDate);
-			
-			// RELEASE NAME
-			String releaseName = this.standardFormatRelease(cells.get(2).text());
-			release.setReleaseName(releaseName);
-			
-			// GENRE
-			release.setGenre(cells.get(5).text()); 
-			
-			// CREW
-			release.setCrew(cells.get(6).text());
-			
-			// RANGE DATA, SOLO LE RELEASE COMPRESE DA - A
-			if(dataDa!=null && dataA!=null) {
-				release.setDateInRange(this.downloadReleaseDay(dateInDate, dataDa, dataA));
-			}
-			
-			// CONTROLLA SE E' UN RADIO/SAT RIP
-			release.setRadioRip(this.isRadioRipRelease(releaseName));
-			
-			log.info("|"+release+"| acquisita");
+		Element relDate = tmp.getElementsByClass(conf.CLASS_RELEASE_LIST_DATA).get(0).getElementsByTag("time").get(0);
+		String dateIn = relDate.attr("datetime");
+		dateIn = this.getStandardDateFormat(dateIn);
+		Date dateInDate = SymusicUtility.getStandardDate(dateIn);
+		
+		// RELEASE NAME
+		release.setReleaseName(releaseName);
+		
+		// URL
+		release.setUrlReleaseDetails(releaseUrl);
+		
+		// RELEASE DATE
+		release.setReleaseDate(dateInDate);
+		
+		// RANGE DATA, SOLO LE RELEASE COMPRESE DA - A
+		if(dataDa!=null && dataA!=null) {
+			release.setDateInRange(this.downloadReleaseDay(dateInDate, dataDa, dataA));
 		}
+		
+		// CONTROLLA SE E' UN RADIO/SAT RIP
+		release.setRadioRip(this.isRadioRipRelease(releaseName));
+		
+//		System.out.println(release);
+		log.info("|"+release+"| acquisita");
 		
 		return release;
 	}
@@ -327,15 +322,19 @@ public class PresceneParser extends GenericParser {
 
 		String zeroDayFormat = conf.DATE_FORMAT;
 
+		dateIn = dateIn.replace("th,", "").replace("rd,", "").replace("st,", "").replace("nd,", "");
+
 		return SymusicUtility.getStandardDateFormat(dateIn, zeroDayFormat);
 
 	}
 	
 	private String createSearchString(String releaseName) {
-		if(releaseName.contains("_"))
-			return releaseName;
-		else
-			return this.applyFilterSearch(releaseName);
+		return releaseName.replaceAll("[^A-Za-z0-9_()]", "-").replace("_", "-");
+//		return releaseName.replaceAll("[^A-Za-z0-9 -_]", "").replace("_", "-");
+//		if(releaseName.contains("_"))
+//			return releaseName;
+//		else
+//			return this.applyFilterSearch(releaseName);
 	}
 	
 	@Override
@@ -349,11 +348,18 @@ public class PresceneParser extends GenericParser {
 		return t;
 	}
 	
+	public String getUrlRelease(String releaseName, String genre) {
+		return conf.URL+(createSearchString(releaseName).toLowerCase())+"/";
+	}
+	
 	public static void main(String[] args) throws IOException, ParseReleaseException {
-		PresceneParser p = new PresceneParser();
-		List<BaseReleaseParserModel> l = p.parseFullPage("https://prescene.tk/index.php?group=ZzZz");
-		for(BaseReleaseParserModel m : l)
-			System.out.println(m);
+		AlbumDLParser p = new AlbumDLParser();
+		BaseReleaseParserModel m = new BaseReleaseParserModel();
+		m.setReleaseName("T-Jay feat Adele – Dreams (The Remixes)-(DNZF 173)-WEB-2015-ZzZz");
+		m.setUrlReleaseDetails(p.getUrlRelease(m.getReleaseName(), null));
+		ReleaseModel mm = p.parseReleaseDetails(m, null);
+		
+		System.out.println(mm);
 	}
 
 }

@@ -3,7 +3,7 @@ package it.fivano.symusic.core.parser;
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.SymusicUtility.LevelSimilarity;
 import it.fivano.symusic.conf.MusicDLConf;
-import it.fivano.symusic.core.parser.model.MusicDLParserModel;
+import it.fivano.symusic.core.parser.model.BaseMusicParserModel;
 import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.ReleaseExtractionModel.AreaExtraction;
 import it.fivano.symusic.model.ReleaseModel;
@@ -31,7 +31,7 @@ public class MusicDLParser extends GenericParser {
 		this.setLogger(getClass());
 	}
 	
-	public List<MusicDLParserModel> parseFullPage(String urlPage, Date da, Date a) throws ParseReleaseException {
+	public List<BaseMusicParserModel> parseFullPage(String urlPage, Date da, Date a) throws ParseReleaseException {
 		this.dataDa = da;
 		this.dataA = a;
 		
@@ -39,9 +39,9 @@ public class MusicDLParser extends GenericParser {
 		
 	}
 	
-	public List<MusicDLParserModel> parseFullPage(String urlPage) throws ParseReleaseException {
+	public List<BaseMusicParserModel> parseFullPage(String urlPage) throws ParseReleaseException {
 		
-		List<MusicDLParserModel> result = new ArrayList<MusicDLParserModel>();
+		List<BaseMusicParserModel> result = new ArrayList<BaseMusicParserModel>();
 		
 		if(urlPage == null)
 			return result;
@@ -68,7 +68,7 @@ public class MusicDLParser extends GenericParser {
 				
 			}
 			if(releaseGroup.size()>0) {
-				MusicDLParserModel release = null;
+				BaseMusicParserModel release = null;
 				log.info("####################################");
 				for(Element tmp : releaseGroup) {
 					
@@ -94,9 +94,9 @@ public class MusicDLParser extends GenericParser {
 						
 	}
 
-	public MusicDLParserModel searchRelease(String releaseName) throws ParseReleaseException {
+	public BaseMusicParserModel searchRelease(String releaseName) throws ParseReleaseException {
 		
-		MusicDLParserModel result = null;
+		BaseMusicParserModel result = null;
 		
 		if(releaseName == null)
 			return result;
@@ -176,7 +176,7 @@ public class MusicDLParser extends GenericParser {
 	}
 	
 	
-	public ReleaseModel parseReleaseDetails(MusicDLParserModel musicDLModel, ReleaseModel release) throws ParseReleaseException {
+	public ReleaseModel parseReleaseDetails(BaseMusicParserModel musicDLModel, ReleaseModel release) throws ParseReleaseException {
 		
 		Document doc = null;
 		try {
@@ -258,7 +258,7 @@ public class MusicDLParser extends GenericParser {
 	}
 
 
-	private ReleaseModel popolaRelease(ReleaseModel release, MusicDLParserModel musicDLModel) throws ParseException {
+	private ReleaseModel popolaRelease(ReleaseModel release, BaseMusicParserModel musicDLModel) throws ParseException {
 		if(musicDLModel.getReleaseName()!=null) {
 			release.setNameWithUnderscore(musicDLModel.getReleaseName());
 
@@ -279,9 +279,9 @@ public class MusicDLParser extends GenericParser {
 		return release;
 	}
 
-	private MusicDLParserModel popolaMusicDLRelease(Element tmp) throws ParseException {
+	private BaseMusicParserModel popolaMusicDLRelease(Element tmp) throws ParseException {
 		
-		MusicDLParserModel release = new MusicDLParserModel();
+		BaseMusicParserModel release = new BaseMusicParserModel();
 		
 		Element releaseItem = tmp.getElementsByClass(conf.CLASS_RELEASE_TITLE).get(0).getElementsByTag("a").get(0);
 		String releaseName = this.standardFormatRelease(releaseItem.text());
@@ -355,7 +355,7 @@ public class MusicDLParser extends GenericParser {
 	
 	public static void main(String[] args) throws IOException, ParseReleaseException {
 		MusicDLParser p = new MusicDLParser();
-		MusicDLParserModel m = p.parseFullPage("http://musicdl.net/trance").get(0);
+		BaseMusicParserModel m = p.parseFullPage("http://musicdl.net/trance").get(0);
 		ReleaseModel mm = p.parseReleaseDetails(m, null);
 		
 		System.out.println(mm);

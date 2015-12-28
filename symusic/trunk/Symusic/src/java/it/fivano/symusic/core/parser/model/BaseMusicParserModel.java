@@ -3,7 +3,7 @@ package it.fivano.symusic.core.parser.model;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MusicDLParserModel {
+public class BaseMusicParserModel {
 	
 	private String releaseName;
 	private String urlReleaseDetails;
