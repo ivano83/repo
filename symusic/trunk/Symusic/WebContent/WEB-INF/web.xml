@@ -51,6 +51,12 @@
 	</servlet>
 	
 	<servlet>
+		<display-name>EuroadrenalineServlet</display-name>
+		<servlet-name>EuroadrenalineServlet</servlet-name>
+		<servlet-class>it.fivano.symusic.action.EuroadrenalineServlet</servlet-class>
+	</servlet>
+	
+	<servlet>
 		<display-name>LinkServlet</display-name>
 		<servlet-name>LinkServlet</servlet-name>
 		<servlet-class>it.fivano.symusic.action.LinkServlet</servlet-class>
@@ -91,6 +97,10 @@
 	<servlet-mapping>
 		<servlet-name>LastReleaseDateServlet</servlet-name>
 		<url-pattern>/LastReleaseDateServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>EuroadrenalineServlet</servlet-name>
+		<url-pattern>/EuroadrenalineServlet</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>LinkServlet</servlet-name>

@@ -260,6 +260,44 @@
 
 <div style="padding-bottom: 60px"></div>
 
+<form action="EuroadrenalineServlet"> 
+	<h3>Ricerca Euroadrenaline</h3>
+	<table>
+		<tr>
+			<td>
+				<div># pagine da caricare </div>
+			</td>
+			<td>
+				<input type="text" name="numPagine" size="10">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>Ignora Release Radio/Sat RIP</div>
+			</td>
+			<td>
+				<input type="checkbox" name="excludeRelaseRip" value="true" checked="checked" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>Generi ricercati</div>
+			</td>
+			<td>
+				<select name="genre" multiple="multiple" size="3" >
+					<option value="House" selected="selected">House</option>
+					<option value="Trance">Trance</option>
+					<option value="Hardstyle">Hardstyle</option>
+				</select>
+			</td>
+		</tr>
+	</table>
+	<input type="submit" value="Ricerca">
+	
+</form>
+
+<div style="padding-bottom: 60px"></div>
+
 <form action="ScenelogServlet"> 
 	<h3>Ricerca Scenelog</h3>
 	<table>
