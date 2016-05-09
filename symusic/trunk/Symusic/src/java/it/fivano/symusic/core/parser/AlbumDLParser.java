@@ -24,31 +24,31 @@ import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 public class AlbumDLParser extends GenericParser {
-	
+
 	private AlbumDLConf conf;
-	
-	
+
+
 	public AlbumDLParser() throws IOException {
 		conf = new AlbumDLConf();
 		this.setLogger(getClass());
 	}
-	
+
 	public List<BaseReleaseParserModel> parseFullPage(String urlPage, Date da, Date a) throws ParseReleaseException {
 		this.dataDa = da;
 		this.dataA = a;
-		
+
 		return this.parseFullPage(urlPage);
-		
+
 	}
-	
+
 	public List<BaseReleaseParserModel> parseFullPage(String urlPage) throws ParseReleaseException {
-		
+
 		List<BaseReleaseParserModel> result = new ArrayList<BaseReleaseParserModel>();
-		
+
 		if(urlPage == null)
 			return result;
 
-		
+
 		try {
 			// CONNESSIONE ALLA PAGINA
 			String userAgent = this.randomUserAgent();
@@ -57,24 +57,24 @@ public class AlbumDLParser extends GenericParser {
 			doc = Jsoup.connect(urlPage).timeout(TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
 
 			if(antiDDOS.isAntiDDOS(doc)) {
-				doc = this.bypassAntiDDOS(doc, conf.URL, urlPage);
+				doc = this.bypassAntiDDOS(doc, conf.URL, urlPage, userAgent);
 			}
 
 			Elements releaseGroup = doc.getElementsByClass(conf.CLASS_RELEASE_LIST_ITEM);
 			if(releaseGroup.size()==0) {
 				releaseGroup = doc.getElementsByAttributeValue("id",conf.CLASS_RELEASE_LIST_ITEM);
-				
+
 			}
 			if(releaseGroup.size()>0) {
 				BaseReleaseParserModel release = null;
 				log.info("####################################");
 				for(Element tmp : releaseGroup) {
-					
+
 					release = this.popolaMusicDLRelease(tmp);
-					
+
 					result.add(release);
 				}
-				
+
 			}
 		} catch (IOException e) {
 			log.error("Errore IO", e);
@@ -86,96 +86,96 @@ public class AlbumDLParser extends GenericParser {
 			log.error("Errore generico", e);
 			throw new ParseReleaseException("Errore generico",e);
 		}
-		
-		
+
+
 		return result;
-						
+
 	}
 
 	public BaseReleaseParserModel searchRelease(String releaseName) throws ParseReleaseException {
-		
+
 		BaseReleaseParserModel result = null;
-		
+
 		if(releaseName == null)
 			return result;
 
-		
+
 		try {
-			
+
 			int tentativi = 0;
 			boolean trovato = false;
-			
+
 			String userAgent = this.randomUserAgent();
-			
+
 			Elements releaseItems = null;
 			Document doc = null;
 			do  {
 				try {
-				
+
 					// pagina di inizio
 					String releaseNameSearch = this.createSearchString(releaseName);
 					String urlConn = conf.URL+conf.URL_ACTION+"?"+conf.PARAMS.replace("{0}", releaseNameSearch);
 					log.info("Connessione in corso --> "+urlConn);
 					doc = Jsoup.connect(urlConn).timeout((tentativi+1)*TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
-					
+
 					if(antiDDOS.isAntiDDOS(doc)) {
-						doc = this.bypassAntiDDOS(doc, conf.URL, urlConn);
+						doc = this.bypassAntiDDOS(doc, conf.URL, urlConn,userAgent);
 					}
-					
+
 					releaseItems = doc.getElementsByClass(conf.CLASS_RELEASE_ITEM);
-					
+
 					if(releaseItems==null || releaseItems.isEmpty()) {
 						throw new ParseReleaseException("Tentativo "+tentativi+" fallito!");
 					}
-				
+
 					trovato = true;
 				} catch (Exception e1) {
 					log.error("[ALBUMDL] Nessun risultato ottenuto per la release = "+releaseName+"  --> "+e1.getMessage());
 					userAgent = this.randomUserAgent(); // proviamo un nuovo user agent
 					tentativi++;
 				}
-				
+
 			} while(tentativi<2 && !trovato);
-			
+
 			if(releaseItems==null) {
 				log.info("[ALBUMDL] Nessun risultato ottenuto per la release = "+releaseName);
 				return null;
 //				throw new ParseReleaseException("[ALBUMDL] Nessun risultato ottenuto per la release = "+releaseName);
 			}
-						
+
 			String releaseLinkGood = null;
 			for(Element e : releaseItems) {
 				Element title = e.getElementsByClass(conf.CLASS_RELEASE_TITLE).get(0);
 				Element relCandidate = title.select("h1 > a").get(0);
-								
+
 				if(SymusicUtility.compareStringSimilarity(releaseName, relCandidate.text(), LevelSimilarity.ALTO)) {
 					releaseLinkGood = relCandidate.attr("href");
 					log.info("[ALBUMDL] Trovata la release: "+relCandidate.text()+" - "+releaseLinkGood);
-					
+
 					result = this.popolaMusicDLRelease(e);
-					
+
 					break;
 				}
 
 			}
-			
+
 			if(result == null) {
-				log.info("[ALBUMDL] Release non trovata tra tutti i risultati ottenuti: "+releaseName);	
+				log.info("[ALBUMDL] Release non trovata tra tutti i risultati ottenuti: "+releaseName);
 			}
-			
-			
+
+
 		} catch (Exception e) {
 			log.error("Errore nel parsing", e);
 //			throw new ParseReleaseException("Errore nel parsing",e);
 		}
-		
+
 		return result;
-						
+
 	}
-	
-	
+
+
 	public ReleaseModel parseReleaseDetails(BaseReleaseParserModel musicModel, ReleaseModel release) throws ParseReleaseException {
-		
+
 		Document doc = null;
 		try {
 
@@ -185,35 +185,35 @@ public class AlbumDLParser extends GenericParser {
 			// SE RELEASE ANCORA NON PRESENTE SI CREA L'OGGETTO
 			if(release==null)
 				release = new ReleaseModel();
-			
-			
+
+
 			// release trovata
 			String userAgent = this.randomUserAgent();
 			doc = Jsoup.connect(musicModel.getUrlReleaseDetails()).timeout(TIMEOUT*2).userAgent(userAgent).ignoreHttpErrors(true).get();
-			
+
 			if(antiDDOS.isAntiDDOS(doc)) {
-				doc = this.bypassAntiDDOS(doc, conf.URL, musicModel.getUrlReleaseDetails());
+				doc = this.bypassAntiDDOS(doc, conf.URL, musicModel.getUrlReleaseDetails(),userAgent);
 			}
-			
+
 			Element releaseInfo = doc.getElementsByClass(conf.TABLE_INFO).get(0);
 			Elements listInfo = releaseInfo.select("tbody > tr");
-			
+
 			release.setArtist(listInfo.get(0).select("td").get(1).text());
 			release.setSong(listInfo.get(1).select("td").get(1).text());
 			release.setGenre(SymusicUtility.creaGenere(listInfo.get(2).select("td").get(1).text()));
 
 			release = this.popolaRelease(release, musicModel);
 
-			
+
 			TrackModel currTrack = null;
 			Element releaseTrack = doc.getElementsByClass(conf.TABLE_TRACKS).get(0);
-			
+
 			Elements listTrack = releaseTrack.select("table > tbody > tr");
 
-			
+
 			List<TrackModel> tracks = new ArrayList<TrackModel>();
 			for(Element tx : listTrack) {
-				
+
 				Elements row = tx.select("td");
 				if(row.size()==4) {
 					currTrack = new TrackModel();
@@ -223,18 +223,18 @@ public class AlbumDLParser extends GenericParser {
 					currTrack.setTime(row.get(3).text());
 					tracks.add(currTrack);
 					log.info("[ALBUMDL] \t TRACK:  "+currTrack.getTrackNumber()+". "+currTrack);
-					
+
 				}
 
 			}
-			
+
 			if(release.getTracks().isEmpty()) {
 				release.setTracks(tracks);
 			} else {
 				// PRIORITA' ALLE TRACCE ALBUMDL
 				release.setTracks(SymusicUtility.chooseTrack(tracks, release.getTracks(), true));
 			}
-			
+
 
 			Element releaseDownloads = doc.getElementsByClass(conf.RELEASE_DOWNLOAD).get(0);
 
@@ -242,7 +242,7 @@ public class AlbumDLParser extends GenericParser {
 			for(Element dl : downloads) {
 				release.addLink(this.popolateLink(dl));
 			}
-			
+
 //			SymusicUtility.updateReleaseExtraction(release.getReleaseExtraction(),true,AreaExtraction.SCENELOG);
 
 		} catch(Exception e) {
@@ -250,7 +250,7 @@ public class AlbumDLParser extends GenericParser {
 //			SymusicUtility.updateReleaseExtraction(release.getReleaseExtraction(),false,AreaExtraction.SCENELOG);
 //			throw new ParseReleaseException("Errore nel parsing",e);
 		}
-		
+
 		return release;
 
 	}
@@ -266,50 +266,50 @@ public class AlbumDLParser extends GenericParser {
 				release.setName(musicDLModel.getReleaseName().replace("_", " "));
 			}
 		}
-		
+
 		if(release.getReleaseDate()==null && musicDLModel.getReleaseDate()!=null)
 			release.setReleaseDate(SymusicUtility.getStandardDate(musicDLModel.getReleaseDate()));
-		
+
 		// AGGIUNGE ULTERIORI INFO DELLA RELEASE A PARTIRE DAL NOME
 		// ES. CREW E ANNO RELEASE
 		SymusicUtility.processReleaseName(release);
-		
+
 		return release;
 	}
 
 	private BaseReleaseParserModel popolaMusicDLRelease(Element tmp) throws ParseException {
-		
+
 		BaseReleaseParserModel release = new BaseReleaseParserModel();
-		
+
 		Element releaseItem = tmp.getElementsByClass(conf.CLASS_RELEASE_TITLE).get(0).getElementsByTag("a").get(0);
 		String releaseName = this.standardFormatRelease(releaseItem.text());
 		String releaseUrl = releaseItem.attr("href");
-		
+
 		Element relDate = tmp.getElementsByClass(conf.CLASS_RELEASE_LIST_DATA).get(0).getElementsByTag("time").get(0);
 		String dateIn = relDate.attr("datetime");
 		dateIn = this.getStandardDateFormat(dateIn);
 		Date dateInDate = SymusicUtility.getStandardDate(dateIn);
-		
+
 		// RELEASE NAME
 		release.setReleaseName(releaseName);
-		
+
 		// URL
 		release.setUrlReleaseDetails(releaseUrl);
-		
+
 		// RELEASE DATE
 		release.setReleaseDate(dateInDate);
-		
+
 		// RANGE DATA, SOLO LE RELEASE COMPRESE DA - A
 		if(dataDa!=null && dataA!=null) {
 			release.setDateInRange(this.downloadReleaseDay(dateInDate, dataDa, dataA));
 		}
-		
+
 		// CONTROLLA SE E' UN RADIO/SAT RIP
 		release.setRadioRip(this.isRadioRipRelease(releaseName));
-		
+
 //		System.out.println(release);
 		log.info("|"+release+"| acquisita");
-		
+
 		return release;
 	}
 
@@ -327,7 +327,7 @@ public class AlbumDLParser extends GenericParser {
 		return SymusicUtility.getStandardDateFormat(dateIn, zeroDayFormat);
 
 	}
-	
+
 	private String createSearchString(String releaseName) {
 		return releaseName.replaceAll("[^A-Za-z0-9_()]", "-").replace("_", "-");
 //		return releaseName.replaceAll("[^A-Za-z0-9 -_]", "").replace("_", "-");
@@ -336,7 +336,7 @@ public class AlbumDLParser extends GenericParser {
 //		else
 //			return this.applyFilterSearch(releaseName);
 	}
-	
+
 	@Override
 	protected String applyFilterSearch(String t) {
 		t = t.replaceAll("[-,!?&']", " ").replace(" feat ", " ").replace(" feat. ", " ").replace(" ft ", " ").replace(" featuring ", " ")
@@ -347,18 +347,18 @@ public class AlbumDLParser extends GenericParser {
 		}
 		return t;
 	}
-	
+
 	public String getUrlRelease(String releaseName, String genre) {
 		return conf.URL+(createSearchString(releaseName).toLowerCase())+"/";
 	}
-	
+
 	public static void main(String[] args) throws IOException, ParseReleaseException {
 		AlbumDLParser p = new AlbumDLParser();
 		BaseReleaseParserModel m = new BaseReleaseParserModel();
 		m.setReleaseName("T-Jay feat Adele – Dreams (The Remixes)-(DNZF 173)-WEB-2015-ZzZz");
 		m.setUrlReleaseDetails(p.getUrlRelease(m.getReleaseName(), null));
 		ReleaseModel mm = p.parseReleaseDetails(m, null);
-		
+
 		System.out.println(mm);
 	}
 

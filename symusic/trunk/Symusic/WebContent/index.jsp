@@ -5,9 +5,9 @@
 <html>
 <head>
 	<jsp:include page="jsp/head_common.jsp"/>
-	
+
 	<title>SYMUSIC - Facilita la ricerca delle release musicali</title>
-	
+
 	<script type="text/javascript">
 		function checkDataRange() {
 			var da = document.getElementById("annoDa");
@@ -20,7 +20,7 @@
 
 		}
 		function lastReleaseDate(genreIn) {
-			 $.get('LastReleaseDateServlet',{genre:genreIn},function(responseText) { 
+			 $.get('LastReleaseDateServlet',{genre:genreIn},function(responseText) {
 				 $('.inDate').val(responseText);
 	     });
 		}
@@ -29,7 +29,7 @@
 <body>
 <h2>S Y M U S I C</h2>
 
-<form action="ZeroDayMusicServlet" id="form1"> 
+<form action="ZeroDayMusicServlet" id="form1">
 
 	<table>
 		<tr>
@@ -142,12 +142,12 @@
 		</tr>
 	</table>
 	<input type="submit" value="Ricerca">
-	
+
 </form>
 
 <div style="padding-bottom: 60px"></div>
 
-<form action="ZeroDayMusicServlet"> 
+<form action="ZeroDayMusicServlet">
 
 	<table>
 		<tr>
@@ -255,12 +255,12 @@
 		</tr>
 	</table>
 	<input type="submit" value="Ricerca">
-	
+
 </form>
 
 <div style="padding-bottom: 60px"></div>
 
-<form action="EuroadrenalineServlet"> 
+<form action="EuroadrenalineServlet">
 	<h3>Ricerca Euroadrenaline</h3>
 	<table>
 		<tr>
@@ -293,12 +293,12 @@
 		</tr>
 	</table>
 	<input type="submit" value="Ricerca">
-	
+
 </form>
 
 <div style="padding-bottom: 60px"></div>
 
-<form action="ScenelogServlet"> 
+<form action="ScenelogServlet">
 	<h3>Ricerca Scenelog</h3>
 	<table>
 
@@ -342,12 +342,12 @@
 		</tr>
 	</table>
 	<input type="submit" value="Ricerca">
-	
+
 </form>
 
 <div style="padding-bottom: 60px"></div>
 
-<form action="BeatportServlet"> 
+<form action="BeatportServlet">
 	<h3>Ricerca Beatport</h3>
 	<table>
 		<tr>
@@ -372,12 +372,12 @@
 		</tr>
 	</table>
 	<input type="submit" value="Ricerca">&nbsp;&nbsp;
-	
+
 </form>
 
 <div style="padding-bottom: 60px"></div>
 
-<form action="LocalReleaseServlet"> 
+<form action="LocalReleaseServlet">
 	<h3>Ricerca Release Salvate</h3>
 	<table>
 		<tr>
@@ -411,7 +411,7 @@
 		</tr>
 	</table>
 	<input type="submit" value="Ricerca">&nbsp;&nbsp;
-	
+
 </form>
 
 

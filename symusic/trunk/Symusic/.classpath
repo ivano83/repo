@@ -20,6 +20,7 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/SymusicEAR/EarContent/lib/jsoup-1.9.1.jar"/>
+	<classpathentry kind="lib" path="/SymusicEAR/EarContent/lib/rhino-1.7.7.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
-	<!-- <classpathentry kind="output" path="WebContent/WEB-INF/classes"/> -->
 </classpath>
