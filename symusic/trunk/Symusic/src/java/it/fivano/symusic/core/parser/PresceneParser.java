@@ -57,6 +57,10 @@ public class PresceneParser extends GenericParser {
 			if(antiDDOS.isAntiDDOS(doc)) {
 				doc = this.bypassAntiDDOS(doc, conf.BASE_URL, urlPage, userAgent);
 			}
+			else if(doc.text().contains("wait 4 seconds then reload page")) {
+				Thread.sleep(4100);
+				doc = Jsoup.connect(urlPage).timeout(TIMEOUT).userAgent(userAgent).ignoreHttpErrors(true).get();
+			}
 
 			Elements releaseGroup = doc.getElementsByClass(conf.CLASS_RELEASE_GROUP);
 
