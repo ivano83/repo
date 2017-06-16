@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReleaseModel {
-	
+
 	private Long id;
 	private String name;
 	private String nameWithUnderscore;
@@ -17,21 +17,23 @@ public class ReleaseModel {
 	private GenreModel genre;
 	private ReleaseExtractionModel releaseExtraction;
 	private ReleaseFlagModel releaseFlag;
-	
+
 	private Integer voteValue;
 	private Double voteAverage;
 	private boolean voted;
-	
+
 	private List<LinkModel> links;
 	private List<TrackModel> tracks;
 	private List<VideoModel> videos;
-	
+
+	private List<String> similarRelease;
+
 	public ReleaseModel() {
 		voteAverage = 0.;
 		voteValue = 0;
 	}
-	
-	
+
+
 	public String getName() {
 		if(name==null && nameWithUnderscore!=null) {
 			name = nameWithUnderscore.replace("_", " ");
@@ -92,11 +94,11 @@ public class ReleaseModel {
 	public void addLink(LinkModel link) {
 		if(this.links==null)
 			links = new ArrayList<LinkModel>();
-		
+
 		if(!links.contains(link))
 			links.add(link);
 	}
-	
+
 	 @Override
 	public String toString() {
 		return this.getName() + ((releaseDate!=null)?" ["+releaseDate+"]":"");
@@ -112,7 +114,7 @@ public class ReleaseModel {
 	public void addTrack(TrackModel tr) {
 		if(this.tracks==null)
 			tracks = new ArrayList<TrackModel>();
-		
+
 		if(!tracks.contains(tr))
 			tracks.add(tr);
 	}
@@ -127,7 +129,7 @@ public class ReleaseModel {
 	public void addVideo(VideoModel tr) {
 		if(this.videos==null)
 			videos = new ArrayList<VideoModel>();
-		
+
 		if(!videos.contains(tr))
 			videos.add(tr);
 	}
@@ -177,7 +179,7 @@ public class ReleaseModel {
 	public void setReleaseExtraction(ReleaseExtractionModel releaseExtraction) {
 		this.releaseExtraction = releaseExtraction;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if(this.nameWithUnderscore!=null) {
@@ -201,6 +203,20 @@ public class ReleaseModel {
 
 	public void setReleaseFlag(ReleaseFlagModel releaseFlag) {
 		this.releaseFlag = releaseFlag;
+	}
+
+	public List<String> getSimilarRelease() {
+		return similarRelease;
+	}
+	public void setSimilarRelease(List<String> similarRelease) {
+		this.similarRelease = similarRelease;
+	}
+	public void addSimilarRelease(String tr) {
+		if(this.similarRelease==null)
+			similarRelease = new ArrayList<String>();
+
+		if(!similarRelease.contains(tr))
+			similarRelease.add(tr);
 	}
 
 }

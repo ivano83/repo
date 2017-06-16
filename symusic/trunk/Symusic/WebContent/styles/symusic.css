@@ -29,7 +29,12 @@
 	font-family: cursive;
 	font-size: 12px;
 	padding: 2px 0;
-} 
+}
+
+.rel_similar {
+	font-size: 10px;
+	padding: 2px 0;
+}
 
 .rel_successive {
 	left: 5%;
@@ -99,14 +104,14 @@
 }
 
 .new_icon {
-	padding-left:10px; 
-	top:10px; 
+	padding-left:10px;
+	top:10px;
 	position:relative;
 }
 
 /** CALENDARIO */
 
-/* input box in default state */ 
+/* input box in default state */
 .tcalInput {
 	background: url('../img/calendar/cal.gif') 100% 50% no-repeat;
 	padding-right: 20px;
@@ -195,8 +200,8 @@
 }
 #tcalGrid td:HOVER {
 	color:blue;
-}	
+}
 #tcalGrid td.tcalOtherMonth { color: silver; }
 #tcalGrid td.tcalWeekend { background-color: #ACD6F5; }
 #tcalGrid td.tcalToday { border: 1px solid red; }
-#tcalGrid td.tcalSelected { background-color: #FFB3BE; }		
+#tcalGrid td.tcalSelected { background-color: #FFB3BE; }

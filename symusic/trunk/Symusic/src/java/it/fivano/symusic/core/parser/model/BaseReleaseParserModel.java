@@ -8,13 +8,13 @@ public class BaseReleaseParserModel {
 	private String releaseName;
 	private String urlReleaseDetails;
 	private Date releaseDate;
-	
+
 	private boolean radioRip;
 	private boolean dateInRange;
-	
+
 	private String genre;
 	private String crew;
-	
+
 	public String getReleaseName() {
 		return releaseName;
 	}
@@ -45,8 +45,8 @@ public class BaseReleaseParserModel {
 	public void setDateInRange(boolean dateInRange) {
 		this.dateInRange = dateInRange;
 	}
-	
-	
+
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
@@ -65,5 +65,5 @@ public class BaseReleaseParserModel {
 	public void setCrew(String crew) {
 		this.crew = crew;
 	}
-	
+
 }

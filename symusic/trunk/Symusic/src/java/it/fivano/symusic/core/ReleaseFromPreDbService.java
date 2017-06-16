@@ -2,10 +2,13 @@ package it.fivano.symusic.core;
 
 import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.backend.service.ReleaseService;
+import it.fivano.symusic.conf.PreDbConf;
 import it.fivano.symusic.conf.PresceneConf;
 import it.fivano.symusic.core.parser.BeatportParser;
 import it.fivano.symusic.core.parser.MusicDLParser;
+import it.fivano.symusic.core.parser.PreDbParser;
 import it.fivano.symusic.core.parser.PresceneParser;
+import it.fivano.symusic.core.parser.SceneDownloadParser;
 import it.fivano.symusic.core.parser.ScenelogParser;
 import it.fivano.symusic.core.parser.YoutubeParser;
 import it.fivano.symusic.core.parser.model.BaseReleaseParserModel;
@@ -28,22 +31,23 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-public class ReleaseFromPresceneService extends ReleaseSiteService {
+public class ReleaseFromPreDbService extends ReleaseSiteService {
 
-	private PresceneConf conf;
+	private PreDbConf conf;
 	private String genre;
 
 	private static int MAX_CONSECUTIVE_FAILS = 20;
 
 	private List<ReleaseModel> listRelease;
 
-	private static int pageGap = 50;
+	private static int pageGap = 1;
 
 
-	public ReleaseFromPresceneService(Long idUser) throws IOException {
+
+	public ReleaseFromPreDbService(Long idUser) throws IOException {
 		super();
 		this.idUser = idUser;
-		conf = new PresceneConf();
+		conf = new PreDbConf();
 		enableBeatportService = true;
 		enableScenelogService = true;
 		enableYoutubeService = true;
@@ -52,28 +56,29 @@ public class ReleaseFromPresceneService extends ReleaseSiteService {
 	}
 
 
-	public List<ReleaseModel> parsePresceneRelease(String genere, Date da, Date a, SearchType searchType) throws BackEndException, ParseReleaseException {
+	public List<ReleaseModel> parsePreDbRelease(String genere, Date da, Date a, SearchType searchGenre) throws BackEndException, ParseReleaseException {
 
 		this.genre = genere;
 		listRelease = new ArrayList<ReleaseModel>();
 		try {
 
 			String param = conf.PARAMS_GENRE;
-			if(searchType.equals(SearchType.SEARCH_CREW)) {
-				param = conf.PARAMS_CREW;
+			if(searchGenre.equals(SearchType.SEARCH_CREW)) {
+				param = conf.PARAMS_CREW.replace("{0}", genere)+
+						"&"+conf.PARAMS_GENRE;
 			}
 
 			// PAGINA DI INIZIO
-			String urlConn = conf.URL+"?"+param.replace("{0}", genere);
+			String urlConn = conf.URL+"?"+param;
 
 			// OGGETTO PER GESTIRE IL CARICAMENTO DELLE PAGINE SUCCESSIVE DEL SITO
-			PresceneInfo info = new PresceneInfo();
+			PreDbInfo info = new PreDbInfo();
 			info.setProcessNextPage(true);
 			info.setA(a);
 			info.setDa(da);
 
 			// PROCESSA LE RELEASE DELLA PRIMA PAGINA
-			PresceneParser music = new PresceneParser();
+			PreDbParser music = new PreDbParser();
 			List<BaseReleaseParserModel> resZero = music.parseFullPage(urlConn, da, a);
 			this.checkProcessPage(resZero, info);
 
@@ -143,8 +148,11 @@ public class ReleaseFromPresceneService extends ReleaseSiteService {
 					release = relDb; // SOSTITUISCE I DATI FINO AD ORA ESTRATTI CON QUELLI DEL DB
 				}
 				else {
+					// dati da sceneDownload
 					release = this.arricchisciRelease(sc, release);
 					SymusicUtility.processReleaseName(release);
+					release = new SceneDownloadParser().parseReleaseDetails(release);
+
 				}
 
 				if(!this.verificaAnnoRelease(release,annoDa,annoAl)) {
@@ -258,7 +266,7 @@ public class ReleaseFromPresceneService extends ReleaseSiteService {
 	}
 
 
-	private void checkProcessPage(List<BaseReleaseParserModel> resScenelog, PresceneInfo info) {
+	private void checkProcessPage(List<BaseReleaseParserModel> resScenelog, PreDbInfo info) {
 		Date max = null;
 		Date min = null;
 		if(!resScenelog.isEmpty()) {
@@ -319,7 +327,7 @@ public class ReleaseFromPresceneService extends ReleaseSiteService {
 	}
 
 
-	private String extractNextPage(PresceneInfo info, String originalUrl) {
+	private String extractNextPage(PreDbInfo info, String originalUrl) {
 
 		return originalUrl+"&"+conf.PARAMS_PAGE.replace("{0}", (info.getNumPagina()*pageGap)+"");
 
@@ -337,8 +345,8 @@ public class ReleaseFromPresceneService extends ReleaseSiteService {
 		Date da = sdf.parse("20150215");
 		Date a = sdf.parse("20150216");
 
-		ReleaseFromPresceneService s = new ReleaseFromPresceneService(1L);
-		List<ReleaseModel> res = s.parsePresceneRelease("Dance", da, a, SearchType.SEARCH_GENRE);
+		ReleaseFromPreDbService s = new ReleaseFromPreDbService(1L);
+		List<ReleaseModel> res = s.parsePreDbRelease("Dance", da, a, SearchType.SEARCH_GENRE);
 //		List<ReleaseModel> res = s.parseMusicDLRelease("trance",da,a);
 		for(ReleaseModel r : res)
 			System.out.println(r);
@@ -357,7 +365,7 @@ public class ReleaseFromPresceneService extends ReleaseSiteService {
 
 }
 
-class PresceneInfo {
+class PreDbInfo {
 
 	private int numPagina = 0;
 	private String nextPage;

@@ -4,9 +4,10 @@ import it.fivano.symusic.SymusicUtility;
 import it.fivano.symusic.backend.service.UserService;
 import it.fivano.symusic.core.Release0DayMp3Service;
 import it.fivano.symusic.core.Release0DayMusicService;
+import it.fivano.symusic.core.ReleaseFromPreDbService;
 import it.fivano.symusic.core.ReleaseFromPresceneService;
 import it.fivano.symusic.core.ReleaseMusicDLService;
-import it.fivano.symusic.core.ReleaseFromPresceneService.SearchType;
+import it.fivano.symusic.core.ReleaseSiteService.SearchType;
 import it.fivano.symusic.model.ReleaseModel;
 import it.fivano.symusic.model.UserModel;
 
@@ -29,14 +30,14 @@ import javax.servlet.http.HttpServletResponse;
 
 public class ZeroDayMusicServlet extends BaseAction {
 	private static final long serialVersionUID = 1L;
-	
+
 	private String urlPrecedente;
 	private String urlSuccessivo;
-	
+
 	private String reload;
 
     /**
-     * Default constructor. 
+     * Default constructor.
      */
     public ZeroDayMusicServlet() {
     	this.setLogger(getClass());
@@ -46,9 +47,9 @@ public class ZeroDayMusicServlet extends BaseAction {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		try {
-			
+
 
 			UserModel user = null;
 			if(request.getSession().getAttribute("user")!=null)
@@ -56,27 +57,27 @@ public class ZeroDayMusicServlet extends BaseAction {
 			else
 				user = new UserService().getUser("ivano");
 
-			
+
 			String site = request.getParameter("site");
 			String genre = request.getParameter("genre");
 			String crew = request.getParameter("crew");
 			Date initDate = null;
 			Date endDate = null;
-			
+
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			String iDate = request.getParameter("initDate");
 			String eDate = request.getParameter("endDate");
-			
+
 			String annoDa = request.getParameter("annoDa");
 			String annoAl = request.getParameter("annoAl");
-			
+
 			String enableBeatport = request.getParameter("enableBeatport");
 			String excludeReleaseRip = request.getParameter("excludeRelaseRip");
 			String excludeReleaseVA = request.getParameter("excludeVA");
 			boolean flagBeatport = (enableBeatport!=null && enableBeatport.equalsIgnoreCase("true"))?true:false;
 			boolean flagRip = (excludeReleaseRip!=null && excludeReleaseRip.equalsIgnoreCase("true"))?true:false;
 			boolean flagVA = (excludeReleaseVA!=null && excludeReleaseVA.equalsIgnoreCase("true"))?true:false;
-			
+
 			// se non presente le date sono inizializzate alla data corrente
 			initDate = (iDate==null || iDate.isEmpty())? sdf.parse(sdf.format(new Date())) : sdf.parse(iDate);
 			endDate = (eDate==null || eDate.isEmpty())? sdf.parse(sdf.format(new Date())) : sdf.parse(eDate);
@@ -85,17 +86,17 @@ public class ZeroDayMusicServlet extends BaseAction {
 			urlPrecedente += "&enableBeatport="+flagBeatport+"&excludeRelaseRip="+flagRip;
 			urlSuccessivo = request.getRequestURI()+"?site="+site+"&genre="+genre+"&initDate="+sdf.format(SymusicUtility.aggiungiData(endDate, 1))+"&endDate="+sdf.format(SymusicUtility.aggiungiData(endDate, 2));
 			urlSuccessivo += "&enableBeatport="+flagBeatport+"&excludeRelaseRip="+flagRip;
-			
+
 			request.setAttribute("urlPrecedente", urlPrecedente);
 			request.setAttribute("urlSuccessivo", urlSuccessivo);
-			
+
 			List<ReleaseModel> listRelease = new ArrayList<ReleaseModel>();
-			
+
 			reload = request.getParameter("reload");
 			if(reload!=null && reload.length()>0) {
 				listRelease = (List<ReleaseModel>) request.getSession().getAttribute("listRelease");
 			} else {
-				
+
 				if(site.equals("1")) {
 					Release0DayMusicService zeroDay = new Release0DayMusicService(user.getId());
 					zeroDay.setEnableBeatportService(flagBeatport);
@@ -131,22 +132,30 @@ public class ZeroDayMusicServlet extends BaseAction {
 						listRelease = musicDL.parsePresceneRelease(genre, initDate, endDate, SearchType.SEARCH_GENRE);
 					else
 						listRelease = musicDL.parsePresceneRelease(crew, initDate, endDate, SearchType.SEARCH_CREW);
+				} else if(site.equals("5")) {
+					ReleaseFromPreDbService musicDL = new ReleaseFromPreDbService(user.getId());
+					musicDL.setEnableBeatportService(flagBeatport);
+					musicDL.setExcludeRipRelease(flagRip);
+					musicDL.setExcludeVA(flagVA);
+					musicDL.setAnnoDa(annoDa);
+					musicDL.setAnnoAl(annoAl);
+					listRelease = musicDL.parsePreDbRelease(crew, initDate, endDate, SearchType.SEARCH_CREW);
 				}
 			}
-			
+
 			request.getSession().setAttribute("listRelease", listRelease);
-			
-			
+
+
 			RequestDispatcher rd = getServletContext().getRequestDispatcher("/jsp/release_result.jsp");
 			rd.forward(request, response);
-			
-			
+
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-		
-		
+
+
 	}
 
 	/**
@@ -179,7 +188,7 @@ public class ZeroDayMusicServlet extends BaseAction {
 	public void setReload(String reload) {
 		this.reload = reload;
 	}
-	
+
 	public static void main(String[] args) throws UnsupportedEncodingException {
 		System.out.println(new String("Ferry Tayle ft. Sarah Shields – The Most Important Thing (Club".getBytes(),"ISO-8859-1"));
 	}

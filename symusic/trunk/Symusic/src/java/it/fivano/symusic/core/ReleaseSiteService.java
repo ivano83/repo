@@ -13,9 +13,11 @@ import it.fivano.symusic.exception.BackEndException;
 import it.fivano.symusic.exception.ParseReleaseException;
 import it.fivano.symusic.model.ReleaseExtractionModel;
 import it.fivano.symusic.model.ReleaseModel;
+import it.fivano.symusic.model.ReleaseModelDateSort;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.jsoup.Jsoup;
@@ -31,14 +33,19 @@ public abstract class ReleaseSiteService extends BaseService {
 	protected boolean enableYoutubeService;
 	protected boolean excludeRipRelease;
 	protected boolean excludeVA;
-	
+
 	protected String annoDa;
 	protected String annoAl;
-	
+
 	protected Long idUser;
-	
+
+	public static enum SearchType {
+		SEARCH_GENRE,
+		SEARCH_CREW;
+	}
+
 	protected List<ReleaseModel> arricchimentoRelease(List<ReleaseModel> releases, SupportObject supp) throws ParseReleaseException {
-		
+
 		// INIT OGGETTO THREAD
 		Object monitor = new Object();
 		int maxThread = Integer.parseInt(generalConf.MAX_ACTIVE_THREAD);
@@ -70,10 +77,10 @@ public abstract class ReleaseSiteService extends BaseService {
 				throw new ParseReleaseException("Errore gestione thread",e1);
 			}
 		}
-		
+
 		return new ArrayList<ReleaseModel>(threadObject.getReleaseResults().values());
 	}
-	
+
 	protected boolean isRadioRipRelease(ReleaseModel release) {
 		for(String rip : generalConf.RELEASE_EXCLUSION) {
 			if(release.getNameWithUnderscore().contains(rip))
@@ -81,7 +88,7 @@ public abstract class ReleaseSiteService extends BaseService {
 		}
 		return false;
 	}
-	
+
 	protected boolean isVARelease(ReleaseModel release) {
 		for(String rip : generalConf.RELEASE_VA) {
 			if(release.getNameWithUnderscore().startsWith(rip))
@@ -89,23 +96,23 @@ public abstract class ReleaseSiteService extends BaseService {
 		}
 		return false;
 	}
-	
+
 	protected void saveOrUpdateRelease(ReleaseModel release, boolean isRecuperato) throws BackEndException {
-		
+
 		if(!isRecuperato) {
 			// SALVA O RECUPERA IL GENERE
 			if(release.getGenre()!=null)
 				release.setGenre(new GenreService().saveGenre(release.getGenre()));
-			
+
 			release.getReleaseFlag().setNewRelease(true);
-			
+
 			ReleaseService relServ = new ReleaseService();
 			ReleaseModel r = relServ.saveRelease(release);
 			release.setId(r.getId());
 			log.info(release+" e' stata salvata sul database con id = "+r.getId());
 		}
 		else {
-			
+
 		}
 		if(enableYoutubeService) {
 			VideoService vidServ = new VideoService();
@@ -116,19 +123,64 @@ public abstract class ReleaseSiteService extends BaseService {
 		}
 		LinkService linkServ = new LinkService();
 		linkServ.saveLinks(release.getLinks(), release.getId());
-		
+
 		// AGGIORNA/SALVA I FLAG DI ESTRAZIONE
 		ReleaseExtractionModel extr = release.getReleaseExtraction();
 		extr.setIdRelease(release.getId());
 		new ReleaseExtractionService().saveReleaseExtraction(extr);
 		log.info("Salvataggio del release extraction con idRelease="+release.getId());
-		
+
 	}
-	
+
+	protected void addSimilarRelease(ReleaseModel release) throws BackEndException {
+
+		ReleaseService relServ = new ReleaseService();
+		List<ReleaseModel> listaRel = new ArrayList<ReleaseModel>();
+		List<String> listaRelString = new ArrayList<String>();
+		if(release.getArtist()!=null && release.getArtist().length()>2) {  // con due lettere non conviene fare la ricerca
+
+			listaRel = relServ.getListSimilarRelease(release.getArtist(), "author",idUser);
+			if(listaRel.isEmpty()) {
+
+				String name = release.getArtist().replace(" Feat. ", "+").replace(" Feat ", "+").replace(" Featuring ", "+")
+						.replace(" feat. ", "+").replace(" feat ", "+").replace(" featuring ", "+")
+						.replace(" Meets ", "+").replace(" meets ", "+").replace(" Vs ", "+").replace(" vs ", "+")
+						.replace(" And ", "+").replace(" and ", "+");
+
+				String[] nameSplit = name.split("\\+");
+				if(nameSplit.length>1)
+					for(String s : nameSplit) {
+						if(s.length()>2) // con due lettere non conviene fare la ricerca
+							listaRel.addAll(relServ.getListSimilarRelease(s, "author",idUser));
+					}
+
+				if(listaRel.isEmpty()) {
+
+					for(String s : nameSplit) {
+						listaRel.addAll(relServ.getListSimilarRelease(s.replace(" ", "_"), "fullName",idUser));
+
+					}
+				}
+
+			}
+
+			Collections.sort(listaRel, Collections.reverseOrder(new ReleaseModelDateSort()));
+
+		}
+
+		for(int i=0;(listaRelString.size()<=3&&i<listaRel.size()-1);i++) {
+			if(!listaRel.get(i).getNameWithUnderscore().equalsIgnoreCase(release.getNameWithUnderscore()))
+				listaRelString.add(listaRel.get(i).getNameWithUnderscore());
+		}
+
+		release.setSimilarRelease(listaRelString);
+
+
+	}
 
 	@Override
 	protected abstract String applyFilterSearch(String result);
-	
+
 	public boolean isEnableBeatportService() {
 		return enableBeatportService;
 	}
@@ -171,6 +223,6 @@ public abstract class ReleaseSiteService extends BaseService {
 	public void setAnnoAl(String annoAl) {
 		this.annoAl = annoAl;
 	}
-	
-	
+
+
 }

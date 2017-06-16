@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -17,7 +17,7 @@
 
 <script type="text/javascript">
 	function delrel(idBox) {
-		 $.get('ReleaseDeleteServlet',{id:idBox},function(responseText) { 
+		 $.get('ReleaseDeleteServlet',{id:idBox},function(responseText) {
              $('.del_'+idBox).html('<div>I dati della release sono stati eliminati!</div>');
              $('.rel_link_'+idBox).html('');
              $('.rel_track_all_'+idBox).html('');
@@ -25,10 +25,10 @@
              $('.artist_'+idBox).html('');
              $('.title_'+idBox).html('');
      });
-	 
+
 	}
 	function releaseOption(idRel,option,optionName,color) {
-			 $.get('FlagReleaseServlet',{idRelease:idRel,optionType:option,optionName:optionName,color:color},function(responseText) { 
+			 $.get('FlagReleaseServlet',{idRelease:idRel,optionType:option,optionName:optionName,color:color},function(responseText) {
 			if(option==2) {
 	             $('.status_'+idRel).html('<span>'+optionName+'</span>');
 	             $('.status_'+idRel).removeClass("rel_status").removeClass("rel_status_preview").addClass("rel_status_download");
@@ -48,7 +48,7 @@
 
 <h2>Risultati: ${fn:length(listRelease)} release trovate</h2>
 
-<table class="rel_table">	
+<table class="rel_table">
 	<c:forEach items="${listRelease}" var="item">
 		<tr class="row_${item.id}">
 			<td width="30%">
@@ -69,9 +69,18 @@
 				</c:choose>
 				</span>
 				<div class="delrel" data-id="${item.id}">
-					<span class="rel_link del_${item.id}"><a href="#" onclick="javascript:delrel(${item.id})">Resetta dati</a></span>
+					<span class="rel_link del_${item.id}" style="display:none;"><a href="#" onclick="javascript:delrel(${item.id})">Resetta dati</a></span>
+
+					<c:if test="${not empty item.similarRelease}">
+					<span class="rel_link del_${item.id}">Release simili scaricate:</span>
+					<ul>
+						<c:forEach items="${item.similarRelease}" var="track">
+							<li class="rel_similar"><span>${track}</span></li>
+						</c:forEach>
+					</ul>
+					</c:if>
 				</div>
-				
+
 				<c:choose>
 					<c:when test="${item.releaseFlag.downloaded}">
 					<div class="rel_status_download status_${item.id}" style="display:inline">
@@ -92,7 +101,7 @@
 				<c:if test="${item.releaseFlag.newRelease}"><span class="new_icon"><img alt="NEW RELEASE" src="img/new.jpg"  width="40px" /></span></c:if>
 			</td>
 			<td>
-			
+
 				<table class="table_track rel_track_all_${item.id}">
 					<tr class="table_track_head">
 						<td><strong>Track Name</strong></td>
@@ -123,11 +132,12 @@
 				<a class="rel_site" href="LinkServlet?site=SCENELOG&release=${item.nameWithUnderscore}" target="_blank"><img src="img/Scnlog_eu.png" alt="Scenelog" height="20px" /></a>
 				<a class="rel_site" href="LinkServlet?site=MP3_TRACKZ&release=${item.nameWithUnderscore}" target="_blank"><img src="img/mp3Trackz.png" alt="mp3Trackz" height="20px" /></a>
 				<a class="rel_site" href="LinkServlet?site=MUSIC_DL&release=${item.nameWithUnderscore}&genre=${item.genre.name}" target="_blank"><img src="img/MusicDL.png" alt="MusicDL" height="20px" /></a>
+				<span style="float:right;"><a name="link_dl_class" id="dl_${item.id}" href="#" target="_blank" title="Segna come scaricato" onclick="javascript:releaseOption(${item.id},2,'SCARICATO','#33FF66')"><img src="img/download.png" alt="Segna come scaricato" height="18px" width="18px" /></a></span>
 				</div>
 			</td>
 		</tr>
 	</c:forEach>
-	
+
 </table>
 
 <p>
@@ -146,19 +156,19 @@
           }
       }
       clip.on( 'complete', function(client, args) {
-         
+
           var i, el;
           var listLinks = document.getElementsByName('link_copy_class');
 //           alert('listLinks '+listLinks.length);
           for(i = 0; i < listLinks.length; ++i) {
         	  el = document.getElementById(listLinks[i].id);
-        	  
+
         	  if(args.text == el.getAttribute('href')) {
 //         		  alert(args.text+' == '+el.getAttribute('href'));
         		  releaseOption(el.getAttribute('rel-id'),2,'SCARICATO','#33FF66');
               };
           };
-          
+
         } );
     </script>
 <head>

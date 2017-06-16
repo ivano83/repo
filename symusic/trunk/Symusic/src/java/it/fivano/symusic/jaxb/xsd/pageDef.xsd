@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+targetNamespace="http://www.fivano.it/symusic/jaxb/pageDef"
+xmlns:tns="http://www.fivano.it/symusic/jaxb/pageDef" elementFormDefault="qualified">
+
+    <element name="pageDefinition">
+	    <complexType>
+		    <sequence>
+		    	<element name="search"  type="tns:Search" maxOccurs="unbounded"/>
+		    </sequence>
+
+	    </complexType>
+    </element>
+
+    <complexType name="Search">
+	    <sequence>
+	  	 	<element name="description" type="string" minOccurs="0" />
+	    	<element name="url" type="string" />
+	    	<element name="params" type="string" />
+	    </sequence>
+
+    </complexType>
+
+    <complexType name="Result">
+	    <sequence>
+	  	 	<element name="elementList" type="tns:ElementList" minOccurs="0" />
+
+	    </sequence>
+
+    </complexType>
+
+    <complexType name="ElementList">
+	    <sequence>
+	  	 	<element name="tagType" >
+	  	 		<complexType>
+					<simpleContent>
+						<extension base="string">
+							<attribute name="type" use="optional">
+								<simpleType>
+									<restriction base="string">
+										<enumeration value="class" />
+										<enumeration value="attribute" />
+										<enumeration value="tag" />
+										<enumeration value="id" />
+									</restriction>
+								</simpleType>
+							</attribute>
+						</extension>
+					</simpleContent>
+				</complexType>
+	  	 	</element>
+	    	<element name="tagName" type="string" />
+	    	<element name="attrValue" type="string" minOccurs="0" />
+	    	<element name="extractData" type="tns:ExtractData" minOccurs="0" maxOccurs="unbounded" />
+	    	<element name="nextElements" type="tns:ElementList" minOccurs="0" maxOccurs="unbounded" />
+	    </sequence>
+		<attribute name="getFirst" type="boolean" />
+    </complexType>
+
+     <complexType name="ExtractData" >
+	    <sequence>
+	  	 	<element name="variableMapping" type="string" minOccurs="0" />
+	  	 	<element name="variableType" minOccurs="0" >
+			  	 <simpleType>
+				  	 <restriction base="string">
+						<enumeration value="STRING" />
+						<enumeration value="DATE" />
+						<enumeration value="INT" />
+					</restriction>
+				</simpleType>
+	  	 	</element>
+			<element name="datePattern" type="string" minOccurs="0"  />
+			<element name="text" type="string" minOccurs="0" />
+
+	    </sequence>
+
+    </complexType>
+
+    <complexType name="UrlParam">
+	    <sequence>
+	    	<element name="name" type="string" />
+	    	<element name="value" >
+	    		<complexType>
+					<simpleContent>
+						<extension base="string">
+							<attribute name="type" use="optional">
+								<simpleType>
+									<restriction base="string">
+										<enumeration value="CONSTANT" />
+										<enumeration value="VARIABLE" />
+									</restriction>
+								</simpleType>
+							</attribute>
+						</extension>
+					</simpleContent>
+				</complexType>
+	    	</element>
+	    </sequence>
+
+    </complexType>
+</schema>

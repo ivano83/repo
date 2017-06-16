@@ -24,17 +24,17 @@ import com.wcohen.ss.Level2MongeElkan;
 import com.wcohen.ss.MongeElkan;
 
 public class SymusicUtility {
-	
+
 	public static final String STANDARD_DATE_FORMAT = "dd/MM/yyyy";
-	
+
 	public enum LevelSimilarity {
 		MEDIO, ALTO, ALTISSIMO;
-		
+
 	}
-	
+
 	public enum EnvironmentType {
 		TESTING("testing");
-		
+
 		private String env;
 		private EnvironmentType(String env) {
 			this.env = env;
@@ -43,48 +43,48 @@ public class SymusicUtility {
 			return env;
 		}
 	}
-	
+
 	public static Properties getProps(String propsName) throws IOException {
 		InputStream in = SymusicUtility.class.getClassLoader().getResourceAsStream(propsName);
 		Properties props = new Properties();
 		props.load(in);
 		return props;
 	}
-	
-	
+
+
 	public static String getStandardDateFormat(String dateIn, String format) throws ParseException {
-		
-		
+
+
 		Date date = new SimpleDateFormat(format, Locale.ENGLISH).parse(dateIn);
-		
+
 		return new SimpleDateFormat(STANDARD_DATE_FORMAT).format(date);
-		
+
 	}
-	
+
 	public static Date getStandardDate(String dateIn) throws ParseException {
 		if(dateIn==null)
 			return null;
-		
+
 		return new SimpleDateFormat(STANDARD_DATE_FORMAT).parse(dateIn);
-		
+
 	}
-	
+
 	public static String getStandardDate(Date dateIn) throws ParseException {
 		if(dateIn==null)
 			return null;
-		
+
 		return new SimpleDateFormat(STANDARD_DATE_FORMAT).format(dateIn);
-		
+
 	}
-	
+
 	public static void processReleaseName(ReleaseModel rel) {
-		
+
 		String name = rel.getNameWithUnderscore();
 		String[] nameSplit = name.replace(" ","-").split("-");
 //		String[] nameSplit = name.replace(" ","_").replace("-","_").split("_");
 		int size = nameSplit.length;
 		if(size<=2) return;
-		
+
 		String crew = nameSplit[size-1];
 		String year = nameSplit[size-2];
 		if(!year.matches("\\d\\d\\d\\d") && year.length()!=4) {
@@ -101,22 +101,27 @@ public class SymusicUtility {
 			rel.setCrew(crew);
 			rel.setYear(year);
 		}
-		
+
+		if(nameSplit.length>2) {
+			rel.setArtist(nameSplit[0].replace("_", " "));
+			rel.setSong(nameSplit[1].replace("_", " "));
+		}
+
 	}
-	
+
 	public static boolean compareStringSimilarity(String s1, String s2, LevelSimilarity levelSimil) {
 		double res = getStringSimilarity(s1, s2, levelSimil);
 		if(res == 0)
 			return false;
-		
+
 		return true;
 
 	}
-	
+
 	public static double getStringSimilarity(String s1, String s2, LevelSimilarity levelSimil) {
 		s1 = s1.toLowerCase().replace("+", " ");
 		s2 = s2.toLowerCase().replace("+", " ");
-		
+
 		double soglia = 0.85;
 		if(LevelSimilarity.ALTO.toString().equals(levelSimil.toString())) {
 			soglia = 0.9;
@@ -124,33 +129,33 @@ public class SymusicUtility {
 		else if(LevelSimilarity.ALTISSIMO.toString().equals(levelSimil.toString())) {
 			soglia = 0.95;
 		}
-		
+
 		if(s1.contains(s2))
 			return 1.2;
-		
+
 		if(s2.contains(s1))
 			return 1.2;
-		
+
 		if(customCompare(s1,s2)) {
 			return 1.1;
 		}
-		
+
 		MongeElkan alg = new MongeElkan();
 		double score = alg.score(s1, s2);
 //		System.out.println(score);
 		if(score > soglia)
 			return score;
-		
+
 		Level2MongeElkan alg2 = new Level2MongeElkan();
 		score = alg2.score(s1, s2);
 //		System.out.println(score);
 		if(score > soglia)
 			return score;
-		
+
 		return 0;
 
 	}
-	
+
 	private static boolean customCompare(String s1, String s2) {
 		String pattern = "[ ,!?']";
 		s1 = s1.replaceAll(pattern,"-");
@@ -159,7 +164,7 @@ public class SymusicUtility {
 		do { s2 = s2.replace("--", "-"); }while(s2.contains("--"));
 		if(s1.endsWith("-")) s1 = s1.substring(0,s1.length()-1);
 		if(s2.endsWith("-")) s2 = s2.substring(0,s2.length()-1);
-		
+
 		String[] parole1 = s1.split("-");
 		int totParoleTrovate = 0;
 		List<String> parole2 = Arrays.asList(s2.split("-"));
@@ -168,38 +173,38 @@ public class SymusicUtility {
 				totParoleTrovate++;
 			}
 		}
-		
+
 		if(totParoleTrovate==parole1.length)
 			return true;
-		else 
+		else
 			return false;
 	}
 
 
 	public static Date sottraiData(Date data, int numGiorniDaSottrarre) {
-		
+
 		Long millisDaSottrarre = (60*60*24*numGiorniDaSottrarre)*1000L;
-		
+
 		return new Date(data.getTime()-millisDaSottrarre);
-		
+
 	}
-	
+
 	public static Date aggiungiData(Date data, int numGiorniDaSottrarre) {
-		
+
 		Long millisDaSottrarre = (60*60*24*numGiorniDaSottrarre)*1000L;
-		
+
 		return new Date(data.getTime()+millisDaSottrarre);
-		
+
 	}
-	
+
 	public static LinkModel popolateLink(Element dl) {
 		LinkModel currLink = new LinkModel();
 		currLink.setLink(dl.attr("href"));
 		currLink.setName((dl.attr("href").length()>70)? dl.attr("href").substring(0,70)+"..." : dl.attr("href"));
-		
+
 		return currLink;
 	}
-	
+
 	public static List<TrackModel> chooseTrack(List<TrackModel> tracks1, List<TrackModel> tracks2, boolean primaListaPreferita) {
 		if(!tracks1.isEmpty() && !tracks2.isEmpty()) {
 			if(tracks1.size()!=tracks2.size())
@@ -214,18 +219,18 @@ public class SymusicUtility {
 				else
 					return tracks2;
 			}
-				
+
 		}
-		
-		if(tracks1.isEmpty() && !tracks2.isEmpty()) 
+
+		if(tracks1.isEmpty() && !tracks2.isEmpty())
 			return tracks2;
-		else 
+		else
 			return tracks1;
 
 	}
 
 	public static void updateReleaseExtraction(ReleaseExtractionModel relExtr, boolean res, AreaExtraction area) {
-				
+
 		switch (area) {
 		case BEATPORT:
 			if(res) {
@@ -263,9 +268,9 @@ public class SymusicUtility {
 		default:
 			break;
 		}
-		
+
 	}
-	
+
 	public static void sleepRandom(long minMillis) {
 		try {
 			Thread.sleep(minMillis+(new Random().nextInt(200)));
@@ -279,7 +284,7 @@ public class SymusicUtility {
 		System.out.println(compareStringSimilarity("Houseshaker Feat. Amanda Blush","Amawfewnda Blasdewush Feat Houfeseshaker",LevelSimilarity.ALTO));
 
 		sottraiData(new Date(), 2);
-		
+
 		customCompare("ciao-pippo e paperino, bene!!?!", "");
 	}
 
