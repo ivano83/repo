@@ -101,8 +101,15 @@ public abstract class ReleaseSiteService extends BaseService {
 
 		if(!isRecuperato) {
 			// SALVA O RECUPERA IL GENERE
-			if(release.getGenre()!=null)
-				release.setGenre(new GenreService().saveGenre(release.getGenre()));
+			try {
+				if(release.getGenre()!=null)
+					release.setGenre(new GenreService().saveGenre(release.getGenre()));
+			} catch (Exception e) {
+				if(release.getGenre()!=null) {
+					release.getGenre().setId(32);
+					release.getGenre().setName("Unknown");
+				}
+			}
 
 			release.getReleaseFlag().setNewRelease(true);
 
