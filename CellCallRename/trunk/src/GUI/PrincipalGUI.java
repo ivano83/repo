@@ -37,35 +37,36 @@ public class PrincipalGUI extends javax.swing.JFrame {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private JButton openButton;
 	private JButton startButton;
 	private JButton infoRubricaButton;
 	private JButton rubricaButton;
-	
+
 	private JRadioButton radioButton1;
 	private JRadioButton radioButton2;
-	
+	private JRadioButton radioButton3;
+
 	private JTabbedPane jTabbedPane;
 	private JDialog infoRubricaWindow;
-	
+
 	private JTextField rubricaField;
 	private JTextArea infoArea;
 	private JTextArea logArea;
 	private JTextField pathField;
-	
+
 	private JPanel panelManager;
 	private JPanel panelRename;
 
 	private JFileChooser fc = new JFileChooser();
 	private File dirScelta;
 	private File rubricaScelta;
-	
+
 	private AbstractAction infoRubricaAction;
 	private AbstractAction rubricaAction;
 	private AbstractAction openAction;
 	private AbstractAction eseguiAction;
-	
+
 	/**
 	* Auto-generated main method to display this JFrame
 	*/
@@ -78,16 +79,16 @@ public class PrincipalGUI extends javax.swing.JFrame {
 			}
 		});
 	}
-	
+
 	public PrincipalGUI() {
 		super("Cell Call Rename");
 		initGUI();
 	}
-	
+
 //	public PrincipalGUI getGUI() {
 //		return this;
 //	}
-	
+
 	private void initGUI() {
 		try {
 			{
@@ -95,7 +96,7 @@ public class PrincipalGUI extends javax.swing.JFrame {
 				// associamo l'evento di chiusura al solito bottone di chiusura
 				this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			}
-			
+
 			this.setSize(650, 500);
 			{
 				JMenuItem helpMenuItem;
@@ -115,7 +116,7 @@ public class PrincipalGUI extends javax.swing.JFrame {
 				JMenuItem newFileMenuItem;
 				JMenu jMenu3;
 				JMenuBar jMenuBar1;
-				
+
 				jMenuBar1 = new JMenuBar();
 				setJMenuBar(jMenuBar1);
 				{
@@ -201,17 +202,17 @@ public class PrincipalGUI extends javax.swing.JFrame {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private AbstractAction getOpenAction() {
 		if(openAction == null) {
 			openAction = new AbstractAction("Apri", null) {
-				
-				
+
+
 				public void actionPerformed(ActionEvent evt) {
 					JFrame f1 = new JFrame();
 					fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 					int scelta = fc.showOpenDialog(f1);
-					
+
 					if (scelta == JFileChooser.APPROVE_OPTION) {
 						dirScelta = fc.getSelectedFile();
 						pathField.setText(dirScelta.getPath());
@@ -222,7 +223,7 @@ public class PrincipalGUI extends javax.swing.JFrame {
 		}
 		return openAction;
 	}
-	
+
 	private JTabbedPane getJTabbedPane() {
 		if(jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
@@ -232,7 +233,7 @@ public class PrincipalGUI extends javax.swing.JFrame {
 		}
 		return jTabbedPane;
 	}
-	
+
 	private JPanel getPanelRename() {
 		if(panelRename == null) {
 			panelRename = new JPanel();
@@ -251,8 +252,8 @@ public class PrincipalGUI extends javax.swing.JFrame {
 			panelRename.add(getRubricaField(), new GridBagConstraints(1, 1, 2, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 			panelRename.add(getRubricaButton(), new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 6, 0, 0), 0, 0));
 			panelRename.add(getInfoRubricaButton(), new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		
-		
+
+
 			 //Create the radio buttons.
 		    radioButton1 = new JRadioButton("P[num.tel][in/out][gg-mm-aaaa]-[hh-mm-ss]");
 		    radioButton1.setActionCommand("[][][][]");
@@ -263,26 +264,32 @@ public class PrincipalGUI extends javax.swing.JFrame {
 		    radioButton2.setActionCommand("__");
 		    radioButton2.setName("__");
 
+		    radioButton3 = new JRadioButton("call_<hh-mm-ss>_<IN/OUT>_<nome/num>");
+		    radioButton3.setActionCommand("call_");
+		    radioButton3.setName("call_");
+
 		    //Group the radio buttons.
 		    ButtonGroup group = new ButtonGroup();
 		    group.add(radioButton1);
 		    group.add(radioButton2);
+		    group.add(radioButton3);
 
 		    panelRename.add(radioButton1, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		    panelRename.add(radioButton2, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-			
-		
+		    panelRename.add(radioButton3, new GridBagConstraints(3, 2, 1, 1, 0.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+
+
 		}
 		return panelRename;
 	}
-	
+
 	private JPanel getPanelManager() {
 		if(panelManager == null) {
 			panelManager = new JPanel();
 		}
 		return panelManager;
 	}
-	
+
 	public JTextField getPathField() {
 		if(pathField == null) {
 			pathField = new JTextField();
@@ -291,7 +298,7 @@ public class PrincipalGUI extends javax.swing.JFrame {
 		}
 		return pathField;
 	}
-	
+
 	private JButton getOpenButton() {
 		if(openButton == null) {
 			openButton = new JButton();
@@ -300,14 +307,14 @@ public class PrincipalGUI extends javax.swing.JFrame {
 		}
 		return openButton;
 	}
-	
+
 	private JTextArea getLogArea() {
 		if(logArea == null) {
 			logArea = new JTextArea();
 		}
 		return logArea;
 	}
-	
+
 	private JButton getStartButton() {
 		if(startButton == null) {
 			startButton = new JButton();
@@ -316,7 +323,7 @@ public class PrincipalGUI extends javax.swing.JFrame {
 		}
 		return startButton;
 	}
-	
+
 	private JTextArea getInfoArea() {
 		if(infoArea == null) {
 			infoArea = new JTextArea();
@@ -334,7 +341,7 @@ public class PrincipalGUI extends javax.swing.JFrame {
 		}
 		return infoArea;
 	}
-	
+
 	private JTextField getRubricaField() {
 		if(rubricaField == null) {
 			rubricaField = new JTextField();
@@ -343,7 +350,7 @@ public class PrincipalGUI extends javax.swing.JFrame {
 		}
 		return rubricaField;
 	}
-	
+
 	private JButton getRubricaButton() {
 		if(rubricaButton == null) {
 			rubricaButton = new JButton();
@@ -352,7 +359,7 @@ public class PrincipalGUI extends javax.swing.JFrame {
 		}
 		return rubricaButton;
 	}
-	
+
 	private JButton getInfoRubricaButton() {
 		if(infoRubricaButton == null) {
 			infoRubricaButton = new JButton();
@@ -362,18 +369,18 @@ public class PrincipalGUI extends javax.swing.JFrame {
 		}
 		return infoRubricaButton;
 	}
-	
+
 	private AbstractAction getRubricaAction() {
 		if(rubricaAction == null) {
 			rubricaAction = new AbstractAction("Importa", null) {
-				
+
 
 				public void actionPerformed(ActionEvent evt) {
 					JFrame f2 = new JFrame();
 					JFileChooser fc2 = new JFileChooser();
 					//fc2 .setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 					int scelta = fc2.showOpenDialog(f2);
-					
+
 					if (scelta == JFileChooser.APPROVE_OPTION) {
 						rubricaScelta = fc2.getSelectedFile();
 						rubricaField.setText(rubricaScelta.getPath());
@@ -384,7 +391,7 @@ public class PrincipalGUI extends javax.swing.JFrame {
 		}
 		return rubricaAction;
 	}
-	
+
 	private AbstractAction getInfoRubricaAction() {
 		if(infoRubricaAction == null) {
 			infoRubricaAction = new AbstractAction("?", null) {
@@ -395,7 +402,7 @@ public class PrincipalGUI extends javax.swing.JFrame {
 		}
 		return infoRubricaAction;
 	}
-	
+
 	private JDialog getInfoRubricaDialog() {
 		if(infoRubricaWindow == null) {
 			infoRubricaWindow = new JDialog();
@@ -417,23 +424,23 @@ public class PrincipalGUI extends javax.swing.JFrame {
 					infoRubricaWindow.setVisible(true);
 				}
 			}
-			
+
 		}
 		return infoRubricaWindow;
 	}
-	
-	
+
+
 	private AbstractAction getEseguiAction() {
 		if(eseguiAction == null) {
 			eseguiAction = new AbstractAction("Esegui", null) {
-				
-				
+
+
 				public void actionPerformed(ActionEvent evt) {
-					
+
 					String urlRubrica = null;
 					if(rubricaScelta!=null)
 						urlRubrica = rubricaScelta.getPath();
-					
+
 					RenameFile ren = new RenameFile();
 					System.out.println("getAbsolutePath " + dirScelta.getAbsolutePath());
 					try {
@@ -442,13 +449,15 @@ public class PrincipalGUI extends javax.swing.JFrame {
 					}
 					System.out.println("getPath " + dirScelta.getPath());
 					System.out.println("getName " + dirScelta.getName());
-					
+
 					String tipoOp = null;
 					if(radioButton1.isSelected())
 						tipoOp = radioButton1.getActionCommand();
 					else if(radioButton2.isSelected())
 						tipoOp = radioButton2.getActionCommand();
-					
+					else if(radioButton3.isSelected())
+						tipoOp = radioButton3.getActionCommand();
+
 //					ren.modificaNomiFile("[][][][]", dirScelta.getPath(), urlRubrica, dirScelta.getPath()+"\\MODIFICATE");
 					ren.modificaNomiFile(tipoOp, dirScelta.getPath(), urlRubrica, dirScelta.getPath()+"\\MODIFICATE");
 
@@ -457,7 +466,7 @@ public class PrincipalGUI extends javax.swing.JFrame {
 		}
 		return eseguiAction;
 	}
-	
-	
+
+
 
 }
